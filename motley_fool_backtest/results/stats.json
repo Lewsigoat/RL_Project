@@ -1,0 +1,118 @@
+{
+  "stats": {
+    "start": "2026-02-02",
+    "end": "2026-07-17",
+    "final_equity": 1077149.0,
+    "total_return": 0.0771,
+    "annualized": 0.1788,
+    "sharpe": 1.05,
+    "max_drawdown": -0.1507,
+    "spy_return_same_period": 0.0689,
+    "n_trades": 639,
+    "win_rate": 0.368,
+    "avg_win": 1238.0,
+    "avg_loss": -530.0,
+    "profit_factor": 1.36
+  },
+  "breakdowns": {
+    "direction": [
+      {
+        "direction": "bearish",
+        "n": "51",
+        "total_pnl": "-6164.29",
+        "win_rate": "0.275",
+        "avg_ret": "-0.075"
+      },
+      {
+        "direction": "bullish",
+        "n": "588",
+        "total_pnl": "83188.44",
+        "win_rate": "0.376",
+        "avg_ret": "0.027"
+      }
+    ],
+    "instrument": [
+      {
+        "instrument": "itm_call",
+        "n": "2",
+        "total_pnl": "2569.25",
+        "win_rate": "0.5",
+        "avg_ret": "0.367"
+      },
+      {
+        "instrument": "itm_put",
+        "n": "3",
+        "total_pnl": "-2036.94",
+        "win_rate": "0.0",
+        "avg_ret": "-0.498"
+      },
+      {
+        "instrument": "otm_call",
+        "n": "14",
+        "total_pnl": "14134.07",
+        "win_rate": "0.286",
+        "avg_ret": "0.29"
+      },
+      {
+        "instrument": "otm_put",
+        "n": "3",
+        "total_pnl": "-1400.14",
+        "win_rate": "0.0",
+        "avg_ret": "-0.373"
+      },
+      {
+        "instrument": "stock",
+        "n": "617",
+        "total_pnl": "63757.91",
+        "win_rate": "0.373",
+        "avg_ret": "0.016"
+      }
+    ],
+    "confidence": [
+      {
+        "confidence": "(0.4, 0.6]",
+        "n": "210",
+        "total_pnl": "431.5",
+        "win_rate": "0.352",
+        "avg_ret": "-0.002"
+      },
+      {
+        "confidence": "(0.6, 0.8]",
+        "n": "415",
+        "total_pnl": "64456.02",
+        "win_rate": "0.376",
+        "avg_ret": "0.025"
+      },
+      {
+        "confidence": "(0.8, 1.0]",
+        "n": "13",
+        "total_pnl": "12314.04",
+        "win_rate": "0.385",
+        "avg_ret": "0.165"
+      }
+    ],
+    "risk": [
+      {
+        "risk": "(0, 3]",
+        "n": "212",
+        "total_pnl": "14822.08",
+        "win_rate": "0.368",
+        "avg_ret": "0.009"
+      },
+      {
+        "risk": "(3, 6]",
+        "n": "290",
+        "total_pnl": "33823.83",
+        "win_rate": "0.362",
+        "avg_ret": "0.016"
+      },
+      {
+        "risk": "(6, 10]",
+        "n": "137",
+        "total_pnl": "28378.24",
+        "win_rate": "0.38",
+        "avg_ret": "0.04"
+      }
+    ]
+  }
+}
