@@ -1,0 +1,132 @@
+{
+  "split_date": "2026-04-02",
+  "dims": {
+    "long_only": [
+      "False",
+      "True"
+    ],
+    "min_conf": [
+      "0.4",
+      "0.5",
+      "0.6",
+      "0.7"
+    ],
+    "max_risk": [
+      "10",
+      "7",
+      "5"
+    ],
+    "allow_options": [
+      "True",
+      "False"
+    ],
+    "thesis_only": [
+      "False",
+      "True"
+    ]
+  },
+  "max_cagr": {
+    "filters": {
+      "long_only": "False",
+      "min_conf": 0.6,
+      "max_risk": "10",
+      "allow_options": "False",
+      "thesis_only": "False"
+    },
+    "train": {
+      "annualized": 0.0366,
+      "sharpe": 0.31,
+      "total_return": 0.0164,
+      "max_drawdown": -0.1257,
+      "n_trades": 445.0,
+      "win_rate": 0.321,
+      "profit_factor": 1.1
+    },
+    "test": {
+      "start": "2026-04-06",
+      "end": "2026-07-17",
+      "final_equity": 1118041.0,
+      "total_return": 0.118,
+      "annualized": 0.4912,
+      "sharpe": 4.69,
+      "max_drawdown": -0.0136,
+      "spy_return_same_period": 0.128,
+      "n_trades": 255,
+      "win_rate": 0.545,
+      "avg_win": 1181.0,
+      "avg_loss": -399.0,
+      "profit_factor": 3.55
+    },
+    "spy_test_window": 0.128
+  },
+  "max_cagr_unconstrained": {
+    "filters": {
+      "long_only": "False",
+      "min_conf": 0.6,
+      "max_risk": "10",
+      "allow_options": "False",
+      "thesis_only": "False"
+    },
+    "train": {
+      "annualized": 0.0366,
+      "sharpe": 0.31,
+      "total_return": 0.0164,
+      "max_drawdown": -0.1257,
+      "n_trades": 445.0,
+      "win_rate": 0.321,
+      "profit_factor": 1.1
+    }
+  },
+  "max_sharpe": {
+    "filters": {
+      "long_only": "False",
+      "min_conf": 0.7,
+      "max_risk": "7",
+      "allow_options": "False",
+      "thesis_only": "False"
+    },
+    "train": {
+      "annualized": 0.0339,
+      "sharpe": 0.32,
+      "total_return": 0.0152,
+      "max_drawdown": -0.105,
+      "n_trades": 259.0,
+      "win_rate": 0.328,
+      "profit_factor": 1.14
+    },
+    "test": {
+      "start": "2026-04-06",
+      "end": "2026-07-17",
+      "final_equity": 1093389.0,
+      "total_return": 0.0934,
+      "annualized": 0.3767,
+      "sharpe": 5.33,
+      "max_drawdown": -0.0095,
+      "spy_return_same_period": 0.128,
+      "n_trades": 115,
+      "win_rate": 0.643,
+      "avg_win": 1507.0,
+      "avg_loss": -444.0,
+      "profit_factor": 6.13
+    },
+    "spy_test_window": 0.128
+  },
+  "max_sharpe_unconstrained": {
+    "filters": {
+      "long_only": "False",
+      "min_conf": 0.7,
+      "max_risk": "7",
+      "allow_options": "False",
+      "thesis_only": "False"
+    },
+    "train": {
+      "annualized": 0.0339,
+      "sharpe": 0.32,
+      "total_return": 0.0152,
+      "max_drawdown": -0.105,
+      "n_trades": 259.0,
+      "win_rate": 0.328,
+      "profit_factor": 1.14
+    }
+  }
+}
