@@ -52,6 +52,18 @@ optional ITM/OTM options, ATR trailing stops, and ratcheting profit takers.
 - **Time stop**: the label's horizon (10–90 trading days); options exit at expiry.
 - **Benchmark**: SPY over the same window.
 
+## Walk-forward filter test (`tune_filters.py`)
+
+Signals are split chronologically 70/30 (split date 2026-04-02). A pre-registered
+grid of signal filters (long-only, min confidence, max risk, options on/off,
+thesis-articles-only) is scored on the train window by Sharpe (min 40 trades),
+frozen, and evaluated once on the test window. See `results/oos_report.md`.
+Chosen filters: long-only, confidence ≥ 0.7, risk ≤ 7, stock-only. Out-of-sample:
++9.4% (Sharpe 5.3, max DD −0.9%, PF 6.2, 113 trades) vs unfiltered +15.5%
+(Sharpe 4.9) and SPY +12.8% in the same window — note the test window landed in a
+strong rebound, flattering all long exposure; the filters trade absolute return
+for much better risk-adjusted numbers.
+
 ## Caveats
 
 - 13.8% stratified sample of the period's articles, not the full firehose.

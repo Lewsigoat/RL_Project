@@ -75,6 +75,7 @@ def load_signals():
         for line in f:
             art = json.loads(line)
             for s in art.get("signals", []):
+                s["article_type"] = art.get("article_type") or "other"
                 if not s.get("relevant") or s.get("direction") not in ("bullish", "bearish"):
                     continue
                 if (s.get("confidence") or 0) < MIN_CONFIDENCE:
@@ -84,6 +85,7 @@ def load_signals():
                     continue
                 signals.append({
                     "date": art["date"], "url": art["url"], "title": art.get("title", ""),
+                    "article_type": s["article_type"],
                     "ticker": t, "direction": s["direction"],
                     "confidence": float(s["confidence"]),
                     "risk": float(s.get("risk_score") or 5),
@@ -123,9 +125,10 @@ class Position:
         return row.close
 
 
-def run():
-    prices = load_prices()
-    signals = load_signals()
+def run(signals=None, prices_all=None, write=True):
+    prices = dict(prices_all) if prices_all is not None else load_prices()
+    if signals is None:
+        signals = load_signals()
     spy = prices.pop("SPY")
     all_days = spy.index
     global END_DATE
@@ -315,9 +318,13 @@ def run():
 
     ec = pd.Series(dict(equity_curve)).sort_index()
     trades = pd.DataFrame(closed)
-    os.makedirs(RESULTS, exist_ok=True)
-    ec.to_csv(os.path.join(RESULTS, "equity_curve.csv"), header=["equity"])
-    trades.drop(columns=["legs"]).to_csv(os.path.join(RESULTS, "trades.csv"), index=False)
+    if trades.empty:
+        return ec, trades, None
+    if write:
+        os.makedirs(RESULTS, exist_ok=True)
+        ec.to_csv(os.path.join(RESULTS, "equity_curve.csv"), header=["equity"])
+        trades.drop(columns=["legs"]).to_csv(os.path.join(RESULTS, "trades.csv"),
+                                             index=False)
 
     # ---- stats
     rets = ec.pct_change().dropna()
@@ -336,21 +343,22 @@ def run():
         "avg_win": round(trades[trades.pnl > 0].pnl.mean(), 0),
         "avg_loss": round(trades[trades.pnl <= 0].pnl.mean(), 0),
         "profit_factor": round(trades[trades.pnl > 0].pnl.sum()
-                               / -trades[trades.pnl <= 0].pnl.sum(), 2),
+                               / max(-trades[trades.pnl <= 0].pnl.sum(), 1e-9), 2),
     }
-    by = {}
-    for col, buck in [("direction", None), ("instrument", None),
-                      ("confidence", pd.cut(trades.confidence, [0.4, 0.6, 0.8, 1.0])),
-                      ("risk", pd.cut(trades.risk, [0, 3, 6, 10]))]:
-        g = trades.groupby(buck if buck is not None else col, observed=True)
-        by[col] = g.agg(n=("pnl", "size"), total_pnl=("pnl", "sum"),
-                        win_rate=("pnl", lambda x: round((x > 0).mean(), 3)),
-                        avg_ret=("ret", "mean")).round(3).reset_index().astype(str) \
-                   .to_dict("records")
-    with open(os.path.join(RESULTS, "stats.json"), "w") as f:
-        json.dump({"stats": stats, "breakdowns": by}, f, indent=2, default=str)
-    print(json.dumps(stats, indent=2))
-    return ec, trades
+    if write:
+        by = {}
+        for col, buck in [("direction", None), ("instrument", None),
+                          ("confidence", pd.cut(trades.confidence, [0.4, 0.6, 0.8, 1.0])),
+                          ("risk", pd.cut(trades.risk, [0, 3, 6, 10]))]:
+            g = trades.groupby(buck if buck is not None else col, observed=True)
+            by[col] = g.agg(n=("pnl", "size"), total_pnl=("pnl", "sum"),
+                            win_rate=("pnl", lambda x: round((x > 0).mean(), 3)),
+                            avg_ret=("ret", "mean")).round(3).reset_index().astype(str) \
+                       .to_dict("records")
+        with open(os.path.join(RESULTS, "stats.json"), "w") as f:
+            json.dump({"stats": stats, "breakdowns": by}, f, indent=2, default=str)
+        print(json.dumps(stats, indent=2))
+    return ec, trades, stats
 
 
 if __name__ == "__main__":
