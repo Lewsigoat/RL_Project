@@ -1,0 +1,2288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dungeon Escape</title>
+<style>
+  :root {
+    --bg-outer: #0a0910;
+    --bg-glow:  #1b1730;
+    --ink:      #e8e2d4;
+    --ink-dim:  #9a917f;
+    --accent:   #ffb347;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg-outer);
+    color: var(--ink);
+    font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    overflow: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, var(--bg-glow) 0%, var(--bg-outer) 70%);
+    touch-action: none;
+    user-select: none; -webkit-user-select: none;
+  }
+  #stage {
+    position: relative;
+    width: min(100%, calc((100vh - 90px) * 1.5));
+    aspect-ratio: 3 / 2;
+    max-height: calc(100vh - 90px);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px #2c2740,
+      0 0 0 5px #14111f,
+      0 0 0 6px #37304d,
+      0 24px 60px -12px #000,
+      0 0 90px -20px #4a3a7a;
+  }
+  canvas#game {
+    display: block;
+    width: 100%; height: 100%;
+    background: #07060c;
+    image-rendering: auto;
+  }
+  #legend {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    justify-content: center; align-items: center;
+    font-size: 12px; letter-spacing: .04em;
+    color: var(--ink-dim);
+    max-width: min(100%, calc((100vh - 90px) * 1.5));
+  }
+  #legend b { color: var(--accent); font-weight: 600; }
+  kbd {
+    display: inline-block;
+    padding: 1px 6px; margin: 0 1px;
+    border: 1px solid #453c60; border-bottom-width: 2px;
+    border-radius: 4px; background: #191527;
+    color: var(--ink); font: inherit; font-size: 11px;
+  }
+  /* On-screen controls: only shown on coarse-pointer (touch) devices. */
+  #touch { position: absolute; inset: 0; display: none; pointer-events: none; }
+  @media (pointer: coarse) { #touch { display: block; } }
+  .tbtn {
+    position: absolute; bottom: 3.5%;
+    display: flex; align-items: center; justify-content: center;
+    width: 15%; aspect-ratio: 1;
+    max-width: 92px;
+    border-radius: 50%;
+    background: rgba(232,226,212,.10);
+    border: 2px solid rgba(232,226,212,.28);
+    color: var(--ink); font-size: 22px; line-height: 1;
+    pointer-events: auto; touch-action: none;
+  }
+  .tbtn:active, .tbtn[data-on="1"] { background: rgba(255,179,71,.34); border-color: var(--accent); }
+  #t-left  { left: 3%; }
+  #t-right { left: 20%; }
+  #t-jump  { right: 3%; }
+  #t-down  { right: 21%; width: 12%; font-size: 18px; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game" width="960" height="640" aria-label="Dungeon Escape game"></canvas>
+    <div id="touch">
+      <div class="tbtn" id="t-left"  data-key="left">&#9664;</div>
+      <div class="tbtn" id="t-right" data-key="right">&#9654;</div>
+      <div class="tbtn" id="t-down"  data-key="down">&#9660;</div>
+      <div class="tbtn" id="t-jump"  data-key="jump">&#9650;</div>
+    </div>
+  </div>
+  <div id="legend">
+    <span><b>Move</b> <kbd>&larr;</kbd><kbd>&rarr;</kbd> / <kbd>A</kbd><kbd>D</kbd></span>
+    <span><b>Jump</b> <kbd>Space</kbd> (hold&nbsp;=&nbsp;higher)</span>
+    <span><b>Drop thru planks</b> <kbd>&darr;</kbd>+<kbd>Space</kbd></span>
+    <span><b>Restart</b> <kbd>R</kbd></span>
+    <span><b>New dungeon</b> <kbd>N</kbd></span>
+    <span><b>Mute</b> <kbd>M</kbd></span>
+  </div>
+
+<script>
+(function () {
+'use strict';
+
+/* ==========================================================================
+   DUNGEON ESCAPE
+   A single-file 2D platformer. No external assets, no libraries: every tile,
+   sprite, sound and background layer is generated procedurally at runtime.
+
+   Layout of this file:
+     1.  Tunables            - all physics / world constants in one place
+     2.  Utility             - seeded RNG, math helpers
+     3.  Tilemap model       - tile ids and queries
+     4.  Jump reachability   - simulates the jump arc to derive level limits
+     5.  Level generation    - constructive generator + validator
+     6.  Procedural art      - tile sprite cache, parallax layers
+     7.  Audio               - WebAudio blips
+     8.  Input               - keyboard + touch
+     9.  Physics/collision   - swept, axis-separated AABB vs tilemap
+     10. Entities            - player, enemies, coins, door, particles
+     11. Game state machine  - lives, score, win/lose, restart
+     12. Rendering           - world, entities, HUD, overlays
+     13. Main loop           - fixed timestep accumulator
+     14. Test API            - window.DungeonEscape
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TUNABLES
+   -------------------------------------------------------------------------- */
+
+var TILE   = 32;
+var VIEW_W = 960;
+var VIEW_H = 640;
+var MAP_W  = 120;              // 120 x 26 tiles (requirement: at least 50 x 20)
+var MAP_H  = 26;
+
+// Physics are expressed in pixels and seconds so the numbers stay readable.
+var GRAVITY      = 2200;       // px/s^2 applied while rising
+var FALL_MULT    = 1.45;       // heavier gravity while falling -> snappier arc
+var MAX_FALL     = 900;        // px/s terminal velocity (velocity capping)
+var JUMP_VEL     = 720;        // px/s launch speed
+var JUMP_CUT_VEL = 240;        // px/s kept when jump is released early
+var RUN_SPEED    = 260;        // px/s horizontal cap
+var RUN_ACCEL    = 1800;       // px/s^2 ground acceleration
+var RUN_FRICTION = 2400;       // px/s^2 ground deceleration with no input
+var AIR_ACCEL    = 1150;       // px/s^2 air control
+var AIR_FRICTION = 520;        // px/s^2 air drag with no input
+var COYOTE_TIME  = 0.10;       // s of grace after walking off a ledge
+var JUMP_BUFFER  = 0.12;       // s a jump press is remembered before landing
+var INVULN_TIME  = 1.30;       // s of i-frames after a hit
+var DROP_TIME    = 0.22;       // s of pass-through after dropping off a plank
+
+var PLAYER_W = 20;
+var PLAYER_H = 36;
+
+// Clearance either side of a respawn point, measured from the player's centre.
+// RUN_SPEED^2 / (2 * RUN_ACCEL) is only ~19px, so 40px from centre (30px clear
+// of the body) is comfortably enough runway to be at full speed before a jump.
+var RUNWAY = 40;
+
+var FIXED_DT   = 1 / 120;      // physics tick
+var MAX_FRAME  = 0.25;         // clamp huge frame gaps (tab was backgrounded)
+var EPS        = 0.001;
+
+var COIN_SCORE   = 100;
+var ESCAPE_BONUS = 500;
+var START_LIVES  = 3;
+var TOTAL_COINS  = 3;
+var ENEMY_COUNT  = 2;
+
+/* --------------------------------------------------------------------------
+   2. UTILITY
+   -------------------------------------------------------------------------- */
+
+// mulberry32: small, fast, deterministic PRNG. Same seed => same dungeon,
+// which is what makes "Restart" reproducible and the tests repeatable.
+function mulberry32(a) {
+  a = a >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    var t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+// Frame-rate independent exponential smoothing factor.
+function smoothing(rate, dt) { return 1 - Math.exp(-rate * dt); }
+function randInt(rnd, lo, hi) { return lo + Math.floor(rnd() * (hi - lo + 1)); }
+function pick(rnd, arr) { return arr[Math.floor(rnd() * arr.length) % arr.length]; }
+
+// Deterministic per-tile hash, used to pick art variants without storing them.
+function hash2(x, y) {
+  var h = Math.imul(x, 0x1f1f1f1f) ^ Math.imul(y, 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+
+function rectsOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
+  return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
+
+/* --------------------------------------------------------------------------
+   3. TILEMAP MODEL
+   -------------------------------------------------------------------------- */
+
+var T_EMPTY    = 0;
+var T_STONE    = 1;   // solid dungeon rock (the bulk of the level body)
+var T_BRICK    = 2;   // solid capstone: the walkable top surface of a ledge
+var T_PLATFORM = 3;   // one-way wooden plank: solid only from above
+var T_SPIKE    = 4;   // hazard, not solid
+
+function isSolid(t)   { return t === T_STONE || t === T_BRICK; }
+function isOneWay(t)  { return t === T_PLATFORM; }
+function isHazard(t)  { return t === T_SPIKE; }
+
+var level = null;     // populated by loadLevel()
+
+// Out of bounds: sides and top read as solid so nothing can escape sideways or
+// punch through the ceiling. Below the map reads as empty so a fall keeps going
+// and is caught by the death plane instead of silently landing on nothing.
+function tileAt(cx, cy) {
+  if (cx < 0 || cx >= MAP_W || cy < 0) return T_STONE;
+  if (cy >= MAP_H) return T_EMPTY;
+  return level.grid[cy * MAP_W + cx];
+}
+
+/* --------------------------------------------------------------------------
+   4. JUMP REACHABILITY
+   The level generator must never produce a gap the player cannot clear. Rather
+   than hand-tuning magic numbers that silently rot whenever a physics constant
+   changes, we simulate the actual jump arc (same gravity, same fall multiplier,
+   same run speed) and derive the limits from it.
+   -------------------------------------------------------------------------- */
+
+var _gapCache = Object.create(null);
+
+// Highest the player's feet ever get above the launch point, in pixels.
+function maxJumpRisePx() {
+  var vy = -JUMP_VEL, y = 0, dt = 1 / 480;
+  while (vy < 0) { vy += GRAVITY * dt; y += vy * dt; }
+  return -y;
+}
+
+// How many whole tiles of horizontal gap the player can clear when the landing
+// ledge is `riseTiles` tiles higher (negative = lower). Returns -1 if the
+// height itself is out of reach.
+function maxGapTiles(riseTiles) {
+  var key = String(riseTiles);
+  if (key in _gapCache) return _gapCache[key];
+
+  var targetDy = -riseTiles * TILE;   // screen coords: negative y is higher
+  var SAFETY   = 0.85;                // headroom for imperfect human timing
+  var LAND_PAD = 0.5;                 // must land past the ledge lip, not on it
+
+  var vy = -JUMP_VEL, y = 0, x = 0, t = 0;
+  var dt = 1 / 480;
+  var reach = -1;
+  // For a landing that is higher than the launch point we must actually get
+  // above it first. Without this gate a target above the apex looks "reached"
+  // the instant the arc turns over, which would let the generator emit a jump
+  // that is physically impossible.
+  var everAbove = (targetDy >= 0);
+  while (t < 4) {
+    vy += (vy > 0 ? GRAVITY * FALL_MULT : GRAVITY) * dt;
+    if (vy > MAX_FALL) vy = MAX_FALL;
+    y += vy * dt;
+    x += RUN_SPEED * dt;
+    t += dt;
+    if (y <= targetDy) everAbove = true;
+    // The first moment we are descending back through the target height is the
+    // furthest a landing can possibly happen.
+    if (everAbove && vy > 0 && y >= targetDy) { reach = x; break; }
+    if (y > 10 * TILE) break;
+  }
+  var out = reach < 0 ? -1 : Math.floor((reach * SAFETY) / TILE - LAND_PAD);
+  _gapCache[key] = out;
+  return out;
+}
+
+/* --------------------------------------------------------------------------
+   5. LEVEL GENERATION
+   Constructive, not rejection-based: the generator only ever emits transitions
+   that maxGapTiles() says are jumpable, so the level is traversable by
+   construction. validateLevel() then re-checks that invariant independently, so
+   a bug in the generator surfaces as a regenerate instead of an unwinnable run.
+   -------------------------------------------------------------------------- */
+
+var MIN_TOP = 8;               // highest ledge row: leaves full-jump headroom
+var MAX_TOP = MAP_H - 5;       // lowest ledge row: leaves room for the pit
+var MIN_SEGMENTS = 9;
+var PLANK_W = 3;               // one-way coin plank width, in tiles
+var PLANK_DROP = 3;            // how far above its ledge a plank floats
+
+// Tiles of ledge needed past the end of a plank so that running off it at full
+// speed still lands on the ledge rather than in the shaft beyond it. Derived
+// from the fall time, not guessed, so it tracks any change to the physics.
+function plankRunoffTiles(dropTiles) {
+  var fallTime = Math.sqrt(2 * dropTiles * TILE / (GRAVITY * FALL_MULT));
+  return Math.ceil((fallTime * RUN_SPEED + PLAYER_W) / TILE);
+}
+
+function generateLevel(seed) {
+  var rnd = mulberry32(seed);
+  var grid = new Uint8Array(MAP_W * MAP_H);   // starts all T_EMPTY
+
+  function set(x, y, v) {
+    if (x >= 0 && y >= 0 && x < MAP_W && y < MAP_H) grid[y * MAP_W + x] = v;
+  }
+  function get(x, y) {
+    if (x < 0 || y < 0 || x >= MAP_W || y >= MAP_H) return T_STONE;
+    return grid[y * MAP_W + x];
+  }
+
+  var FLOOR   = MAP_H - 1;     // bedrock row
+  var PIT_ROW = MAP_H - 2;     // spikes at the bottom of every shaft
+  var LEFT    = 2;             // first playable column
+  var RIGHT   = MAP_W - 2;     // one past the last playable column
+
+  /* ---- 5a. Plan the ledge chain ---------------------------------------- */
+  var segs = [];
+  var x = LEFT;
+  var top = MAP_H - 9;
+  var guard = 0;
+
+  while (x < RIGHT - 5 && guard++ < 500) {
+    var remaining = RIGHT - x;
+    var len = randInt(rnd, 4, 10);
+    if (len > remaining) len = remaining;
+    if (len < 3) break;
+    segs.push({ x: x, len: len, top: top, rise: 0, gap: 0 });
+
+    // Enumerate every transition that is in-bounds AND provably jumpable, then
+    // pick one. Because the option list is built from maxGapTiles(), an
+    // impossible jump can never be selected.
+    var opts = [];
+    for (var r = -4; r <= 3; r++) {
+      var nt = top - r;
+      if (nt < MIN_TOP || nt > MAX_TOP) continue;
+      var mg = maxGapTiles(r);
+      if (mg < 1) continue;
+      if (mg > 5) mg = 5;
+      for (var gp = 1; gp <= mg; gp++) {
+        // Bias: flat-ish hops are common, big climbs are rare and feel earned.
+        var weight = (r === 0 ? 3 : (Math.abs(r) <= 2 ? 2 : 1));
+        for (var w = 0; w < weight; w++) opts.push({ r: r, gp: gp });
+      }
+    }
+    if (!opts.length) break;
+    var choice = pick(rnd, opts);
+    segs[segs.length - 1].rise = choice.r;
+    segs[segs.length - 1].gap = choice.gp;
+
+    x += len + choice.gp;
+    top -= choice.r;
+  }
+
+  if (segs.length < MIN_SEGMENTS) return null;
+
+  // The last ledge is the escape landing: stretch it to the right wall so the
+  // door always has solid ground and a little run-up behind it.
+  var last = segs[segs.length - 1];
+  last.len = RIGHT - last.x;
+  last.gap = 0;
+  last.rise = 0;
+  if (last.len < 5) return null;
+
+  /* ---- 5b. Carve the ledges -------------------------------------------- */
+  var covered = new Uint8Array(MAP_W);
+  for (var i = 0; i < segs.length; i++) {
+    var s = segs[i];
+    for (var k = 0; k < s.len; k++) {
+      var cx = s.x + k;
+      if (cx < LEFT || cx >= RIGHT) continue;
+      covered[cx] = 1;
+      set(cx, s.top, T_BRICK);
+      for (var cy = s.top + 1; cy <= FLOOR; cy++) set(cx, cy, T_STONE);
+    }
+  }
+
+  // Every uncovered playable column is a shaft. Spikes at the bottom make a
+  // missed jump a real, readable failure instead of a soft landing.
+  for (var gx = LEFT; gx < RIGHT; gx++) {
+    if (!covered[gx]) set(gx, PIT_ROW, T_SPIKE);
+  }
+
+  /* ---- 5c. Borders ------------------------------------------------------ */
+  for (var by = 0; by < MAP_H; by++) {
+    set(0, by, T_STONE); set(1, by, T_STONE);
+    set(MAP_W - 2, by, T_STONE); set(MAP_W - 1, by, T_STONE);
+  }
+  for (var bx = 0; bx < MAP_W; bx++) {
+    set(bx, 0, T_STONE); set(bx, 1, T_STONE); set(bx, FLOOR, T_STONE);
+  }
+
+  /* ---- 5d. Pick feature segments --------------------------------------- */
+  // Coins, enemies and the door each want their own ledge so they never fight
+  // for the same square of floor.
+  var mid = [];
+  for (var m = 1; m < segs.length - 1; m++) mid.push(m);
+  if (mid.length < TOTAL_COINS + ENEMY_COUNT) return null;
+
+  function takeSpread(pool, count, minLen) {
+    // Spread picks evenly across the level so features are not all clustered.
+    var out = [];
+    for (var c = 0; c < count; c++) {
+      var want = Math.floor(((c + 0.5) / count) * pool.length);
+      var found = -1, bestDist = Infinity;
+      for (var p = 0; p < pool.length; p++) {
+        var idx = pool[p];
+        if (segs[idx].len < minLen) continue;
+        var d = Math.abs(p - want);
+        if (d < bestDist) { bestDist = d; found = p; }
+      }
+      if (found < 0) return null;
+      out.push(pool[found]);
+      pool.splice(found, 1);
+    }
+    return out;
+  }
+
+  var enemySegs = takeSpread(mid, ENEMY_COUNT, 6);
+  if (!enemySegs) return null;
+  var coinSegs = takeSpread(mid, TOTAL_COINS, 4);
+  if (!coinSegs) return null;
+
+  /* ---- 5e. Coins (some on one-way planks, for a reason to jump) --------- */
+  var coins = [];
+  for (var ci = 0; ci < coinSegs.length; ci++) {
+    var cs = segs[coinSegs[ci]];
+    // A plank needs landing room to its right: someone who runs off the end of
+    // it at full speed is airborne for PLANK_DROP tiles and keeps travelling,
+    // so the ledge has to still be under them when they come down. Without
+    // this the plank is an invisible trap that flings you into the pit.
+    var runoff = plankRunoffTiles(PLANK_DROP);
+    var minPlankLen = 1 + PLANK_W + runoff;
+    var onPlank = rnd() < 0.6 && cs.top - PLANK_DROP - 1 >= 2 && cs.len >= minPlankLen;
+    var half = (PLANK_W - 1) / 2;
+    var off = onPlank
+      ? clamp(Math.floor(cs.len / 2), 1 + half, cs.len - 1 - runoff - half)
+      : Math.floor(cs.len / 2);
+    var ccx = cs.x + off;
+    var coinY;
+    if (onPlank) {
+      var prow = cs.top - PLANK_DROP;
+      for (var pk = -half; pk <= half; pk++) set(ccx + pk, prow, T_PLATFORM);
+      coinY = prow * TILE - 18;
+    } else {
+      coinY = (cs.top - 1) * TILE - 4;
+    }
+    coins.push({ x: ccx * TILE + TILE / 2, y: coinY, r: 11, taken: false, phase: rnd() * 6.283 });
+  }
+
+  /* ---- 5f. Enemies ------------------------------------------------------ */
+  var enemies = [];
+  for (var ei = 0; ei < enemySegs.length; ei++) {
+    var es = segs[enemySegs[ei]];
+    var minX = (es.x + 0.25) * TILE;
+    var maxX = (es.x + es.len - 0.25) * TILE;
+    if (ei % 2 === 0) {
+      // Crawler: patrols the ledge, turns at walls and at ledge edges.
+      var cw = 30, ch = 24;
+      enemies.push({
+        kind: 'crawler',
+        x: (es.x + Math.floor(es.len / 2)) * TILE, y: es.top * TILE - ch,
+        w: cw, h: ch, vx: 0, vy: 0,
+        dir: rnd() < 0.5 ? -1 : 1, speed: 62,
+        minX: minX, maxX: maxX, t: rnd() * 6.283,
+        grounded: false, usesOneWay: true, dropTimer: 0
+      });
+    } else {
+      // Wisp: floats a Lissajous path through the open air above the ledge.
+      var rangeX = Math.max(TILE, (es.len * TILE) / 2 - TILE);
+      var baseX = (es.x + es.len / 2) * TILE;
+      var baseY = es.top * TILE - 2.6 * TILE;
+      enemies.push({
+        kind: 'wisp',
+        x: baseX - 13, y: baseY - 13, w: 26, h: 26,
+        baseX: baseX, baseY: baseY,
+        rangeX: rangeX, rangeY: 1.1 * TILE,
+        sx: 0.9, sy: 1.55, phase: rnd() * 6.283, t: rnd() * 6.283
+      });
+    }
+  }
+
+  /* ---- 5g. Exit door ---------------------------------------------------- */
+  var doorW = 40, doorH = 58;
+  var doorTile = RIGHT - 3;
+  var door = {
+    x: doorTile * TILE + (TILE - doorW) / 2,
+    y: last.top * TILE - doorH,
+    w: doorW, h: doorH
+  };
+
+  /* ---- 5h. Torches (decoration + light, drawn only, never collidable) --- */
+  var torches = [];
+  for (var ti = 0; ti < segs.length; ti++) {
+    var ts = segs[ti];
+    if (ts.len < 4) continue;
+    if (rnd() < 0.72) {
+      var tx = ts.x + randInt(rnd, 1, ts.len - 2);
+      torches.push({ x: tx * TILE + TILE / 2, y: (ts.top - 2) * TILE + 10, phase: rnd() * 6.283 });
+    }
+  }
+
+  var spawn = {
+    x: (segs[0].x + 1) * TILE + (TILE - PLAYER_W) / 2,
+    y: segs[0].top * TILE - PLAYER_H
+  };
+
+  return {
+    seed: seed, grid: grid, segs: segs, spawn: spawn,
+    coins: coins, enemies: enemies, door: door, torches: torches,
+    get: get
+  };
+}
+
+// Independent re-check of everything the generator promised. Anything that
+// fails here means the run would be broken, so we throw the seed away.
+function validateLevel(L) {
+  if (!L) return 'no level';
+  if (L.segs.length < MIN_SEGMENTS) return 'too few segments';
+  if (L.coins.length !== TOTAL_COINS) return 'coin count';
+  if (L.enemies.length !== ENEMY_COUNT) return 'enemy count';
+  if (!L.door) return 'no door';
+
+  function g(x, y) {
+    if (x < 0 || y < 0 || x >= MAP_W || y >= MAP_H) return T_STONE;
+    return L.grid[y * MAP_W + x];
+  }
+
+  // Every ledge-to-ledge transition must be within the simulated jump arc.
+  for (var i = 0; i < L.segs.length - 1; i++) {
+    var a = L.segs[i], b = L.segs[i + 1];
+    var rise = a.top - b.top;
+    var gap = b.x - (a.x + a.len);
+    if (rise > 3) return 'rise too high at seg ' + i;
+    var mg = maxGapTiles(rise);
+    if (mg < 1 || gap > mg) return 'gap ' + gap + ' > max ' + mg + ' at seg ' + i;
+    if (gap < 0) return 'overlapping segs at ' + i;
+  }
+
+  // Spawn must be standing on something, with room for the body.
+  var sx = Math.floor((L.spawn.x + PLAYER_W / 2) / TILE);
+  var sfeet = Math.floor((L.spawn.y + PLAYER_H + 1) / TILE);
+  if (!isSolid(g(sx, sfeet))) return 'spawn not grounded';
+  for (var hy = Math.floor(L.spawn.y / TILE); hy < sfeet; hy++) {
+    if (isSolid(g(sx, hy))) return 'spawn blocked';
+  }
+
+  // Coins must sit in open air (and be reachable: they are always within a
+  // jump of the ledge they were placed on).
+  for (var c = 0; c < L.coins.length; c++) {
+    var co = L.coins[c];
+    if (isSolid(g(Math.floor(co.x / TILE), Math.floor(co.y / TILE)))) return 'coin in wall';
+    if (co.y < 2 * TILE) return 'coin above ceiling';
+  }
+
+  // Wisps must have a clear box to fly in; crawlers must have floor under them.
+  for (var e = 0; e < L.enemies.length; e++) {
+    var en = L.enemies[e];
+    if (en.kind === 'wisp') {
+      var x0 = Math.floor((en.baseX - en.rangeX - en.w) / TILE);
+      var x1 = Math.floor((en.baseX + en.rangeX + en.w) / TILE);
+      var y0 = Math.floor((en.baseY - en.rangeY - en.h) / TILE);
+      var y1 = Math.floor((en.baseY + en.rangeY + en.h) / TILE);
+      if (y0 < 2) return 'wisp box above ceiling';
+      for (var wx = x0; wx <= x1; wx++)
+        for (var wy = y0; wy <= y1; wy++)
+          if (isSolid(g(wx, wy)) || isOneWay(g(wx, wy))) return 'wisp box blocked';
+    } else {
+      var fx = Math.floor((en.x + en.w / 2) / TILE);
+      var fy = Math.floor((en.y + en.h + 1) / TILE);
+      if (!isSolid(g(fx, fy))) return 'crawler not grounded';
+    }
+  }
+
+  // Every one-way plank must have enough ledge past its right end to catch a
+  // player who runs off it at full speed (see plankRunoffTiles).
+  var runoffNeeded = plankRunoffTiles(PLANK_DROP);
+  for (var py = 0; py < MAP_H; py++) {
+    for (var px = 0; px < MAP_W; px++) {
+      if (!isOneWay(g(px, py))) continue;
+      if (isOneWay(g(px + 1, py))) continue;      // only check the right-hand end
+      var ledgeRow = py + PLANK_DROP;
+      for (var rr = 1; rr <= runoffNeeded; rr++) {
+        if (!isSolid(g(px + rr, ledgeRow))) {
+          return 'plank at ' + px + ',' + py + ' has no run-off landing (' + rr + '/' + runoffNeeded + ')';
+        }
+      }
+    }
+  }
+
+  // The door must rest on solid ground and stand in open air.
+  var dcx = Math.floor((L.door.x + L.door.w / 2) / TILE);
+  var dfy = Math.floor((L.door.y + L.door.h + 1) / TILE);
+  if (!isSolid(g(dcx, dfy))) return 'door not grounded';
+  for (var dy = Math.floor(L.door.y / TILE); dy < dfy; dy++) {
+    if (isSolid(g(dcx, dy))) return 'door blocked';
+  }
+  return null;
+}
+
+// A hand-built level used only if generation somehow fails every seed. It is
+// deliberately dull but it is always winnable, so the game can never hard-fail.
+function fallbackLevel() {
+  var grid = new Uint8Array(MAP_W * MAP_H);
+  function set(x, y, v) { if (x >= 0 && y >= 0 && x < MAP_W && y < MAP_H) grid[y * MAP_W + x] = v; }
+  var top = MAP_H - 9, FLOOR = MAP_H - 1;
+  var segs = [];
+  var x = 2;
+  while (x < MAP_W - 2) {
+    var len = Math.min(10, MAP_W - 2 - x);
+    segs.push({ x: x, len: len, top: top, rise: 0, gap: 2 });
+    for (var k = 0; k < len; k++) {
+      set(x + k, top, T_BRICK);
+      for (var cy = top + 1; cy <= FLOOR; cy++) set(x + k, cy, T_STONE);
+    }
+    x += len + 2;
+  }
+  var lastSeg = segs[segs.length - 1];
+  lastSeg.len = (MAP_W - 2) - lastSeg.x;
+  for (var kk = 0; kk < lastSeg.len; kk++) {
+    set(lastSeg.x + kk, top, T_BRICK);
+    for (var cy2 = top + 1; cy2 <= FLOOR; cy2++) set(lastSeg.x + kk, cy2, T_STONE);
+  }
+  for (var gx = 2; gx < MAP_W - 2; gx++) if (grid[top * MAP_W + gx] !== T_BRICK) set(gx, MAP_H - 2, T_SPIKE);
+  for (var by = 0; by < MAP_H; by++) { set(0, by, T_STONE); set(1, by, T_STONE); set(MAP_W - 2, by, T_STONE); set(MAP_W - 1, by, T_STONE); }
+  for (var bx = 0; bx < MAP_W; bx++) { set(bx, 0, T_STONE); set(bx, 1, T_STONE); set(bx, FLOOR, T_STONE); }
+
+  var coins = [], enemies = [];
+  for (var c = 0; c < TOTAL_COINS; c++) {
+    var cs = segs[Math.min(segs.length - 2, 1 + c * 2)];
+    coins.push({ x: (cs.x + 2) * TILE + 16, y: (cs.top - 1) * TILE - 4, r: 11, taken: false, phase: c });
+  }
+  var e0 = segs[1], e1 = segs[Math.min(segs.length - 2, 3)];
+  enemies.push({ kind: 'crawler', x: (e0.x + 3) * TILE, y: e0.top * TILE - 24, w: 30, h: 24, vx: 0, vy: 0, dir: 1, speed: 62, minX: (e0.x + 0.25) * TILE, maxX: (e0.x + e0.len - 0.25) * TILE, t: 0, grounded: false, usesOneWay: true, dropTimer: 0 });
+  enemies.push({ kind: 'wisp', x: (e1.x + 3) * TILE, y: e1.top * TILE - 3 * TILE, w: 26, h: 26, baseX: (e1.x + e1.len / 2) * TILE, baseY: e1.top * TILE - 2.6 * TILE, rangeX: TILE, rangeY: TILE, sx: 0.9, sy: 1.55, phase: 0, t: 0 });
+
+  return {
+    seed: -1, grid: grid, segs: segs,
+    spawn: { x: 3 * TILE + (TILE - PLAYER_W) / 2, y: top * TILE - PLAYER_H },
+    coins: coins, enemies: enemies,
+    door: { x: (MAP_W - 5) * TILE + (TILE - 40) / 2, y: top * TILE - 58, w: 40, h: 58 },
+    torches: []
+  };
+}
+
+function buildLevel(seed) {
+  for (var attempt = 0; attempt < 64; attempt++) {
+    var L = generateLevel((seed + attempt * 7919) >>> 0);
+    if (L && !validateLevel(L)) { L.seed = seed; return L; }
+  }
+  var fb = fallbackLevel();
+  fb.seed = seed;
+  return fb;
+}
+
+/* --------------------------------------------------------------------------
+   6. PROCEDURAL ART
+   Tiles are drawn once into small offscreen canvases keyed by
+   (type, neighbour mask, variant) and then blitted. Only the ~600 tiles that
+   are actually on screen are drawn each frame, so memory stays tiny and the
+   art still reacts to which faces are exposed.
+   -------------------------------------------------------------------------- */
+
+var artScale = 1;                 // set from devicePixelRatio
+var spriteCache = Object.create(null);
+var bgLayers = null;
+
+function makeCanvas(w, h) {
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w));
+  c.height = Math.max(1, Math.round(h));
+  return c;
+}
+
+// Neighbour mask bits: 1 = open above, 2 = open right, 4 = open below, 8 = open left
+function tileMask(cx, cy) {
+  var m = 0;
+  if (!isSolid(tileAt(cx, cy - 1))) m |= 1;
+  if (!isSolid(tileAt(cx + 1, cy))) m |= 2;
+  if (!isSolid(tileAt(cx, cy + 1))) m |= 4;
+  if (!isSolid(tileAt(cx - 1, cy))) m |= 8;
+  return m;
+}
+
+function getTileSprite(type, mask, variant) {
+  var key = type + '|' + mask + '|' + variant + '|' + artScale;
+  var cached = spriteCache[key];
+  if (cached) return cached;
+
+  var S = TILE * artScale;
+  var cv = makeCanvas(S, S);
+  var g = cv.getContext('2d');
+  g.scale(artScale, artScale);
+  drawTileArt(g, type, mask, variant);
+  spriteCache[key] = cv;
+  return cv;
+}
+
+function drawTileArt(g, type, mask, variant) {
+  var rnd = mulberry32(variant * 2654435761 + type * 40503 + mask * 97);
+  var T = TILE;
+
+  if (type === T_STONE || type === T_BRICK) {
+    var isCap = (type === T_BRICK);
+    // Capstones are warmer and lighter than the rock body so the walkable
+    // surface reads instantly.
+    var base = isCap ? [72, 64, 82] : [46, 42, 58];
+    var jitter = Math.floor(rnd() * 10) - 5;
+    var grad = g.createLinearGradient(0, 0, 0, T);
+    grad.addColorStop(0, 'rgb(' + (base[0] + 14 + jitter) + ',' + (base[1] + 13 + jitter) + ',' + (base[2] + 16 + jitter) + ')');
+    grad.addColorStop(1, 'rgb(' + (base[0] - 8 + jitter) + ',' + (base[1] - 8 + jitter) + ',' + (base[2] - 6 + jitter) + ')');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, T, T);
+
+    // Mortar courses: offset every other row so it reads as brickwork.
+    g.strokeStyle = 'rgba(0,0,0,0.30)';
+    g.lineWidth = 1;
+    var half = (variant % 2) ? T / 2 : 0;
+    g.beginPath();
+    g.moveTo(0, T / 2 + 0.5); g.lineTo(T, T / 2 + 0.5);
+    g.moveTo(half + 0.5, 0); g.lineTo(half + 0.5, T / 2);
+    g.moveTo(((half + T / 2) % T) + 0.5, T / 2); g.lineTo(((half + T / 2) % T) + 0.5, T);
+    g.stroke();
+
+    // Speckle: a handful of light and dark grains to break up the flat fill.
+    for (var s = 0; s < 12; s++) {
+      var px = rnd() * T, py = rnd() * T, sz = 1 + rnd() * 1.6;
+      g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,0.045)' : 'rgba(0,0,0,0.16)';
+      g.fillRect(px, py, sz, sz);
+    }
+
+    // Lit lip on exposed top faces, shadow on exposed undersides.
+    if (mask & 1) {
+      g.fillStyle = isCap ? 'rgba(150,205,150,0.34)' : 'rgba(190,200,255,0.13)';
+      g.fillRect(0, 0, T, 3);
+      g.fillStyle = 'rgba(255,255,255,0.10)';
+      g.fillRect(0, 3, T, 1);
+      if (isCap) {
+        // Moss tufts hanging over the lip.
+        g.fillStyle = 'rgba(96,150,84,0.42)';
+        for (var mth = 0; mth < 4; mth++) {
+          var mx = rnd() * T;
+          g.fillRect(mx, 2, 2 + rnd() * 3, 2 + rnd() * 4);
+        }
+      }
+    }
+    if (mask & 4) { g.fillStyle = 'rgba(0,0,0,0.34)'; g.fillRect(0, T - 4, T, 4); }
+    if (mask & 8) { g.fillStyle = 'rgba(0,0,0,0.20)'; g.fillRect(0, 0, 3, T); }
+    if (mask & 2) { g.fillStyle = 'rgba(0,0,0,0.20)'; g.fillRect(T - 3, 0, 3, T); }
+    // Inner vignette so large stone masses do not look like flat paint.
+    g.strokeStyle = 'rgba(0,0,0,0.18)';
+    g.strokeRect(0.5, 0.5, T - 1, T - 1);
+
+  } else if (type === T_PLATFORM) {
+    // One-way plank: visually thin and clearly not part of the rock, so the
+    // player can tell at a glance that it can be jumped through.
+    g.clearRect(0, 0, T, T);
+    var pg = g.createLinearGradient(0, 0, 0, 11);
+    pg.addColorStop(0, '#a9773f');
+    pg.addColorStop(0.55, '#7d5527');
+    pg.addColorStop(1, '#523618');
+    g.fillStyle = pg;
+    g.fillRect(0, 0, T, 11);
+    g.fillStyle = 'rgba(255,225,180,0.22)';
+    g.fillRect(0, 0, T, 2);
+    g.strokeStyle = 'rgba(0,0,0,0.35)';
+    g.beginPath();
+    for (var pw = 0; pw < 3; pw++) {
+      var gx2 = 4 + pw * 10 + rnd() * 3;
+      g.moveTo(gx2, 2); g.lineTo(gx2, 10);
+    }
+    g.stroke();
+    g.fillStyle = 'rgba(70,70,86,0.9)';   // iron bracket
+    g.fillRect(2, 0, 3, 11);
+    g.fillRect(T - 5, 0, 3, 11);
+    g.fillStyle = 'rgba(0,0,0,0.28)';
+    g.fillRect(0, 11, T, 3);
+
+  } else if (type === T_SPIKE) {
+    g.clearRect(0, 0, T, T);
+    var count = 4;
+    var wsp = T / count;
+    for (var sp = 0; sp < count; sp++) {
+      var bx2 = sp * wsp;
+      var tipH = T * 0.62 + rnd() * 4;
+      var sgrad = g.createLinearGradient(bx2, T, bx2, T - tipH);
+      sgrad.addColorStop(0, '#3a3546');
+      sgrad.addColorStop(0.6, '#8f93a8');
+      sgrad.addColorStop(1, '#e6ebf5');
+      g.fillStyle = sgrad;
+      g.beginPath();
+      g.moveTo(bx2, T);
+      g.lineTo(bx2 + wsp / 2, T - tipH);
+      g.lineTo(bx2 + wsp, T);
+      g.closePath();
+      g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.28)';
+      g.beginPath();
+      g.moveTo(bx2 + wsp / 2, T - tipH);
+      g.lineTo(bx2 + wsp * 0.62, T);
+      g.lineTo(bx2 + wsp * 0.5, T);
+      g.closePath();
+      g.fill();
+    }
+    g.fillStyle = 'rgba(24,20,32,0.95)';
+    g.fillRect(0, T - 5, T, 5);
+  }
+}
+
+// Three parallax layers, each a horizontally tileable strip drawn once.
+function buildBackground(seed) {
+  var rnd = mulberry32(seed ^ 0x9e3779b9);
+  var layers = [];
+  var defs = [
+    { h: VIEW_H, factor: 0.12, colA: '#171327', colB: '#0b0913', count: 26, hi: 0.55, lo: 0.95, w: 1200 },
+    { h: VIEW_H, factor: 0.30, colA: '#221c3a', colB: '#120f20', count: 18, hi: 0.42, lo: 0.9, w: 980 },
+    { h: VIEW_H, factor: 0.52, colA: '#2c2447', colB: '#181328', count: 12, hi: 0.30, lo: 0.85, w: 760 }
+  ];
+  for (var d = 0; d < defs.length; d++) {
+    var def = defs[d];
+    var cv = makeCanvas(def.w, def.h);
+    var g = cv.getContext('2d');
+    // Stalagmites from the floor and stalactites from the ceiling.
+    for (var i = 0; i < def.count; i++) {
+      var px = rnd() * def.w;
+      var pw = 40 + rnd() * 130;
+      var ph = def.h * (0.18 + rnd() * 0.34);
+      var up = rnd() < 0.55;
+      var grad = g.createLinearGradient(0, up ? def.h : 0, 0, up ? def.h - ph : ph);
+      grad.addColorStop(0, def.colA);
+      grad.addColorStop(1, def.colB);
+      g.fillStyle = grad;
+      g.beginPath();
+      if (up) {
+        g.moveTo(px - pw / 2, def.h);
+        g.lineTo(px, def.h - ph);
+        g.lineTo(px + pw / 2, def.h);
+      } else {
+        g.moveTo(px - pw / 2, 0);
+        g.lineTo(px, ph);
+        g.lineTo(px + pw / 2, 0);
+      }
+      g.closePath();
+      g.fill();
+    }
+    // Faint distant motes.
+    for (var m = 0; m < 40; m++) {
+      g.fillStyle = 'rgba(180,170,230,' + (0.02 + rnd() * 0.05).toFixed(3) + ')';
+      g.fillRect(rnd() * def.w, rnd() * def.h, 2, 2);
+    }
+    layers.push({ canvas: cv, factor: def.factor });
+  }
+  return layers;
+}
+
+/* --------------------------------------------------------------------------
+   7. AUDIO - short synthesized blips, no files
+   -------------------------------------------------------------------------- */
+
+var Sound = (function () {
+  var ctx = null, muted = false, failed = false;
+
+  function ensure() {
+    if (failed) return null;
+    if (!ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { failed = true; return null; }
+      try { ctx = new AC(); } catch (e) { failed = true; return null; }
+    }
+    if (ctx.state === 'suspended' && ctx.resume) { try { ctx.resume(); } catch (e) {} }
+    return ctx;
+  }
+
+  function tone(freq, freq2, dur, type, vol) {
+    if (muted) return;
+    var c = ensure();
+    if (!c) return;
+    try {
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = type || 'square';
+      var t0 = c.currentTime;
+      o.frequency.setValueAtTime(freq, t0);
+      if (freq2 && freq2 !== freq) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq2), t0 + dur);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.08, t0 + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0 + dur + 0.02);
+    } catch (e) { /* audio is a nicety; never let it break the game */ }
+  }
+
+  return {
+    unlock: ensure,
+    jump:  function () { tone(330, 620, 0.14, 'square', 0.06); },
+    land:  function () { tone(150, 90, 0.07, 'sine', 0.05); },
+    coin:  function () { tone(880, 1320, 0.10, 'triangle', 0.07); setTimeout(function () { tone(1320, 1760, 0.12, 'triangle', 0.055); }, 70); },
+    hurt:  function () { tone(300, 70, 0.32, 'sawtooth', 0.09); },
+    locked:function () { tone(150, 110, 0.16, 'square', 0.05); },
+    open:  function () { tone(420, 900, 0.30, 'triangle', 0.07); },
+    win:   function () { [0, 110, 220, 380].forEach(function (d, i) { setTimeout(function () { tone([523, 659, 784, 1047][i], null, 0.30, 'triangle', 0.075); }, d); }); },
+    over:  function () { [0, 160, 340].forEach(function (d, i) { setTimeout(function () { tone([392, 311, 233][i], null, 0.36, 'sawtooth', 0.075); }, d); }); },
+    toggle: function () { muted = !muted; if (!muted) tone(660, 880, 0.08, 'triangle', 0.06); return muted; },
+    isMuted: function () { return muted; }
+  };
+})();
+
+/* --------------------------------------------------------------------------
+   8. INPUT
+   -------------------------------------------------------------------------- */
+
+var keys = { left: false, right: false, up: false, down: false, jump: false };
+var jumpPressedEdge = false;      // consumed by the jump buffer each tick
+var anyPressEdge = false;         // used by the overlays' "press to continue"
+
+var KEYMAP = {
+  ArrowLeft: 'left', KeyA: 'left',
+  ArrowRight: 'right', KeyD: 'right',
+  ArrowUp: 'up', KeyW: 'up',
+  ArrowDown: 'down', KeyS: 'down',
+  Space: 'jump'
+};
+var PREVENT = { ArrowLeft: 1, ArrowRight: 1, ArrowUp: 1, ArrowDown: 1, Space: 1 };
+
+function setKey(name, down) {
+  if (!(name in keys)) return;
+  if (down && !keys[name] && (name === 'jump' || name === 'up')) jumpPressedEdge = true;
+  keys[name] = down;
+  if (down) anyPressEdge = true;
+}
+
+function onKeyDown(e) {
+  if (e.repeat) {
+    if (PREVENT[e.code]) e.preventDefault();
+    return;
+  }
+  if (PREVENT[e.code]) e.preventDefault();
+  Sound.unlock();
+
+  var mapped = KEYMAP[e.code];
+  if (mapped) setKey(mapped, true);
+  // Up doubles as jump (a very common platformer expectation).
+  if (mapped === 'up') setKey('jump', true);
+
+  if (e.code === 'KeyR') { anyPressEdge = true; restart(); }
+  else if (e.code === 'KeyN') { anyPressEdge = true; newLevel(); }
+  else if (e.code === 'KeyM') { Sound.toggle(); }
+  else if (e.code === 'Enter' || e.code === 'NumpadEnter') { anyPressEdge = true; }
+  else if (e.code === 'KeyP') { togglePause(); }
+}
+
+function onKeyUp(e) {
+  var mapped = KEYMAP[e.code];
+  if (mapped) setKey(mapped, false);
+  if (mapped === 'up') setKey('jump', false);
+}
+
+function clearKeys() {
+  for (var k in keys) keys[k] = false;
+}
+
+window.addEventListener('keydown', onKeyDown);
+window.addEventListener('keyup', onKeyUp);
+// Losing focus mid-press would otherwise leave the player running forever.
+window.addEventListener('blur', clearKeys);
+document.addEventListener('visibilitychange', function () { if (document.hidden) clearKeys(); });
+
+// Touch controls (shown only on coarse pointers via CSS).
+(function bindTouch() {
+  var btns = document.querySelectorAll('#touch .tbtn');
+  for (var i = 0; i < btns.length; i++) {
+    (function (btn) {
+      var name = btn.getAttribute('data-key');
+      function on(ev) {
+        ev.preventDefault();
+        Sound.unlock();
+        btn.setAttribute('data-on', '1');
+        setKey(name, true);
+        if (btn.setPointerCapture && ev.pointerId != null) {
+          try { btn.setPointerCapture(ev.pointerId); } catch (e) {}
+        }
+      }
+      function off(ev) {
+        ev.preventDefault();
+        btn.removeAttribute('data-on');
+        setKey(name, false);
+      }
+      btn.addEventListener('pointerdown', on);
+      btn.addEventListener('pointerup', off);
+      btn.addEventListener('pointercancel', off);
+      btn.addEventListener('pointerleave', off);
+    })(btns[i]);
+  }
+})();
+
+/* --------------------------------------------------------------------------
+   9. PHYSICS - swept, axis-separated AABB vs tilemap
+   Resolving X fully and then Y fully (rather than both at once from a single
+   overlap test) is what keeps the player from squeezing through the seam where
+   two solid tiles meet - the classic corner-clipping bug. Movement is also
+   split into sub-steps no larger than a fraction of a tile so a fast fall can
+   never tunnel through a one-tile-thick floor.
+   -------------------------------------------------------------------------- */
+
+function moveAndCollide(e, dt) {
+  var maxStep = TILE * 0.4;
+  var travel = Math.max(Math.abs(e.vx), Math.abs(e.vy)) * dt;
+  var steps = clamp(Math.ceil(travel / maxStep), 1, 16);
+  var sdt = dt / steps;
+
+  var res = { hitX: false, hitCeil: false, landed: false, oneWay: false };
+  e.grounded = false;
+
+  for (var s = 0; s < steps; s++) {
+    /* ---- X axis ---- */
+    if (e.vx !== 0) {
+      e.x += e.vx * sdt;
+      var cy0 = Math.floor(e.y / TILE);
+      var cy1 = Math.floor((e.y + e.h - EPS) / TILE);
+      var cxA = Math.floor(e.x / TILE);
+      var cxB = Math.floor((e.x + e.w - EPS) / TILE);
+      var cx, cy;
+      if (e.vx > 0) {
+        // Scan left-to-right and stop at the *first* blocker so we always
+        // resolve to the most conservative (leftmost) safe position.
+        found:
+        for (cx = cxA; cx <= cxB; cx++) {
+          for (cy = cy0; cy <= cy1; cy++) {
+            if (isSolid(tileAt(cx, cy))) {
+              e.x = cx * TILE - e.w; e.vx = 0; res.hitX = true; break found;
+            }
+          }
+        }
+      } else {
+        foundL:
+        for (cx = cxB; cx >= cxA; cx--) {
+          for (cy = cy0; cy <= cy1; cy++) {
+            if (isSolid(tileAt(cx, cy))) {
+              e.x = (cx + 1) * TILE; e.vx = 0; res.hitX = true; break foundL;
+            }
+          }
+        }
+      }
+    }
+
+    /* ---- Y axis ---- */
+    if (e.vy !== 0) {
+      var prevBottom = e.y + e.h;
+      e.y += e.vy * sdt;
+      var cx0 = Math.floor(e.x / TILE);
+      var cx1 = Math.floor((e.x + e.w - EPS) / TILE);
+      var ky, kx;
+      if (e.vy > 0) {
+        var cyA = Math.floor(e.y / TILE);
+        var cyB = Math.floor((e.y + e.h - EPS) / TILE);
+        foundD:
+        for (ky = cyA; ky <= cyB; ky++) {
+          for (kx = cx0; kx <= cx1; kx++) {
+            var t = tileAt(kx, ky);
+            var block = isSolid(t), viaOneWay = false;
+            // A one-way plank only stops a fall that started above its surface,
+            // and only when the player is not deliberately dropping through.
+            if (!block && isOneWay(t) && e.usesOneWay && e.dropTimer <= 0 &&
+                prevBottom <= ky * TILE + 0.5) {
+              block = true; viaOneWay = true;
+            }
+            if (block) {
+              e.y = ky * TILE - e.h; e.vy = 0;
+              e.grounded = true; res.landed = true; res.oneWay = viaOneWay;
+              break foundD;
+            }
+          }
+        }
+      } else {
+        var uyA = Math.floor(e.y / TILE);
+        var uyB = Math.floor((e.y + e.h - EPS) / TILE);
+        foundU:
+        for (ky = uyB; ky >= uyA; ky--) {
+          for (kx = cx0; kx <= cx1; kx++) {
+            if (isSolid(tileAt(kx, ky))) {
+              e.y = (ky + 1) * TILE; e.vy = 0; res.hitCeil = true; break foundU;
+            }
+          }
+        }
+      }
+    }
+  }
+  return res;
+}
+
+// Does this AABB touch a hazard tile? Spikes only occupy the lower part of
+// their tile, so the hit box is inset to match what is actually drawn.
+function overlapsHazard(x, y, w, h) {
+  var cx0 = Math.floor(x / TILE), cx1 = Math.floor((x + w - EPS) / TILE);
+  var cy0 = Math.floor(y / TILE), cy1 = Math.floor((y + h - EPS) / TILE);
+  for (var cy = cy0; cy <= cy1; cy++) {
+    for (var cx = cx0; cx <= cx1; cx++) {
+      if (!isHazard(tileAt(cx, cy))) continue;
+      var hx = cx * TILE + 3, hy = cy * TILE + TILE * 0.42;
+      var hw = TILE - 6, hh = TILE * 0.58;
+      if (rectsOverlap(x, y, w, h, hx, hy, hw, hh)) return true;
+    }
+  }
+  return false;
+}
+
+/* --------------------------------------------------------------------------
+   10. ENTITIES
+   -------------------------------------------------------------------------- */
+
+var player = null;
+var particles = [];
+
+function makePlayer() {
+  return {
+    x: level.spawn.x, y: level.spawn.y,
+    w: PLAYER_W, h: PLAYER_H,
+    vx: 0, vy: 0,
+    facing: 1,
+    grounded: false, groundOneWay: false,
+    coyote: 0, buffer: 0, jumping: false,
+    dropTimer: 0, usesOneWay: true,
+    invuln: 0, runPhase: 0,
+    squash: 1, stretch: 1,
+    safeX: level.spawn.x, safeY: level.spawn.y, safeTimer: 0,
+    wasGrounded: true
+  };
+}
+
+function spawnParticles(x, y, count, opts) {
+  opts = opts || {};
+  for (var i = 0; i < count; i++) {
+    var a = opts.angle != null ? opts.angle + (Math.random() - 0.5) * (opts.spread || 1.4)
+                               : Math.random() * Math.PI * 2;
+    var sp = (opts.speed || 90) * (0.35 + Math.random() * 0.9);
+    particles.push({
+      x: x, y: y,
+      vx: Math.cos(a) * sp + (opts.vx || 0),
+      vy: Math.sin(a) * sp + (opts.vy || 0),
+      life: (opts.life || 0.5) * (0.6 + Math.random() * 0.7),
+      age: 0,
+      size: (opts.size || 3) * (0.6 + Math.random() * 0.9),
+      color: opts.color || '#cfc6b4',
+      gravity: opts.gravity != null ? opts.gravity : 700,
+      glow: !!opts.glow
+    });
+  }
+  if (particles.length > 600) particles.splice(0, particles.length - 600);
+}
+
+function updateParticles(dt) {
+  for (var i = particles.length - 1; i >= 0; i--) {
+    var p = particles[i];
+    p.age += dt;
+    if (p.age >= p.life) { particles.splice(i, 1); continue; }
+    p.vy += p.gravity * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vx *= (1 - 1.6 * dt);
+  }
+}
+
+function updatePlayer(dt) {
+  var p = player;
+
+  /* ---- horizontal: acceleration with friction-based deceleration ---- */
+  var wantLeft = keys.left, wantRight = keys.right;
+  var dir = (wantRight ? 1 : 0) - (wantLeft ? 1 : 0);
+  var accel = p.grounded ? RUN_ACCEL : AIR_ACCEL;
+  var friction = p.grounded ? RUN_FRICTION : AIR_FRICTION;
+
+  if (dir !== 0) {
+    p.facing = dir;
+    // Turning around gets extra bite so direction changes feel responsive.
+    var turnBoost = (dir * p.vx < 0) ? 1.9 : 1;
+    p.vx += dir * accel * turnBoost * dt;
+    if (p.vx > RUN_SPEED) p.vx = RUN_SPEED;
+    if (p.vx < -RUN_SPEED) p.vx = -RUN_SPEED;
+  } else if (p.vx !== 0) {
+    var drop = friction * dt;
+    if (Math.abs(p.vx) <= drop) p.vx = 0;
+    else p.vx -= Math.sign(p.vx) * drop;
+  }
+
+  /* ---- coyote time and jump buffering ---- */
+  if (p.grounded) p.coyote = COYOTE_TIME;
+  else p.coyote = Math.max(0, p.coyote - dt);
+
+  if (jumpPressedEdge) p.buffer = JUMP_BUFFER;
+  else p.buffer = Math.max(0, p.buffer - dt);
+
+  p.dropTimer = Math.max(0, p.dropTimer - dt);
+
+  var jumpHeld = keys.jump || keys.up;
+
+  if (p.buffer > 0 && p.coyote > 0) {
+    if (keys.down && p.grounded && p.groundOneWay) {
+      // Down + jump on a plank drops through instead of jumping.
+      p.dropTimer = DROP_TIME;
+      p.grounded = false;
+      p.coyote = 0;
+      p.buffer = 0;
+      p.y += 2;
+      spawnParticles(p.x + p.w / 2, p.y + p.h, 5, { color: '#a9773f', speed: 60, life: 0.3, size: 2, gravity: 300 });
+    } else {
+      p.vy = -JUMP_VEL;
+      p.jumping = true;
+      p.grounded = false;
+      p.buffer = 0;
+      p.coyote = 0;                 // consumed, so this can never double-jump
+      p.stretch = 1.28;
+      Sound.jump();
+      spawnParticles(p.x + p.w / 2, p.y + p.h, 8,
+        { color: '#b8ae99', speed: 110, life: 0.32, size: 2.6, angle: Math.PI / 2, spread: 2.0, gravity: 420 });
+    }
+  }
+
+  /* ---- variable jump height: releasing early clips the rise ---- */
+  if (p.jumping && p.vy < 0 && !jumpHeld) {
+    if (p.vy < -JUMP_CUT_VEL) p.vy = -JUMP_CUT_VEL;
+    p.jumping = false;
+  }
+  if (p.vy >= 0) p.jumping = false;
+
+  /* ---- gravity with velocity capping ---- */
+  var g = (p.vy > 0 ? GRAVITY * FALL_MULT : GRAVITY);
+  p.vy += g * dt;
+  if (p.vy > MAX_FALL) p.vy = MAX_FALL;
+
+  var wasGrounded = p.grounded;
+  var res = moveAndCollide(p, dt);
+  // Recomputed from this tick's landing only. Carrying the previous value
+  // forward would leave the flag stuck on after stepping from a plank onto
+  // solid rock, and down+jump would then silently eat the jump.
+  p.groundOneWay = p.grounded && res.oneWay;
+  if (res.hitCeil) p.jumping = false;
+
+  if (res.landed && !wasGrounded) {
+    Sound.land();
+    p.squash = 1.3;
+    spawnParticles(p.x + p.w / 2, p.y + p.h, 7,
+      { color: '#b8ae99', speed: 130, life: 0.30, size: 2.4, angle: 0, spread: 6.283, gravity: 500, vy: -20 });
+  }
+
+  // Squash/stretch relax back to neutral.
+  p.squash = lerp(p.squash, 1, smoothing(14, dt));
+  p.stretch = lerp(p.stretch, 1, smoothing(14, dt));
+
+  // Run cycle phase, used by the leg animation.
+  if (p.grounded) p.runPhase += Math.abs(p.vx) * dt * 0.06;
+  p.invuln = Math.max(0, p.invuln - dt);
+
+  /* ---- remember the last safe footing for respawns ----
+     Only footing with solid ground well to either side counts. Respawning on
+     the lip of a shaft would drop the player back with no room to build up
+     speed, so the very next jump falls short and they die in the same spot
+     again - a death loop that eats every remaining life. */
+  p.safeTimer -= dt;
+  if (p.grounded && p.vy === 0 && p.safeTimer <= 0 &&
+      !overlapsHazard(p.x, p.y, p.w, p.h) && !p.groundOneWay) {
+    var footRow = Math.floor((p.y + p.h + 2) / TILE);
+    var midX = p.x + p.w / 2;
+    if (isSolid(tileAt(Math.floor((midX - RUNWAY) / TILE), footRow)) &&
+        isSolid(tileAt(Math.floor(midX / TILE), footRow)) &&
+        isSolid(tileAt(Math.floor((midX + RUNWAY) / TILE), footRow))) {
+      p.safeX = p.x; p.safeY = p.y; p.safeTimer = 0.25;
+    }
+  }
+
+  /* ---- hazards ---- */
+  if (p.invuln <= 0) {
+    if (overlapsHazard(p.x + 3, p.y + 3, p.w - 6, p.h - 4)) damagePlayer('spikes');
+  }
+  // Death plane: anything that leaves the bottom of the map is gone.
+  if (p.y > MAP_H * TILE + 120) damagePlayer('pit');
+}
+
+function updateEnemy(e, dt) {
+  if (e.kind === 'crawler') {
+    e.t += dt;
+    e.vx = e.dir * e.speed;
+    e.vy += GRAVITY * dt;
+    if (e.vy > MAX_FALL) e.vy = MAX_FALL;
+    var r = moveAndCollide(e, dt);
+
+    // Turn at the patrol bounds, at walls, and before walking off a ledge.
+    if (e.x < e.minX) { e.x = e.minX; e.dir = 1; }
+    else if (e.x + e.w > e.maxX) { e.x = e.maxX - e.w; e.dir = -1; }
+    else if (r.hitX) { e.dir *= -1; }
+    else if (e.grounded) {
+      var aheadX = e.dir > 0 ? e.x + e.w + 3 : e.x - 3;
+      var footY = e.y + e.h + 3;
+      if (!isSolid(tileAt(Math.floor(aheadX / TILE), Math.floor(footY / TILE)))) e.dir *= -1;
+    }
+  } else {
+    // Wisp: a closed Lissajous path through a box validated to be empty, so it
+    // never needs collision and can never end up inside the rock.
+    e.t += dt;
+    e.x = e.baseX + Math.sin(e.t * e.sx + e.phase) * e.rangeX - e.w / 2;
+    e.y = e.baseY + Math.sin(e.t * e.sy + e.phase * 1.7) * e.rangeY - e.h / 2;
+    if (Math.random() < 0.30) {
+      spawnParticles(e.x + e.w / 2, e.y + e.h / 2, 1,
+        { color: '#7be0ff', speed: 12, life: 0.55, size: 2.4, gravity: -18, glow: true });
+    }
+  }
+
+  // Contact damage.
+  if (game.state === 'playing' && player.invuln <= 0 &&
+      rectsOverlap(player.x + 3, player.y + 3, player.w - 6, player.h - 4, e.x + 3, e.y + 3, e.w - 6, e.h - 6)) {
+    damagePlayer('enemy', e);
+  }
+}
+
+function updateCoins(dt) {
+  for (var i = 0; i < level.coins.length; i++) {
+    var c = level.coins[i];
+    if (c.taken) continue;
+    c.phase += dt * 3.2;
+    if (Math.random() < 0.05) {
+      spawnParticles(c.x + (Math.random() - 0.5) * 18, c.y + (Math.random() - 0.5) * 18, 1,
+        { color: '#ffd75e', speed: 8, life: 0.6, size: 1.8, gravity: -22, glow: true });
+    }
+    if (rectsOverlap(player.x, player.y, player.w, player.h, c.x - c.r, c.y - c.r, c.r * 2, c.r * 2)) {
+      c.taken = true;
+      game.coins++;
+      game.score += COIN_SCORE;
+      Sound.coin();
+      game.flash = Math.max(game.flash, 0.18);
+      spawnParticles(c.x, c.y, 20,
+        { color: '#ffd75e', speed: 190, life: 0.55, size: 3, gravity: 380, glow: true });
+      if (game.coins >= TOTAL_COINS) {
+        Sound.open();
+        game.doorOpenPulse = 1;
+        game.toast = { text: 'The escape door unlocks!', time: 2.6 };
+      }
+    }
+  }
+}
+
+function updateDoor(dt) {
+  var d = level.door;
+  game.doorOpenPulse = Math.max(0, game.doorOpenPulse - dt * 0.8);
+  var unlocked = game.coins >= TOTAL_COINS;
+  var touching = rectsOverlap(player.x, player.y, player.w, player.h, d.x + 6, d.y + 6, d.w - 12, d.h - 6);
+  game.atDoor = touching;
+  if (!touching) { game.doorNagCooldown = Math.max(0, game.doorNagCooldown - dt); return; }
+
+  if (unlocked) {
+    winLevel();
+  } else if (game.doorNagCooldown <= 0) {
+    game.doorNagCooldown = 1.6;
+    Sound.locked();
+    game.toast = { text: 'Locked - collect all ' + TOTAL_COINS + ' coins first (' + game.coins + '/' + TOTAL_COINS + ')', time: 2.0 };
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11. GAME STATE
+   -------------------------------------------------------------------------- */
+
+var game = {
+  state: 'title',        // title | playing | dead | gameover | win
+  score: 0,
+  lives: START_LIVES,
+  coins: 0,
+  time: 0,
+  best: 0,
+  seed: 1,
+  flash: 0,
+  shake: 0,
+  deathTimer: 0,
+  overlayTimer: 0,
+  toast: null,
+  atDoor: false,
+  doorNagCooldown: 0,
+  doorOpenPulse: 0,
+  hintTimer: 7,
+  paused: false,
+  lastCause: ''
+};
+
+var cam = { x: 0, y: 0, shakeX: 0, shakeY: 0 };
+
+function loadLevel(seed) {
+  level = buildLevel(seed >>> 0);
+  game.seed = level.seed;
+  bgLayers = buildBackground(level.seed);
+  spriteCache = Object.create(null);
+  particles.length = 0;
+  player = makePlayer();
+  game.coins = 0;
+  game.time = 0;
+  game.flash = 0;
+  game.shake = 0;
+  game.toast = null;
+  game.atDoor = false;
+  game.doorNagCooldown = 0;
+  game.doorOpenPulse = 0;
+  snapCamera();
+}
+
+function startRun() {
+  game.state = 'playing';
+  game.hintTimer = 7;
+  clearKeys();
+}
+
+function restart() {
+  // Same dungeon, fresh run: the seeded generator makes this exactly reproducible.
+  game.score = 0;
+  game.lives = START_LIVES;
+  loadLevel(game.seed);
+  startRun();
+}
+
+function newLevel() {
+  game.score = 0;
+  game.lives = START_LIVES;
+  loadLevel((game.seed * 1103515245 + 12345) >>> 0);
+  startRun();
+}
+
+function damagePlayer(cause, source) {
+  if (game.state !== 'playing' || player.invuln > 0) return;
+  game.lives--;
+  game.lastCause = cause;
+  game.shake = 1;
+  game.flash = 0.32;
+  Sound.hurt();
+  spawnParticles(player.x + player.w / 2, player.y + player.h / 2, 26,
+    { color: '#ff6b6b', speed: 230, life: 0.6, size: 3.2, gravity: 520, glow: true });
+
+  if (game.lives <= 0) {
+    game.lives = 0;
+    game.state = 'dead';
+    game.deathTimer = 0.85;
+    return;
+  }
+
+  // Respawn on the last confirmed safe footing so a spike pit is not a death loop.
+  player.x = player.safeX;
+  player.y = player.safeY;
+  player.vx = 0;
+  player.vy = 0;
+  player.jumping = false;
+  player.buffer = 0;
+  player.coyote = 0;
+  player.dropTimer = 0;
+  player.invuln = INVULN_TIME;
+  game.toast = { text: cause === 'enemy' ? 'Hit! Lives left: ' + game.lives
+                                         : 'Ouch! Lives left: ' + game.lives, time: 1.6 };
+  snapCamera();
+}
+
+function winLevel() {
+  if (game.state !== 'playing') return;
+  game.state = 'win';
+  game.overlayTimer = 0;
+  var timeBonus = Math.max(0, 1000 - Math.floor(game.time) * 10);
+  game.score += ESCAPE_BONUS + timeBonus;
+  game.timeBonus = timeBonus;
+  if (game.score > game.best) game.best = game.score;
+  Sound.win();
+  spawnParticles(level.door.x + level.door.w / 2, level.door.y + level.door.h / 2, 60,
+    { color: '#ffe08a', speed: 300, life: 1.0, size: 3.4, gravity: 260, glow: true });
+}
+
+function togglePause() {
+  if (game.state !== 'playing') return;
+  game.paused = !game.paused;
+}
+
+/* --------------------------------------------------------------------------
+   CAMERA - smooth follow, clamped to the level so it never shows the void
+   -------------------------------------------------------------------------- */
+
+function cameraTarget() {
+  var lookAhead = clamp(player.vx * 0.30, -110, 110);
+  var tx = player.x + player.w / 2 + lookAhead - VIEW_W / 2;
+  var ty = player.y + player.h / 2 - VIEW_H / 2;
+  var maxX = Math.max(0, MAP_W * TILE - VIEW_W);
+  var maxY = Math.max(0, MAP_H * TILE - VIEW_H);
+  return { x: clamp(tx, 0, maxX), y: clamp(ty, 0, maxY) };
+}
+
+function snapCamera() {
+  var t = cameraTarget();
+  cam.x = t.x; cam.y = t.y;
+}
+
+function updateCamera(dt) {
+  var t = cameraTarget();
+  // Exponential smoothing, framerate independent. Vertical is lazier than
+  // horizontal so small hops do not slosh the view around.
+  cam.x = lerp(cam.x, t.x, smoothing(7.5, dt));
+  cam.y = lerp(cam.y, t.y, smoothing(5.0, dt));
+
+  game.shake = Math.max(0, game.shake - dt * 2.6);
+  var amp = game.shake * game.shake * 11;
+  cam.shakeX = (Math.random() * 2 - 1) * amp;
+  cam.shakeY = (Math.random() * 2 - 1) * amp;
+}
+
+/* --------------------------------------------------------------------------
+   12. RENDERING
+   -------------------------------------------------------------------------- */
+
+var canvas = document.getElementById('game');
+var ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  var dpr = clamp(window.devicePixelRatio || 1, 1, 2);
+  if (canvas.width !== Math.round(VIEW_W * dpr)) {
+    canvas.width = Math.round(VIEW_W * dpr);
+    canvas.height = Math.round(VIEW_H * dpr);
+  }
+  if (artScale !== dpr) {
+    artScale = dpr;
+    spriteCache = Object.create(null);   // re-bake tile art at the new density
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resizeCanvas);
+
+function drawBackground() {
+  var sky = ctx.createLinearGradient(0, 0, 0, VIEW_H);
+  sky.addColorStop(0, '#0d0a17');
+  sky.addColorStop(0.55, '#141026');
+  sky.addColorStop(1, '#07060d');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+
+  if (!bgLayers) return;
+  for (var i = 0; i < bgLayers.length; i++) {
+    var L = bgLayers[i];
+    var w = L.canvas.width;
+    var off = -((cam.x * L.factor) % w);
+    if (off > 0) off -= w;
+    var yOff = -(cam.y * L.factor * 0.35);
+    for (var x = off; x < VIEW_W; x += w) {
+      ctx.drawImage(L.canvas, Math.round(x), Math.round(yOff), w, VIEW_H);
+    }
+  }
+}
+
+function drawTiles() {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  var x0 = Math.max(0, Math.floor(ox / TILE));
+  var x1 = Math.min(MAP_W - 1, Math.floor((ox + VIEW_W) / TILE));
+  var y0 = Math.max(0, Math.floor(oy / TILE));
+  var y1 = Math.min(MAP_H - 1, Math.floor((oy + VIEW_H) / TILE));
+
+  for (var cy = y0; cy <= y1; cy++) {
+    for (var cx = x0; cx <= x1; cx++) {
+      var t = level.grid[cy * MAP_W + cx];
+      if (t === T_EMPTY) continue;
+      var mask = isSolid(t) ? tileMask(cx, cy) : 0;
+      var variant = hash2(cx, cy) % 6;
+      var spr = getTileSprite(t, mask, variant);
+      ctx.drawImage(spr, 0, 0, spr.width, spr.height,
+                    cx * TILE - ox, cy * TILE - oy, TILE, TILE);
+    }
+  }
+}
+
+function drawTorches(time) {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (var i = 0; i < level.torches.length; i++) {
+    var t = level.torches[i];
+    var sx = t.x - ox, sy = t.y - oy;
+    if (sx < -140 || sx > VIEW_W + 140 || sy < -160 || sy > VIEW_H + 160) continue;
+    var flicker = 0.78 + Math.sin(time * 9 + t.phase) * 0.12 + Math.sin(time * 23.7 + t.phase * 2) * 0.08;
+    var R = 118 * flicker;
+    var grad = ctx.createRadialGradient(sx, sy, 4, sx, sy, R);
+    grad.addColorStop(0, 'rgba(255,196,102,0.50)');
+    grad.addColorStop(0.35, 'rgba(255,140,60,0.16)');
+    grad.addColorStop(1, 'rgba(255,110,40,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(sx, sy, R, 0, 6.2832);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Sconce + flame, drawn normally (not additively) so they read as objects.
+  for (var j = 0; j < level.torches.length; j++) {
+    var tt = level.torches[j];
+    var px = tt.x - ox, py = tt.y - oy;
+    if (px < -40 || px > VIEW_W + 40 || py < -60 || py > VIEW_H + 60) continue;
+    ctx.fillStyle = '#3b3348';
+    ctx.fillRect(px - 3, py, 6, 16);
+    var fl = 1 + Math.sin(time * 12 + tt.phase) * 0.16;
+    var fg = ctx.createRadialGradient(px, py - 4, 1, px, py - 4, 12 * fl);
+    fg.addColorStop(0, '#fff6d5');
+    fg.addColorStop(0.4, '#ffbe4d');
+    fg.addColorStop(1, 'rgba(255,90,20,0)');
+    ctx.fillStyle = fg;
+    ctx.beginPath();
+    ctx.ellipse(px, py - 5, 7 * fl, 11 * fl, 0, 0, 6.2832);
+    ctx.fill();
+  }
+}
+
+function drawCoins(time) {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  for (var i = 0; i < level.coins.length; i++) {
+    var c = level.coins[i];
+    if (c.taken) continue;
+    var sx = c.x - ox, sy = c.y - oy + Math.sin(c.phase) * 3.5;
+    if (sx < -40 || sx > VIEW_W + 40) continue;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var glow = ctx.createRadialGradient(sx, sy, 2, sx, sy, 30);
+    glow.addColorStop(0, 'rgba(255,214,94,0.42)');
+    glow.addColorStop(1, 'rgba(255,180,40,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(sx, sy, 30, 0, 6.2832); ctx.fill();
+    ctx.restore();
+
+    // Spin by squashing horizontally - a cheap, readable 3D illusion.
+    var spin = Math.cos(c.phase * 0.9);
+    var rw = Math.max(1.6, Math.abs(spin) * c.r);
+    ctx.save();
+    ctx.translate(sx, sy);
+    var edge = Math.abs(spin) < 0.28;
+    var cg = ctx.createLinearGradient(-rw, -c.r, rw, c.r);
+    cg.addColorStop(0, edge ? '#8a6416' : '#ffe9a3');
+    cg.addColorStop(0.45, '#ffc93c');
+    cg.addColorStop(1, '#a9761a');
+    ctx.fillStyle = cg;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rw, c.r, 0, 0, 6.2832);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(90,58,10,0.85)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    if (!edge) {
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.beginPath();
+      ctx.ellipse(-rw * 0.30, -c.r * 0.34, rw * 0.26, c.r * 0.30, -0.5, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+function drawDoor(time) {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  var d = level.door;
+  var sx = d.x - ox, sy = d.y - oy;
+  if (sx < -120 || sx > VIEW_W + 120) return;
+  var unlocked = game.coins >= TOTAL_COINS;
+
+  // Stone arch.
+  ctx.fillStyle = '#5b5170';
+  ctx.beginPath();
+  ctx.moveTo(sx - 7, sy + d.h);
+  ctx.lineTo(sx - 7, sy + d.w / 2);
+  ctx.arc(sx + d.w / 2, sy + d.w / 2, d.w / 2 + 7, Math.PI, 0);
+  ctx.lineTo(sx + d.w + 7, sy + d.h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Doorway interior.
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + d.h);
+  ctx.lineTo(sx, sy + d.w / 2);
+  ctx.arc(sx + d.w / 2, sy + d.w / 2, d.w / 2, Math.PI, 0);
+  ctx.lineTo(sx + d.w, sy + d.h);
+  ctx.closePath();
+  ctx.clip();
+
+  if (unlocked) {
+    var pulse = 0.72 + Math.sin(time * 4) * 0.14 + game.doorOpenPulse * 0.4;
+    var pg = ctx.createRadialGradient(sx + d.w / 2, sy + d.h * 0.55, 3, sx + d.w / 2, sy + d.h * 0.55, d.h * 0.85);
+    pg.addColorStop(0, 'rgba(190,255,225,' + (0.95 * pulse).toFixed(3) + ')');
+    pg.addColorStop(0.45, 'rgba(70,220,180,' + (0.65 * pulse).toFixed(3) + ')');
+    pg.addColorStop(1, 'rgba(20,90,90,0.25)');
+    ctx.fillStyle = pg;
+    ctx.fillRect(sx - 4, sy - 4, d.w + 8, d.h + 8);
+    // Drifting motes inside the portal.
+    for (var m = 0; m < 5; m++) {
+      var my = sy + d.h - ((time * 26 + m * 37) % (d.h + 10));
+      ctx.fillStyle = 'rgba(230,255,245,0.55)';
+      ctx.fillRect(sx + 6 + ((m * 11) % (d.w - 12)), my, 2, 4);
+    }
+  } else {
+    ctx.fillStyle = '#191426';
+    ctx.fillRect(sx - 4, sy - 4, d.w + 8, d.h + 8);
+    // Iron bars while locked.
+    ctx.fillStyle = '#6d6480';
+    for (var b = 0; b < 4; b++) ctx.fillRect(sx + 4 + b * 10, sy + 4, 4, d.h - 4);
+    ctx.fillRect(sx, sy + d.h * 0.42, d.w, 4);
+    ctx.fillStyle = 'rgba(255,255,255,0.10)';
+    for (var b2 = 0; b2 < 4; b2++) ctx.fillRect(sx + 4 + b2 * 10, sy + 4, 1, d.h - 4);
+  }
+  ctx.restore();
+
+  // Keyhole badge showing coin progress.
+  var badgeY = sy - 16;
+  ctx.font = '600 12px ui-monospace, Menlo, Consolas, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = unlocked ? 'rgba(120,255,210,0.95)' : 'rgba(255,150,150,0.9)';
+  ctx.fillText(unlocked ? 'ESCAPE' : game.coins + '/' + TOTAL_COINS, sx + d.w / 2, badgeY);
+
+  if (unlocked) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var og = ctx.createRadialGradient(sx + d.w / 2, sy + d.h / 2, 6, sx + d.w / 2, sy + d.h / 2, 150);
+    og.addColorStop(0, 'rgba(90,240,200,0.34)');
+    og.addColorStop(1, 'rgba(40,200,170,0)');
+    ctx.fillStyle = og;
+    ctx.beginPath(); ctx.arc(sx + d.w / 2, sy + d.h / 2, 150, 0, 6.2832); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawEnemies(time) {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  for (var i = 0; i < level.enemies.length; i++) {
+    var e = level.enemies[i];
+    var sx = e.x - ox, sy = e.y - oy;
+    if (sx < -80 || sx > VIEW_W + 80 || sy < -80 || sy > VIEW_H + 80) continue;
+
+    if (e.kind === 'crawler') {
+      var wob = Math.sin(e.t * 9) * 2;
+      var bw = e.w, bh = e.h;
+      ctx.save();
+      ctx.translate(sx + bw / 2, sy + bh);
+      // Body: a squat slime that squishes as it walks.
+      var bg = ctx.createLinearGradient(0, -bh, 0, 0);
+      bg.addColorStop(0, '#8be36b');
+      bg.addColorStop(0.6, '#3f9e4a');
+      bg.addColorStop(1, '#1f5c30');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.ellipse(0, -bh / 2 + wob * 0.2, bw / 2, (bh / 2) - wob * 0.25, 0, 0, 6.2832);
+      ctx.fill();
+      // Back spines.
+      ctx.fillStyle = '#2b7038';
+      for (var sp = -1; sp <= 1; sp++) {
+        ctx.beginPath();
+        ctx.moveTo(sp * 8 - 4, -bh + 8);
+        ctx.lineTo(sp * 8, -bh - 3 + wob * 0.3);
+        ctx.lineTo(sp * 8 + 4, -bh + 8);
+        ctx.closePath();
+        ctx.fill();
+      }
+      // Eyes look the way it is walking.
+      ctx.fillStyle = '#fdfff2';
+      ctx.beginPath(); ctx.arc(e.dir * 5 - 4, -bh * 0.62, 4, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(e.dir * 5 + 4, -bh * 0.62, 4, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = '#101018';
+      ctx.beginPath(); ctx.arc(e.dir * 5 - 4 + e.dir * 1.4, -bh * 0.62, 2, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(e.dir * 5 + 4 + e.dir * 1.4, -bh * 0.62, 2, 0, 6.2832); ctx.fill();
+      ctx.restore();
+    } else {
+      var pulse = 1 + Math.sin(e.t * 6) * 0.12;
+      ctx.save();
+      ctx.translate(sx + e.w / 2, sy + e.h / 2);
+      ctx.globalCompositeOperation = 'lighter';
+      var wg = ctx.createRadialGradient(0, 0, 2, 0, 0, 34 * pulse);
+      wg.addColorStop(0, 'rgba(160,240,255,0.72)');
+      wg.addColorStop(0.4, 'rgba(70,180,255,0.28)');
+      wg.addColorStop(1, 'rgba(40,120,255,0)');
+      ctx.fillStyle = wg;
+      ctx.beginPath(); ctx.arc(0, 0, 34 * pulse, 0, 6.2832); ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      // Little skull core.
+      ctx.fillStyle = '#dff4ff';
+      ctx.beginPath(); ctx.ellipse(0, -1, 9, 8.5, 0, 0, 6.2832); ctx.fill();
+      ctx.fillRect(-6, 5, 12, 5);
+      ctx.fillStyle = '#0b2740';
+      ctx.beginPath(); ctx.arc(-3.4, -1.5, 2.6, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(3.4, -1.5, 2.6, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = '#7be0ff';
+      ctx.beginPath(); ctx.arc(-3.4, -1.5, 1.2, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(3.4, -1.5, 1.2, 0, 6.2832); ctx.fill();
+      ctx.restore();
+    }
+  }
+}
+
+function drawPlayer(time) {
+  var p = player;
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  var sx = p.x - ox, sy = p.y - oy;
+
+  // Blink during i-frames, but never blink fully invisible for long.
+  if (p.invuln > 0 && Math.floor(p.invuln * 18) % 2 === 0) return;
+
+  var sq = p.squash, st = p.stretch;
+  var w = p.w * sq / st;
+  var h = p.h * st / sq;
+  var cx = sx + p.w / 2;
+  var by = sy + p.h;
+
+  ctx.save();
+  ctx.translate(cx, by);
+
+  // Contact shadow.
+  if (p.grounded) {
+    ctx.fillStyle = 'rgba(0,0,0,0.32)';
+    ctx.beginPath();
+    ctx.ellipse(0, 1, p.w * 0.55, 4, 0, 0, 6.2832);
+    ctx.fill();
+  }
+
+  // Legs: alternate while running, tuck while airborne.
+  var stride = p.grounded ? Math.sin(p.runPhase) * 6 * clamp(Math.abs(p.vx) / RUN_SPEED, 0, 1) : 3;
+  ctx.fillStyle = '#2a2338';
+  ctx.fillRect(-7, -9, 6, 9 + (p.grounded ? stride : -1));
+  ctx.fillRect(1, -9, 6, 9 - (p.grounded ? stride : -1));
+
+  // Cloak trails behind the direction of travel.
+  var lean = clamp(-p.vx / RUN_SPEED, -1, 1) * 6;
+  ctx.fillStyle = '#6a2b4d';
+  ctx.beginPath();
+  ctx.moveTo(-w / 2 + 2, -h + 10);
+  ctx.quadraticCurveTo(lean * 2.2, -h * 0.45, lean * 2.8, -6);
+  ctx.lineTo(w / 2 - 2, -h + 10);
+  ctx.closePath();
+  ctx.fill();
+
+  // Body.
+  var bg = ctx.createLinearGradient(0, -h, 0, 0);
+  bg.addColorStop(0, '#6f8fd8');
+  bg.addColorStop(0.55, '#41598f');
+  bg.addColorStop(1, '#27334f');
+  ctx.fillStyle = bg;
+  roundRect(ctx, -w / 2, -h, w, h - 6, 6);
+  ctx.fill();
+
+  // Hood.
+  ctx.fillStyle = '#8aa6e8';
+  ctx.beginPath();
+  ctx.ellipse(0, -h + 9, w / 2 + 1.5, 10, 0, Math.PI, 0);
+  ctx.fill();
+  ctx.fillStyle = '#141a2a';
+  roundRect(ctx, -w / 2 + 2.5, -h + 7, w - 5, 10, 3);
+  ctx.fill();
+
+  // Glowing eyes, facing the way we move.
+  ctx.fillStyle = '#ffd75e';
+  var ex = p.facing * 2.5;
+  ctx.fillRect(ex - 5, -h + 10, 3.4, 3.4);
+  ctx.fillRect(ex + 1.6, -h + 10, 3.4, 3.4);
+
+  // Belt.
+  ctx.fillStyle = '#c9a227';
+  ctx.fillRect(-w / 2 + 1, -h * 0.42, w - 2, 3);
+
+  ctx.restore();
+
+  // Soft lantern glow around the hero so the dungeon reads as lit by them.
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  var pg = ctx.createRadialGradient(cx, by - p.h / 2, 8, cx, by - p.h / 2, 150);
+  pg.addColorStop(0, 'rgba(150,180,255,0.16)');
+  pg.addColorStop(1, 'rgba(90,120,255,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.arc(cx, by - p.h / 2, 150, 0, 6.2832); ctx.fill();
+  ctx.restore();
+}
+
+function roundRect(c, x, y, w, h, r) {
+  r = Math.min(r, w / 2, h / 2);
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+function drawParticles() {
+  var ox = Math.round(cam.x + cam.shakeX);
+  var oy = Math.round(cam.y + cam.shakeY);
+  ctx.save();
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    var a = 1 - (p.age / p.life);
+    ctx.globalAlpha = clamp(a, 0, 1);
+    ctx.globalCompositeOperation = p.glow ? 'lighter' : 'source-over';
+    ctx.fillStyle = p.color;
+    var s = p.size * (0.4 + a * 0.6);
+    ctx.fillRect(p.x - ox - s / 2, p.y - oy - s / 2, s, s);
+  }
+  ctx.restore();
+}
+
+function drawVignette() {
+  var g = ctx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.34,
+                                   VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.92);
+  g.addColorStop(0, 'rgba(0,0,0,0)');
+  g.addColorStop(1, 'rgba(0,0,0,0.62)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+}
+
+function drawHeart(x, y, s, filled) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(s / 16, s / 16);
+  ctx.beginPath();
+  ctx.moveTo(8, 14.5);
+  ctx.bezierCurveTo(-3, 7.5, 1, 1, 8, 5.2);
+  ctx.bezierCurveTo(15, 1, 19, 7.5, 8, 14.5);
+  ctx.closePath();
+  if (filled) {
+    var g = ctx.createLinearGradient(0, 0, 0, 16);
+    g.addColorStop(0, '#ff8b9a');
+    g.addColorStop(1, '#c81f45');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,0.07)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+  }
+  ctx.lineWidth = 1.4;
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawHUD() {
+  ctx.save();
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+
+  // Backing panel so the HUD stays readable over bright tiles.
+  var panel = ctx.createLinearGradient(0, 0, 0, 64);
+  panel.addColorStop(0, 'rgba(8,6,14,0.72)');
+  panel.addColorStop(1, 'rgba(8,6,14,0)');
+  ctx.fillStyle = panel;
+  ctx.fillRect(0, 0, VIEW_W, 64);
+
+  // Lives.
+  for (var i = 0; i < START_LIVES; i++) drawHeart(16 + i * 22, 14, 18, i < game.lives);
+
+  // Score.
+  ctx.font = '700 20px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = '#f2ead8';
+  ctx.fillText('SCORE ' + String(game.score).padStart(5, '0'), 100, 14);
+
+  // Coins.
+  var cxx = 300;
+  ctx.save();
+  ctx.translate(cxx, 23);
+  var cg = ctx.createLinearGradient(-8, -8, 8, 8);
+  cg.addColorStop(0, '#ffe9a3');
+  cg.addColorStop(1, '#a9761a');
+  ctx.fillStyle = cg;
+  ctx.beginPath(); ctx.ellipse(0, 0, 8, 9, 0, 0, 6.2832); ctx.fill();
+  ctx.strokeStyle = 'rgba(90,58,10,0.85)'; ctx.lineWidth = 1.4; ctx.stroke();
+  ctx.restore();
+  ctx.font = '700 20px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = game.coins >= TOTAL_COINS ? '#7bffcd' : '#f2ead8';
+  ctx.fillText(game.coins + '/' + TOTAL_COINS, cxx + 14, 14);
+
+  // Timer + seed.
+  ctx.textAlign = 'right';
+  ctx.font = '600 16px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = '#a89e8b';
+  var mm = Math.floor(game.time / 60), ss = Math.floor(game.time % 60);
+  ctx.fillText(mm + ':' + String(ss).padStart(2, '0'), VIEW_W - 16, 16);
+  ctx.font = '600 11px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = 'rgba(168,158,139,0.65)';
+  ctx.fillText('SEED ' + game.seed, VIEW_W - 16, 38);
+
+  // Progress bar: how far along the dungeon the player is.
+  var prog = clamp((player.x - level.spawn.x) / Math.max(1, level.door.x - level.spawn.x), 0, 1);
+  ctx.fillStyle = 'rgba(255,255,255,0.10)';
+  ctx.fillRect(VIEW_W / 2 - 120, 46, 240, 5);
+  ctx.fillStyle = game.coins >= TOTAL_COINS ? '#5ef0c0' : '#8aa6e8';
+  ctx.fillRect(VIEW_W / 2 - 120, 46, 240 * prog, 5);
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.fillRect(VIEW_W / 2 + 118, 43, 3, 11);
+
+  // Fading control hint.
+  if (game.hintTimer > 0) {
+    ctx.globalAlpha = clamp(game.hintTimer / 2, 0, 1) * 0.85;
+    ctx.textAlign = 'center';
+    ctx.font = '600 14px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillStyle = '#cfc6b4';
+    ctx.fillText('← → move    SPACE jump (hold to jump higher)    ↓+SPACE drop through planks',
+                 VIEW_W / 2, VIEW_H - 34);
+    ctx.globalAlpha = 1;
+  }
+
+  // Toast.
+  if (game.toast && game.toast.time > 0) {
+    var a = clamp(game.toast.time, 0, 1);
+    ctx.globalAlpha = a;
+    ctx.textAlign = 'center';
+    ctx.font = '700 17px ui-monospace, Menlo, Consolas, monospace';
+    var tw = ctx.measureText(game.toast.text).width;
+    ctx.fillStyle = 'rgba(10,8,18,0.78)';
+    roundRect(ctx, VIEW_W / 2 - tw / 2 - 14, 74, tw + 28, 30, 8);
+    ctx.fill();
+    ctx.fillStyle = '#ffd75e';
+    ctx.fillText(game.toast.text, VIEW_W / 2, 81);
+    ctx.globalAlpha = 1;
+  }
+
+  if (Sound.isMuted()) {
+    ctx.textAlign = 'right';
+    ctx.font = '600 11px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillStyle = 'rgba(255,120,120,0.8)';
+    ctx.fillText('MUTED', VIEW_W - 16, 54);
+  }
+  ctx.restore();
+}
+
+function drawPanel(title, titleColor, lines, action) {
+  ctx.save();
+  ctx.fillStyle = 'rgba(6,5,12,0.82)';
+  ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+
+  var t = game.overlayTimer;
+  var pop = clamp(t / 0.32, 0, 1);
+  var ease = 1 - Math.pow(1 - pop, 3);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  ctx.save();
+  ctx.translate(VIEW_W / 2, VIEW_H / 2 - 60);
+  ctx.scale(0.86 + ease * 0.14, 0.86 + ease * 0.14);
+  ctx.globalAlpha = ease;
+  ctx.font = '800 58px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillText(title, 3, 4);
+  ctx.fillStyle = titleColor;
+  ctx.fillText(title, 0, 0);
+  ctx.restore();
+
+  ctx.globalAlpha = clamp((t - 0.12) / 0.3, 0, 1);
+  ctx.font = '600 19px ui-monospace, Menlo, Consolas, monospace';
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillStyle = i === 0 ? '#f2ead8' : '#a89e8b';
+    ctx.fillText(lines[i], VIEW_W / 2, VIEW_H / 2 + 6 + i * 30);
+  }
+
+  var blink = 0.62 + Math.sin(t * 5) * 0.38;
+  ctx.globalAlpha = clamp((t - 0.35) / 0.3, 0, 1) * blink;
+  ctx.font = '700 20px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = '#ffd75e';
+  ctx.fillText(action, VIEW_W / 2, VIEW_H - 96);
+
+  ctx.globalAlpha = clamp((t - 0.45) / 0.3, 0, 1);
+  ctx.font = '600 13px ui-monospace, Menlo, Consolas, monospace';
+  ctx.fillStyle = 'rgba(168,158,139,0.8)';
+  ctx.fillText('R restart same dungeon   ·   N generate a new dungeon   ·   M mute',
+               VIEW_W / 2, VIEW_H - 56);
+  ctx.restore();
+}
+
+function drawOverlays() {
+  if (game.state === 'title') {
+    drawPanel('DUNGEON ESCAPE', '#ffd75e', [
+      'Collect all ' + TOTAL_COINS + ' coins, then reach the escape door.',
+      'Mind the spikes, the slime and the wisp. You have ' + START_LIVES + ' lives.',
+      ''
+    ], 'PRESS SPACE TO ENTER THE DUNGEON');
+  } else if (game.state === 'gameover') {
+    drawPanel('GAME OVER', '#ff6b6b', [
+      'The dungeon keeps you.',
+      'Final score: ' + game.score,
+      'Coins found: ' + game.coins + '/' + TOTAL_COINS + '   Time: ' + game.time.toFixed(1) + 's'
+    ], 'PRESS SPACE TO TRY AGAIN');
+  } else if (game.state === 'win') {
+    drawPanel('YOU ESCAPED!', '#5ef0c0', [
+      'All ' + TOTAL_COINS + ' coins recovered and out alive.',
+      'Score: ' + game.score + '   (escape bonus ' + ESCAPE_BONUS +
+        ' + time bonus ' + (game.timeBonus || 0) + ')',
+      'Time: ' + game.time.toFixed(1) + 's   Lives left: ' + game.lives +
+        (game.best ? '   Best: ' + game.best : '')
+    ], 'PRESS SPACE TO PLAY AGAIN');
+  } else if (game.paused) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(6,5,12,0.6)';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '800 44px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillStyle = '#f2ead8';
+    ctx.fillText('PAUSED', VIEW_W / 2, VIEW_H / 2);
+    ctx.font = '600 16px ui-monospace, Menlo, Consolas, monospace';
+    ctx.fillStyle = '#a89e8b';
+    ctx.fillText('press P to resume', VIEW_W / 2, VIEW_H / 2 + 40);
+    ctx.restore();
+  }
+}
+
+function render(time) {
+  resizeCanvas();
+  ctx.clearRect(0, 0, VIEW_W, VIEW_H);
+  drawBackground();
+  drawTiles();
+  drawTorches(time);
+  drawCoins(time);
+  drawDoor(time);
+  drawEnemies(time);
+  drawParticles();
+  drawPlayer(time);
+  drawVignette();
+
+  if (game.flash > 0) {
+    ctx.fillStyle = 'rgba(255,235,190,' + (game.flash * 0.55).toFixed(3) + ')';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  }
+
+  if (game.state === 'playing' || game.state === 'dead') drawHUD();
+  drawOverlays();
+}
+
+/* --------------------------------------------------------------------------
+   13. MAIN LOOP - fixed timestep accumulator
+   -------------------------------------------------------------------------- */
+
+function update(dt) {
+  game.flash = Math.max(0, game.flash - dt * 2.4);
+  if (game.toast) {
+    game.toast.time -= dt;
+    if (game.toast.time <= 0) game.toast = null;
+  }
+
+  if (game.state === 'title' || game.state === 'gameover' || game.state === 'win') {
+    game.overlayTimer += dt;
+    updateParticles(dt);
+    updateCamera(dt);
+    // Ignore presses for a moment so the keystroke that ended the run does not
+    // instantly dismiss the screen explaining what happened.
+    if (anyPressEdge && game.overlayTimer > 0.55) {
+      if (game.state === 'title') { Sound.unlock(); startRun(); }
+      else restart();
+    }
+    jumpPressedEdge = false;
+    anyPressEdge = false;
+    return;
+  }
+
+  if (game.state === 'dead') {
+    game.deathTimer -= dt;
+    updateParticles(dt);
+    updateCamera(dt);
+    if (game.deathTimer <= 0) {
+      game.state = 'gameover';
+      game.overlayTimer = 0;
+      if (game.score > game.best) game.best = game.score;
+      Sound.over();
+    }
+    jumpPressedEdge = false;
+    anyPressEdge = false;
+    return;
+  }
+
+  if (game.paused) { jumpPressedEdge = false; anyPressEdge = false; return; }
+
+  game.time += dt;
+  game.hintTimer = Math.max(0, game.hintTimer - dt);
+
+  updatePlayer(dt);
+  for (var i = 0; i < level.enemies.length; i++) updateEnemy(level.enemies[i], dt);
+  updateCoins(dt);
+  updateDoor(dt);
+  updateParticles(dt);
+  updateCamera(dt);
+
+  jumpPressedEdge = false;
+  anyPressEdge = false;
+}
+
+var acc = 0;
+var lastTs = 0;
+var rafId = 0;
+var running = true;
+
+function frame(ts) {
+  rafId = requestAnimationFrame(frame);
+  if (!lastTs) lastTs = ts;
+  var dt = (ts - lastTs) / 1000;
+  lastTs = ts;
+  if (dt > MAX_FRAME) dt = MAX_FRAME;
+  acc += dt;
+  var guard = 0;
+  while (acc >= FIXED_DT && guard++ < 240) {
+    update(FIXED_DT);
+    acc -= FIXED_DT;
+  }
+  render(ts / 1000);
+}
+
+canvas.addEventListener('pointerdown', function (e) {
+  Sound.unlock();
+  // On the overlays a tap/click is the same as "press to continue".
+  if (game.state !== 'playing') anyPressEdge = true;
+});
+
+loadLevel(((Date.now() / 1000) | 0) >>> 0);
+game.state = 'title';
+game.overlayTimer = 0;
+resizeCanvas();
+rafId = requestAnimationFrame(frame);
+
+/* --------------------------------------------------------------------------
+   14. TEST API
+   Exposed so the game can be driven deterministically from a headless browser
+   (see the accompanying test script) without touching any private state.
+   -------------------------------------------------------------------------- */
+
+window.DungeonEscape = {
+  version: '1.0.0',
+  config: {
+    TILE: TILE, MAP_W: MAP_W, MAP_H: MAP_H, VIEW_W: VIEW_W, VIEW_H: VIEW_H,
+    GRAVITY: GRAVITY, FALL_MULT: FALL_MULT, MAX_FALL: MAX_FALL,
+    JUMP_VEL: JUMP_VEL, JUMP_CUT_VEL: JUMP_CUT_VEL,
+    RUN_SPEED: RUN_SPEED, RUN_ACCEL: RUN_ACCEL, RUN_FRICTION: RUN_FRICTION,
+    AIR_ACCEL: AIR_ACCEL, AIR_FRICTION: AIR_FRICTION,
+    COYOTE_TIME: COYOTE_TIME, JUMP_BUFFER: JUMP_BUFFER,
+    FIXED_DT: FIXED_DT, PLAYER_W: PLAYER_W, PLAYER_H: PLAYER_H,
+    TOTAL_COINS: TOTAL_COINS, ENEMY_COUNT: ENEMY_COUNT, START_LIVES: START_LIVES
+  },
+  get game() { return game; },
+  get player() { return player; },
+  get level() { return level; },
+  get camera() { return cam; },
+  get particles() { return particles; },
+  tileAt: tileAt,
+  isSolid: isSolid,
+  maxGapTiles: maxGapTiles,
+  maxJumpRisePx: maxJumpRisePx,
+  generateLevel: generateLevel,
+  validateLevel: validateLevel,
+  setKey: setKey,
+  clearKeys: clearKeys,
+  start: startRun,
+  restart: restart,
+  newLevel: newLevel,
+  loadLevel: loadLevel,
+  // Advance the simulation without rendering, in exact fixed steps.
+  step: function (seconds) {
+    var n = Math.max(1, Math.round(seconds / FIXED_DT));
+    for (var i = 0; i < n; i++) update(FIXED_DT);
+    return n;
+  },
+  // Stop/start the rAF loop so tests own the clock.
+  pauseLoop: function () { if (rafId) cancelAnimationFrame(rafId); rafId = 0; running = false; },
+  resumeLoop: function () { if (!rafId) { lastTs = 0; acc = 0; running = true; rafId = requestAnimationFrame(frame); } },
+  isRunning: function () { return running; },
+  teleport: function (x, y) { player.x = x; player.y = y; player.vx = 0; player.vy = 0; snapCamera(); },
+  render: render
+};
+
+})();
+</script>
+</body>
+</html>
