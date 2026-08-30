@@ -1,0 +1,295 @@
+<title>Every GigaStar Drop at Gold Tier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#FCFBF8; --panel:#FFFFFF; --sunk:#F4F1E9;
+  --ink:#1C1A14; --ink2:#4A463A; --muted:#7A7466;
+  --rule:#E2DDCE; --rule2:#CFC8B4;
+  --gold:#9A6B00; --gold-d:#6B4A00; --gold-l:#E6D19A; --gold-w:#F3EAD2;
+  --blue:#0E6FA8; --clay:#B03A22; --green:#2F6B35;
+  --shadow:0 1px 2px rgba(28,26,20,.05),0 8px 24px -12px rgba(28,26,20,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#131209; --panel:#1C1A11; --sunk:#232014;
+    --ink:#F2EEE0; --ink2:#CFC8B2; --muted:#948C77;
+    --rule:#332F1F; --rule2:#4A452E;
+    --gold:#E0B341; --gold-d:#F0D28A; --gold-l:#5C4409; --gold-w:#332608;
+    --blue:#5CAEE0; --clay:#E58060; --green:#7FBF86;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#131209; --panel:#1C1A11; --sunk:#232014;
+  --ink:#F2EEE0; --ink2:#CFC8B2; --muted:#948C77;
+  --rule:#332F1F; --rule2:#4A452E;
+  --gold:#E0B341; --gold-d:#F0D28A; --gold-l:#5C4409; --gold-w:#332608;
+  --blue:#5CAEE0; --clay:#E58060; --green:#7FBF86;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);
+  font-family:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:16px;line-height:1.55;margin:0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px 96px}
+h1,h2,h3{font-family:"Newsreader",Georgia,"Times New Roman",serif;font-weight:600;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* masthead */
+header.mast{padding:56px 0 22px;border-bottom:2px solid var(--ink)}
+.mast h1{font-size:clamp(34px,5.2vw,54px);line-height:1.03;letter-spacing:-.015em;margin:14px 0 12px}
+.mast .sub{font-size:17px;color:var(--ink2);max-width:63ch}
+.mastmeta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:18px;font-size:12.5px;color:var(--muted)}
+.mastmeta b{color:var(--ink2);font-weight:600}
+
+/* answer block */
+.answer{margin:34px 0 8px;padding:30px 32px;background:var(--panel);border:1px solid var(--rule);
+  border-left:4px solid var(--gold);border-radius:3px;box-shadow:var(--shadow)}
+.answer .big{font-family:"Newsreader",Georgia,serif;font-size:clamp(24px,3.4vw,33px);line-height:1.25;letter-spacing:-.01em}
+.answer .big em{font-style:normal;color:var(--gold);font-variant-numeric:tabular-nums}
+.answer p{color:var(--ink2);margin:14px 0 0;max-width:66ch;font-size:15.5px}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(186px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:30px 0 10px;border-radius:3px;overflow:hidden}
+.kpi{background:var(--panel);padding:18px 20px 20px}
+.kpi .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi .v{font-family:"Public Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums;font-size:29px;
+  font-weight:600;letter-spacing:-.025em;margin-top:7px;line-height:1.1}
+.kpi .n{font-size:12.5px;color:var(--muted);margin-top:5px}
+.kpi.hero .v{color:var(--gold);font-size:35px;font-weight:700}
+.kpi .v.neg{color:var(--clay)}
+
+section{margin-top:52px}
+section > h2{font-size:26px;letter-spacing:-.01em;margin-bottom:6px}
+section > .lede{color:var(--ink2);max-width:66ch;margin:0 0 20px;font-size:15.5px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:24px 26px;box-shadow:var(--shadow)}
+
+/* cohort chart */
+.cohort{display:grid;gap:14px}
+.crow{display:grid;grid-template-columns:64px 1fr 96px;align-items:center;gap:16px}
+.crow .yr{font-family:"Public Sans",sans-serif;font-variant-numeric:tabular-nums;font-size:14px;font-weight:700;color:var(--ink2)}
+.crow .track{background:var(--sunk);border-radius:0 3px 3px 0;height:26px;position:relative;overflow:hidden}
+.crow .fill{height:100%;border-radius:0 3px 3px 0;background:var(--gold);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.crow .val{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:14.5px;
+  font-weight:600;text-align:right;color:var(--ink)}
+.crow .meta{font-size:12px;color:var(--muted);grid-column:2;margin-top:-8px}
+.axisnote{font-size:12px;color:var(--muted);margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+
+/* ranked bars */
+.ranked{display:grid;gap:5px;margin-top:4px}
+.rrow{display:grid;grid-template-columns:1fr;gap:0}
+.rbar{display:grid;grid-template-columns:190px 1fr 62px;align-items:center;gap:12px;
+  padding:4px 6px;border-radius:3px;cursor:default}
+.rbar:hover{background:var(--sunk)}
+.rbar .nm{font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbar .tk{height:16px;background:var(--sunk);border-radius:0 2px 2px 0;position:relative;overflow:hidden}
+.rbar .fl{height:100%;background:var(--gold);border-radius:0 2px 2px 0}
+.rbar .fl.young{background:var(--gold-l)}
+.rbar .pc{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:12.5px;
+  text-align:right;color:var(--ink)}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin:0 0 18px;font-size:12.5px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:13px;height:13px;border-radius:2px;display:inline-block}
+
+/* table */
+.tblwrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--panel);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th,td{text-align:right;padding:9px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+th{background:var(--sunk);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;position:sticky;top:0;cursor:pointer;user-select:none}
+th:hover{color:var(--ink)}
+th.l,td.l{text-align:left}
+tbody tr:hover{background:var(--sunk)}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+td.roi{font-weight:600}
+.pill{display:inline-block;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  padding:2px 7px;border-radius:2px;background:var(--gold-w);color:var(--gold-d);border:1px solid var(--gold-l)}
+.pill.open{background:transparent;color:var(--blue);border-color:var(--blue)}
+.pill.dead{background:transparent;color:var(--muted);border-color:var(--rule2)}
+
+ul.notes{margin:0;padding-left:19px;color:var(--ink2);font-size:15px}
+ul.notes li{margin-bottom:11px;max-width:70ch}
+ul.notes li b{color:var(--ink);font-weight:600}
+.srcs{font-size:13.5px;color:var(--ink2)}
+.srcs a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.srcs a:hover{color:var(--ink)}
+a:focus-visible,th:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:640px){
+  .wrap{padding:0 18px 64px}
+  .rbar{grid-template-columns:126px 1fr 54px;gap:9px}
+  .crow{grid-template-columns:46px 1fr 76px;gap:11px}
+}
+</style>
+<div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">GigaStar Market &middot; Reg CF channel drops &middot; Position study</div>
+  <h1>Every GigaStar drop, bought at the Gold tier</h1>
+  <p class="sub">One Gold&nbsp;CRT &mdash; the smallest ticket on offer &mdash; in all 39 drops that actually funded, from ClearValue&nbsp;Tax&nbsp;1 in April 2023 through Craftee&nbsp;1, live today. What that basket cost, and what it has paid back.</p>
+  <div class="mastmeta">
+    <span>Valued <b>30 August 2026</b></span>
+    <span>Distributions through <b>June 2026 revenue</b></span>
+    <span>Sources <b>GigaStar public API &middot; SEC EDGAR</b></span>
+  </div>
+</header>
+
+<div class="answer">
+  <div class="big">The basket cost <em>$3,156</em> and has paid back <em>$464.80</em> &mdash; <em>14.7%</em> of capital returned, with no principal repayment to come.</div>
+  <p>These are perpetual revenue-share units, not bonds: the $3,156 is never returned. The only return is the monthly distribution stream, so 14.7% is progress toward payback, not profit. Every one of the 38 closed drops has paid something; none has yet returned its purchase price except ClearValue&nbsp;Tax&nbsp;1, which has paid <strong>3.5&times;</strong>.</p>
+</div>
+
+<div class="kpis">
+  <div class="kpi hero"><div class="k">Cash returned</div><div class="v">14.73%</div><div class="n">$464.80 on $3,156.00</div></div>
+  <div class="kpi"><div class="k">Net position</div><div class="v neg">&minus;$2,691</div><div class="n">unrecovered capital</div></div>
+  <div class="kpi"><div class="k">Drops held</div><div class="v">39</div><div class="n">38 closed + 1 still open</div></div>
+  <div class="kpi"><div class="k">Median drop</div><div class="v">10.80%</div><div class="n">returned to date</div></div>
+  <div class="kpi"><div class="k">Seasoned yield</div><div class="v">12.6%</div><div class="n">per yr, drops &ge;24mo old</div></div>
+</div>
+
+<section>
+  <h2>Age explains almost everything</h2>
+  <p class="lede">Sorted by the year the drop closed. A 2026 drop has had three or four monthly distributions; a 2023 drop has had thirty-plus. Read this as a maturation curve, not a quality ranking.</p>
+  <div class="card">
+    <div class="cohort" id="cohort"></div>
+    <div class="axisnote">Bars show capital returned to date as a share of ticket price, aggregated per vintage. Scale is shared across rows and runs 0&ndash;50%.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Every drop, ranked by capital returned</h2>
+  <p class="lede">ClearValue Tax 1 is the outlier that made the platform's reputation: a $15 Gold&nbsp;CRT that has paid $52.23. It is charted at full scale below; the axis is capped at 60% so the rest stay legible.</p>
+  <div class="card">
+    <div class="legend">
+      <span><i class="sw" style="background:var(--gold)"></i> Closed &ge;12 months</span>
+      <span><i class="sw" style="background:var(--gold-l)"></i> Closed &lt;12 months &mdash; too early to judge</span>
+    </div>
+    <div class="ranked" id="ranked"></div>
+    <div class="axisnote">Axis capped at 60%. ClearValue Tax 1 (348.22%) runs off-scale and is labelled with its true value.</div>
+  </div>
+</section>
+
+<section>
+  <h2>The full ledger</h2>
+  <p class="lede">All 45 drops GigaStar has filed with the SEC, including the six that never funded and could not have been bought. Click any column heading to sort.</p>
+  <div class="tblwrap">
+    <table id="tbl">
+      <thead><tr>
+        <th class="l" data-k="d">Drop</th>
+        <th class="l" data-k="c">Category</th>
+        <th data-k="cl">Closed</th>
+        <th data-k="mo">Months</th>
+        <th data-k="g">Gold CRT</th>
+        <th data-k="p">Paid / CRT</th>
+        <th data-k="roi">Returned</th>
+        <th data-k="ann">Ann.</th>
+        <th data-k="raised">Drop raised</th>
+        <th data-k="dist">Drop distributed</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>How this was built, and what it can't tell you</h2>
+  <div class="card">
+    <ul class="notes">
+      <li><b>The universe.</b> SEC EDGAR full-text search returns 45 GigaStar "Channel Drop" issuers that have filed a Form&nbsp;C, matching the platform's own count of 45 offers. Six never funded &mdash; Jonathan DesVerney Gospel Music&nbsp;1, The Shluv Family&nbsp;2, Ace1Whips&nbsp;1, Mr_Organik&nbsp;1, Sebastine&nbsp;1 and Flix Media&nbsp;1 &mdash; so the buyable basket is 39.</li>
+      <li><b>The Gold tier is the lowest tier.</b> Each Form&nbsp;C states that a Gold CRT is 1 revenue-sharing unit, Platinum 4, and Diamond 16, and that "each tier has the same economic value per dollar amount invested." Buying the lowest tier therefore costs the least and changes nothing about the rate of return.</li>
+      <li><b>Return per unit.</b> Because distributions are strictly pro-rata per unit and tier pricing is linear, a drop's return per Gold CRT equals its total distributions divided by its total raise. That derivation reproduces GigaStar's own published per-unit figures exactly on 10 of the 11 drops where it publishes them.</li>
+      <li><b>One disagreement.</b> Let's Talk Money&nbsp;3 is the exception: GigaStar reports $2.47 per unit where the drop's own economics give $4.93, a clean 2&times; gap that looks like the March&nbsp;2026 restatement of CRTs into standardised Gold units. The drop's own arithmetic is used here; the alternative would cut the basket's return from 14.73% to 14.65%.</li>
+      <li><b>Fees are excluded.</b> GigaStar currently charges $5 per order plus $3 for ACH. Thirty-nine separate small orders would add roughly $312, pulling the basket return from 14.73% down to about 13.4%. Historical fee schedules may have differed, so this is a sensitivity, not a restatement.</li>
+      <li><b>Payback, extrapolated.</b> The fifteen drops at least 24 months old have returned 32.3%, an average of 12.6% a year. Held flat, that implies roughly an eight-year payback before any profit &mdash; and YouTube revenue decays, so flat is optimistic.</li>
+      <li><b>Reconciliation.</b> Per-drop distributions sum to $1,448,236 against the $1,478,489 on GigaStar's headline counter, a 2% gap consistent with the two endpoints refreshing on different schedules.</li>
+      <li><b>Not advice.</b> These are illiquid, speculative securities. Past distributions do not predict future ones, and a secondary market that would let you exit was still not trading as of this date.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <div class="card srcs">
+    <p style="margin-top:0">Per-drop distributions and cumulative per-unit figures: GigaStar's public analytics endpoint, <span class="mono">mgw.gigastar.io/public/portfolio/analytics/offerRois</span>, with platform totals from <span class="mono">/keyMetrics</span>. Gold CRT prices and drop dates: the WealthBlock offering records behind <a href="https://invest.gigastarmarket.io/offerings">invest.gigastarmarket.io/offerings</a>. Offering universe, tier definitions and the ClearValue&nbsp;Tax&nbsp;1 price: <a href="https://www.sec.gov/cgi-bin/srqsb?text=form-type%3DC">SEC EDGAR</a> Form&nbsp;C filings, including <a href="https://www.sec.gov/Archives/edgar/data/1972057/000197205723000001/Form_C_CVT.pdf">ClearValue Tax Channel Drop LLC</a>. Context: <a href="https://gigastar.io/gigastar-for-investors">GigaStar for Investors</a> and <a href="https://www.prnewswire.com/news-releases/gigastar-reaches-1-million-milestone-in-creator-revenue-distributed-to-investors-302629845.html">the $1M distribution milestone release</a>.</p>
+  </div>
+</section>
+
+<footer>Figures as reported by GigaStar on 30 August 2026 and recomputed independently. Platform-wide: $6,972,115 raised for creators, $1,478,489 distributed to investors, 30,226 investor accounts across 45 offers.</footer>
+</div>
+<script>
+const DROPS=[{"d":"ClearValue Tax 1","ch":"ClearValue Tax","c":"Finance","st":null,"cl":"2023-05-05","g":15.0,"p":52.23,"roi":348.22,"mo":39.8,"ann":104.9,"raised":60120,"dist":209350.15},{"d":"The Shluv Family 1","ch":"The Shluv Family","c":"Entertainment","st":"settled","cl":"2023-07-01","g":43,"p":4.44,"roi":10.33,"mo":38.0,"ann":3.3,"raised":56674,"dist":5853.57},{"d":"Let's Talk Money 1","ch":"Let's Talk Money! with Joseph Hogue, CFA","c":"Finance","st":"settled","cl":"2023-07-14","g":31,"p":9.57,"roi":30.88,"mo":37.5,"ann":9.9,"raised":137392,"dist":42419.94},{"d":"Stock Moe 1","ch":"Crypto Moe","c":"Finance","st":"settled","cl":"2023-08-22","g":60,"p":11.19,"roi":18.64,"mo":36.3,"ann":6.2,"raised":146460,"dist":27303.54},{"d":"ClearValue Tax 2","ch":"ClearValue Tax","c":"Finance","st":"settled","cl":"2023-09-07","g":90,"p":46.07,"roi":51.19,"mo":35.7,"ann":17.2,"raised":720000,"dist":368566.99},{"d":"Violetta Alexis 1","ch":"Violetta Alexis","c":"Spirituality","st":"settled","cl":"2023-11-08","g":25,"p":2.71,"roi":10.84,"mo":33.7,"ann":3.9,"raised":16875,"dist":1830.05},{"d":"Savvy Finance 1","ch":"Savvy Finance","c":"Finance","st":"settled","cl":"2024-01-18","g":50,"p":29.55,"roi":59.1,"mo":31.4,"ann":22.6,"raised":51850,"dist":30644.46},{"d":"Jonathan DesVerney Gospel Music 1","ch":"Jonathan DesVerney Gospel Music","c":"Music","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"ClearValue Tax 3","ch":"ClearValue Tax","c":"Finance","st":"settled","cl":"2024-05-29","g":136,"p":36.14,"roi":26.58,"mo":27.0,"ann":11.8,"raised":1081472,"dist":287414.93},{"d":"Rickey 1","ch":"Rickey","c":"Comedy","st":"settled","cl":"2024-05-31","g":40,"p":1.41,"roi":3.53,"mo":27.0,"ann":1.6,"raised":10440,"dist":369.02},{"d":"Thee Mademoiselle 1","ch":"Thee Mademoiselle","c":"Social Commentary","st":"settled","cl":"2024-06-05","g":34,"p":12.88,"roi":37.88,"mo":26.8,"ann":17.0,"raised":17986,"dist":6812.53},{"d":"The Gabriels 1","ch":"The Gabriels","c":"Entertainment","st":"settled","cl":"2024-06-14","g":50,"p":7.55,"roi":15.11,"mo":26.5,"ann":6.8,"raised":100000,"dist":15105.7},{"d":"James Pelton 1","ch":"James Pelton","c":"Finance","st":"settled","cl":"2024-06-21","g":40,"p":3.85,"roi":9.62,"mo":26.3,"ann":4.4,"raised":32000,"dist":3078.22},{"d":"Double Toasted 1","ch":"Double Toasted","c":"Entertainment","st":"settled","cl":"2024-07-05","g":66,"p":15.3,"roi":23.18,"mo":25.8,"ann":10.8,"raised":71082,"dist":16479.91},{"d":"Let's Talk Money 2","ch":"Let's Talk Money! with Joseph Hogue, CFA","c":"Finance","st":"settled","cl":"2024-07-12","g":47,"p":14.31,"roi":30.45,"mo":25.6,"ann":14.3,"raised":123610,"dist":37634.91},{"d":"Daru Strong 1","ch":"Daru Strong","c":"Fitness","st":"settled","cl":"2024-07-31","g":66,"p":9.05,"roi":13.71,"mo":25.0,"ann":6.6,"raised":24948,"dist":3419.89},{"d":"Hubert Lee 1","ch":"Hubert Lee","c":"Comedy","st":"settled","cl":"2024-09-13","g":55,"p":3.6,"roi":6.54,"mo":23.5,"ann":3.3,"raised":45100,"dist":2949.74},{"d":"The Shluv Family 2","ch":"The Shluv Family","c":"Entertainment","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"Tony Gaskins 1","ch":"Tony Gaskins","c":"Self-Help","st":"settled","cl":"2024-09-27","g":100,"p":15.94,"roi":15.94,"mo":23.1,"ann":8.3,"raised":488300,"dist":77822.56},{"d":"19XX 1","ch":"19XX","c":"Documentary","st":"settled","cl":"2024-10-04","g":80,"p":26.19,"roi":32.74,"mo":22.8,"ann":17.2,"raised":20000,"dist":6547.74},{"d":"Steve Hofstetter 1","ch":"Steve Hofstetter","c":"Comedy","st":"settled","cl":"2024-10-18","g":84,"p":9.07,"roi":10.8,"mo":22.4,"ann":5.8,"raised":168000,"dist":18142.77},{"d":"James Pelton 2","ch":"James Pelton","c":"Finance","st":"settled","cl":"2024-10-20","g":39,"p":2.74,"roi":7.02,"mo":22.3,"ann":3.8,"raised":16263,"dist":1141.29},{"d":"Rossinni & Co 1","ch":"Rossinni & Co","c":"Real Estate","st":"settled","cl":"2025-01-18","g":76,"p":6.28,"roi":8.27,"mo":19.3,"ann":5.1,"raised":22876,"dist":1891.53},{"d":"Word On The Street 1","ch":"Word On The Street","c":"Hip Hop News","st":"settled","cl":"2025-03-22","g":88,"p":24.46,"roi":27.79,"mo":17.3,"ann":19.3,"raised":20944,"dist":5820.7},{"d":"Mr. Hand Pay 1","ch":"Mr. Hand Pay","c":"Entertainment","st":"settled","cl":"2025-04-01","g":130,"p":12.87,"roi":9.9,"mo":17.0,"ann":7.0,"raised":1298050,"dist":128476.88},{"d":"Officially Ronny 1","ch":"Officially Ronny","c":"Entertainment","st":"settled","cl":"2025-04-12","g":80,"p":21.91,"roi":27.38,"mo":16.6,"ann":19.8,"raised":12080,"dist":3307.77},{"d":"Quick Cuts V2 1","ch":"Quick Cuts V2","c":"Entertainment","st":"settled","cl":"2025-04-26","g":112,"p":6.98,"roi":6.24,"mo":16.1,"ann":4.6,"raised":36512,"dist":2276.96},{"d":"Ace1Whips 1","ch":"Ace1Whips","c":"Automotive","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"Jelle's Marble Runs 1","ch":"Jelle's Marble Runs","c":"Entertainment","st":"settled","cl":"2025-06-25","g":120,"p":13.01,"roi":10.84,"mo":14.2,"ann":9.2,"raised":53160,"dist":5762.92},{"d":"Moxy Approved 1","ch":"Moxy Approved","c":"Entertainment","st":"settled","cl":"2025-06-28","g":124,"p":17.78,"roi":14.34,"mo":14.1,"ann":12.2,"raised":12896,"dist":1848.96},{"d":"Mr. Hand Pay 2","ch":"Mr. Hand Pay","c":"Entertainment","st":"settled","cl":"2025-07-01","g":138,"p":10.43,"roi":7.56,"mo":14.0,"ann":6.5,"raised":1282020,"dist":96897.19},{"d":"RCDriftTok 1","ch":"RCDriftTok","c":"Entertainment","st":"settled","cl":"2025-08-29","g":124,"p":4.36,"roi":3.51,"mo":12.0,"ann":3.5,"raised":51460,"dist":1808.33},{"d":"The Other Side NDE 1","ch":"Only The SAVVY","c":"Spirituality","st":"settled","cl":"2025-09-01","g":110,"p":9.9,"roi":9.0,"mo":11.9,"ann":9.1,"raised":96140,"dist":8653.62},{"d":"Let's Talk Money 3","ch":"Let's Talk Money! with Joseph Hogue, CFA","c":"Finance","st":"settled","cl":"2025-10-24","g":85,"p":4.93,"roi":5.8,"mo":10.2,"ann":6.8,"raised":163455,"dist":9481.25},{"d":"TheBigPayback 1","ch":"TheBigPayback - Slot Machine Videos","c":"Entertainment","st":"settled","cl":"2025-12-06","g":100,"p":5.42,"roi":5.42,"mo":8.8,"ann":7.4,"raised":90700,"dist":4913.41},{"d":"Davidsbeenhere 1","ch":"Davidsbeenhere","c":"Travel","st":"settled","cl":"2026-02-21","g":118,"p":6.34,"roi":5.37,"mo":6.2,"ann":10.3,"raised":173224,"dist":9305.94},{"d":"Tony Gaskins 2","ch":"Tony Gaskins","c":"Self-Help","st":"settled","cl":"2026-03-07","g":89,"p":2.45,"roi":2.75,"mo":5.8,"ann":null,"raised":147473,"dist":4058.27},{"d":"19XX 2","ch":"19XX","c":"Documentary","st":"settled","cl":"2026-05-01","g":97,"p":1.38,"roi":1.43,"mo":4.0,"ann":null,"raised":18139,"dist":258.75},{"d":"The Lighter Side of RC 1","ch":"The Lighter Side of RC","c":"Radio Controlled Aircraft","st":"settled","cl":"2026-05-15","g":85,"p":0.56,"roi":0.66,"mo":3.5,"ann":null,"raised":34000,"dist":223.11},{"d":"Word On The Street 2","ch":"Word On The Street","c":"Hip Hop News","st":"settled","cl":"2026-05-28","g":88,"p":0.7,"roi":0.79,"mo":3.1,"ann":null,"raised":22000,"dist":173.91},{"d":"Naziyah Kahliya 1","ch":"Naziyah Kahliya","c":"Teenager Life","st":"settled","cl":"2026-05-29","g":95,"p":1.25,"roi":1.32,"mo":3.1,"ann":null,"raised":14250,"dist":188.14},{"d":"Mr_Organik 1","ch":"Mr_Organik","c":"Podcast","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"Sebastine 1","ch":"Sebastine","c":"Music","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"Flix Media 1","ch":"KickFlix","c":"Entertainment","st":null,"cl":null,"g":null,"p":null,"roi":null,"mo":null,"ann":null,"raised":0,"dist":0},{"d":"Craftee 1","ch":"Craftee","c":"Gaming","st":"open","cl":"2026-09-29","g":146,"p":0.0,"roi":0.0,"mo":-1.0,"ann":null,"raised":34164,"dist":0}];</script>
+<script>
+const COHORTS=[
+ {yr:'2023',n:6, inv:264,  ret:126.21},
+ {yr:'2024',n:14,inv:887,  ret:187.58},
+ {yr:'2025',n:12,inv:1287, ret:138.32},
+ {yr:'2026',n:7, inv:718,  ret:12.68}
+];
+const CMAX=50;
+document.getElementById('cohort').innerHTML=COHORTS.map(c=>{
+  const pc=c.ret/c.inv*100;
+  return `<div class="crow">
+    <div class="yr">${c.yr}</div>
+    <div class="track"><div class="fill" style="width:${Math.min(pc/CMAX*100,100)}%"></div></div>
+    <div class="val">${pc.toFixed(1)}%</div>
+    <div class="meta">${c.n} drop${c.n>1?'s':''} &middot; $${c.inv.toLocaleString()} in &middot; $${c.ret.toFixed(2)} back</div>
+  </div>`;
+}).join('');
+
+const RMAX=60;
+const funded=DROPS.filter(d=>d.raised&&d.g).sort((a,b)=>(b.roi||0)-(a.roi||0));
+document.getElementById('ranked').innerHTML=funded.map(d=>{
+  const roi=d.roi||0, young=(d.mo===null||d.mo<12);
+  const w=Math.min(roi/RMAX*100,100);
+  const label=roi>RMAX?`${roi.toFixed(0)}%`:`${roi.toFixed(1)}%`;
+  return `<div class="rbar" title="${d.d} — $${d.g} ticket, $${(d.p||0).toFixed(2)} paid, ${roi.toFixed(2)}% returned${d.mo?`, ${d.mo.toFixed(0)} months`:''}">
+    <div class="nm">${d.d}</div>
+    <div class="tk"><div class="fl${young?' young':''}" style="width:${w}%"></div></div>
+    <div class="pc">${label}</div>
+  </div>`;
+}).join('');
+
+const tb=document.querySelector('#tbl tbody');
+const fmt=(v,p=2)=>v===null||v===undefined?'—':Number(v).toLocaleString(undefined,{minimumFractionDigits:p,maximumFractionDigits:p});
+function statusPill(d){
+  if(!d.raised) return '<span class="pill dead">not funded</span>';
+  if(d.st==='open') return '<span class="pill open">open</span>';
+  return '';
+}
+function render(rows){
+  tb.innerHTML=rows.map(d=>`<tr>
+    <td class="l">${d.d} ${statusPill(d)}</td>
+    <td class="l" style="color:var(--muted);font-size:12.5px">${d.c||'—'}</td>
+    <td class="n">${d.cl||'—'}</td>
+    <td class="n">${d.mo!==null&&d.mo>0?d.mo.toFixed(0):'—'}</td>
+    <td class="n">${d.g?'$'+d.g:'—'}</td>
+    <td class="n">${d.p!==null?'$'+fmt(d.p):'—'}</td>
+    <td class="n roi">${d.roi!==null?fmt(d.roi)+'%':'—'}</td>
+    <td class="n" style="color:var(--muted)">${d.ann!==null&&d.ann!==undefined?fmt(d.ann,1)+'%':'—'}</td>
+    <td class="n">${d.raised?'$'+Number(d.raised).toLocaleString():'—'}</td>
+    <td class="n">${d.dist?'$'+fmt(d.dist):'—'}</td>
+  </tr>`).join('');
+}
+let sortK='roi',asc=false;
+const sorted=()=>[...DROPS].sort((a,b)=>{
+  let x=a[sortK],y=b[sortK];
+  if(x===null||x===undefined)x=typeof y==='number'?-Infinity:'';
+  if(y===null||y===undefined)y=typeof x==='number'?-Infinity:'';
+  if(typeof x==='string')return asc?x.localeCompare(y):y.localeCompare(x);
+  return asc?x-y:y-x;
+});
+document.querySelectorAll('#tbl th').forEach(th=>{
+  th.tabIndex=0;
+  const go=()=>{const k=th.dataset.k; asc = (k===sortK)? !asc : (k==='d'||k==='c'); sortK=k; render(sorted());};
+  th.addEventListener('click',go);
+  th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+});
+render(sorted());
+</script>
