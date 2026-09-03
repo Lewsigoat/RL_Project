@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+---
+<Base title="Pressure washer fittings, identified" description="Identify M22-14, M22-15, 1/4 inch and 3/8 inch quick-connects, garden-hose inlets, and Kärcher clips — then pick the adapter that actually seals." path="/">
+  <div class="prose">
+    <p class="crumbs">PW Fit Guide</p>
+    <h1>Which fitting is on your pressure washer?</h1>
+    <p class="lead">Most “universal” hoses are not. The word M22 only describes the thread. The 1 mm stem inside is what leaks.</p>
+    <Answer>
+      Identify the connector at each joint separately — pump, hose, gun, wand, tip — then match stem size, not brand. Start with <a href="/identify/">the identification walkthrough</a> or jump to <a href="/m22-14-vs-15/">M22 14 mm vs 15 mm</a>.
+    </Answer>
+  </div>
+
+  <div class="cards">
+    <a class="card" href="/identify/">
+      <h3>Identify yours</h3>
+      <p>Five joints, two measuring tricks, no guessing from the Amazon title.</p>
+    </a>
+    <a class="card" href="/m22-14-vs-15/">
+      <h3>M22 14 vs 15</h3>
+      <p>Same 22 mm thread. Different stem. This is the leak that looks like a bad hose.</p>
+    </a>
+    <a class="card" href="/quick-connect/">
+      <h3>Quick-connect sizes</h3>
+      <p>1/4″ on tips and foam cannons. 3/8″ on many hoses. They do not interchange.</p>
+    </a>
+    <a class="card" href="/adapters/">
+      <h3>Adapter matrix</h3>
+      <p>What to buy when the pump and the new gun are not the same family.</p>
+    </a>
+    <a class="card" href="/leaks/">
+      <h3>Why it sprays at the nut</h3>
+      <p>Mismatch, missing O-ring, tape on an O-ring seal, or a cracked plastic collar.</p>
+    </a>
+    <a class="card" href="/brands/">
+      <h3>Brand starting points</h3>
+      <p>Sun Joe, AR Blue Clean, Ryobi, Kärcher, Simpson, and the big-box gas brands.</p>
+    </a>
+  </div>
+
+  <div class="prose">
+    <h2>The five joints that fool people</h2>
+    <table>
+      <thead>
+        <tr><th>Joint</th><th>What you usually find</th><th>What people buy by mistake</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Garden hose → pump</td><td><a href="/garden-hose-inlet/">GHT</a> (washer seal)</td><td>3/4″ NPT pipe thread</td></tr>
+        <tr><td>Pump → high-pressure hose</td><td><a href="/m22/">M22-14 or M22-15</a>, or 3/8″ QC</td><td>“M22 hose” with the other stem</td></tr>
+        <tr><td>Hose → spray gun</td><td>M22-14, M22-15, or 3/8″ QC</td><td>A gun whose inlet is the other size</td></tr>
+        <tr><td>Gun → wand</td><td>M22, 1/4″ thread, or QC</td><td>A foam cannon that expects 1/4″ QC</td></tr>
+        <tr><td>Wand → nozzle</td><td><a href="/nozzles/">1/4″ QC tips</a></td><td>3/8″ plugs or metric threaded tips</td></tr>
+      </tbody>
+    </table>
+    <p>Kärcher K-series electrics replace some of those nuts with a <a href="/brands/karcher/">proprietary clip</a>. That is a sixth case, not a broken M22.</p>
+  </div>
+</Base>

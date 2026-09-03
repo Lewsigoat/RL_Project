@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { brands } from '../../data/brands.js';
+---
+<Base title="Pressure washer fittings by brand" description="Starting-point fitting notes for Sun Joe, AR Blue Clean, Ryobi, Kärcher, Simpson, Greenworks, Craftsman, DeWalt, Generac, and PowerStroke." path="/brands/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Brands</p>
+    <h1>Brand starting points</h1>
+    <p class="lead">These pages are hypotheses with sources. Measure the stem. Shared OEM pumps mean two stickers can hide two sizes.</p>
+  </div>
+  <div class="cards">
+    {brands.map((b) => (
+      <a class="card" href={`/brands/${b.slug}/`}>
+        <h3>{b.name}</h3>
+        <p>{b.typical}</p>
+      </a>
+    ))}
+  </div>
+</Base>

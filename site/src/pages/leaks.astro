@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+const faqs = [
+  { q: 'It only leaks when I pull the trigger.', a: 'That is pressure finding a 14-into-15 gap or a nicked O-ring. Idle drips are often the garden-hose washer.' },
+  { q: 'Can I add a second O-ring?', a: 'No. Stacking rings keeps the stem from seating. Replace the correct size ring.' },
+];
+---
+<Base title="Pressure washer fitting leaks" description="A leak at the M22 nut is usually a 14/15 stem mismatch, a missing O-ring, or tape on an O-ring seal — not a weak hose." path="/leaks/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Leaks</p>
+    <h1>Why the fitting sprays</h1>
+    <Answer>
+      If the leak is at a big knurled nut, assume size or O-ring first. If it is at the tap, replace the GHT washer. If it is at a QC collar, inspect the plug groove and the balls.
+    </Answer>
+    <h2>Leak tree</h2>
+    <table>
+      <thead><tr><th>Where it wets</th><th>First check</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Tap → pump</td><td>Washer present? GHT vs NPT?</td><td>New washer or <a href="/garden-hose-inlet/">correct inlet thread</a></td></tr>
+        <tr><td>Pump → hose nut</td><td>14 vs 15, then O-ring</td><td><a href="/m22-14-vs-15/">Coupler</a> or ring</td></tr>
+        <tr><td>Hose → gun nut</td><td>Same as above</td><td>Do not buy a third hose yet</td></tr>
+        <tr><td>QC collar</td><td>Wrong body size; worn balls; cracked plastic</td><td>Match <a href="/qc-14-vs-38/">1/4 vs 3/8</a>; replace socket</td></tr>
+        <tr><td>Along the hose jacket</td><td>Burst or pinhole</td><td>Replace hose; check PSI rating</td></tr>
+      </tbody>
+    </table>
+    <h2>Things that make it worse</h2>
+    <ul>
+      <li>PTFE tape on an M22 thread. The nut stops short of compressing the ring.</li>
+      <li>Vice-grips on a plastic collar.</li>
+      <li>Running the pump to “seat” a joint that already weeps at hand-tight.</li>
+    </ul>
+    <Faq items={faqs} />
+  </div>
+</Base>

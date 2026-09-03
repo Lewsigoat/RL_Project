@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+const faqs = [
+  { q: 'The cannon screws onto my M22 gun and leaks.', a: 'You probably have a 14/15 mismatch or a cannon that expected 1/4″ QC. Identify the gun outlet, then adapter — do not over-tighten plastic cannons.' },
+  { q: 'Does orifice size change the fitting?', a: 'No. 1.1 mm vs 1.25 mm is the foam jet, not the inlet. Buy the inlet you need, then pick an orifice for your GPM.' },
+];
+---
+<Base title="Foam cannon fitting" description="Most consumer foam cannons use a 1/4 inch quick-connect inlet. M22 cannons must match 14 mm or 15 mm. Kärcher K-series needs a clip adapter." path="/foam-cannon/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Foam cannon</p>
+    <h1>Foam cannon fittings</h1>
+    <Answer>
+      Look at the cannon inlet, not the brand on the bottle. 1/4″ QC is the default. M22 cannons still split 14 vs 15. K-series guns need a clip adapter.
+    </Answer>
+    <table>
+      <thead><tr><th>Gun / wand outlet</th><th>Cannon you can buy</th><th>Adapter if they disagree</th></tr></thead>
+      <tbody>
+        <tr><td>1/4″ QC</td><td>Standard QC cannon</td><td>None</td></tr>
+        <tr><td>M22-14</td><td>M22-14 cannon, or QC cannon + M22-14 × 1/4″ QC</td><td>See <a href="/adapters/">matrix</a></td></tr>
+        <tr><td>M22-15</td><td>M22-15 cannon, or 15→14 then the 14 mm path</td><td>Sun Joe-style coupler</td></tr>
+        <tr><td>Kärcher clip</td><td>K-series cannon or clip × 1/4″ QC</td><td><a href="/brands/karcher/">Kärcher</a></td></tr>
+      </tbody>
+    </table>
+    <p>Low-GPM electric machines make thin foam with a “pro” 1.25 mm orifice. That is a flow problem, not a fitting problem. Fit first, then orifice.</p>
+    <Faq items={faqs} />
+  </div>
+</Base>

@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+const faqs = [
+  { q: 'Can I use PTFE tape on GHT?', a: 'You should not need it. GHT seals on the washer. Tape is for tapered NPT, and it can keep a GHT nut from seating.' },
+  { q: 'My inlet is 3/4″ but a pipe fitting will not start.', a: 'You are holding 3/4″ NPT (14 TPI, tapered) against GHT (11.5 TPI, straight). Buy a GHT × NPT adapter if you are hard-plumbing the inlet.' },
+];
+---
+<Base title="Pressure washer garden hose inlet (GHT)" description="The pump inlet uses garden hose thread (GHT / 3/4-11.5 NH), which seals on a washer. It is not 3/4 inch NPT and it is not an M22 high-pressure fitting." path="/garden-hose-inlet/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Garden hose inlet</p>
+    <h1>Garden-hose inlet: GHT, not M22</h1>
+    <Answer>
+      The tap side is 3/4-11.5 NH (GHT). Parallel threads, rubber washer. Never put high-pressure M22 parts on this port.
+    </Answer>
+    <table>
+      <thead><tr><th></th><th>GHT</th><th>3/4″ NPT</th><th>M22</th></tr></thead>
+      <tbody>
+        <tr><td>Shape</td><td>Straight</td><td>Tapered</td><td>Metric straight</td></tr>
+        <tr><td>Pitch</td><td>11.5 TPI</td><td>14 TPI</td><td>~1.5 mm</td></tr>
+        <tr><td>Seal</td><td>Washer</td><td>Thread + tape</td><td>Stem O-ring</td></tr>
+        <tr><td>Pressure</td><td>Tap</td><td>Plumbing</td><td>Pump outlet</td></tr>
+      </tbody>
+    </table>
+    <p>If the inlet weeps, replace the washer before you buy a new hose. If you are feeding the pump from PEX or PVC, use a <strong>GHT female × NPT male</strong> (or the gender you actually have) and keep the high-pressure side out of that conversation.</p>
+    <Faq items={faqs} />
+  </div>
+</Base>

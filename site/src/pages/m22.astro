@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+
+const faqs = [
+  { q: 'Is M22 the same as 22 mm NPT?', a: 'No. M22 is a metric thread (22 mm outer diameter, commonly 1.5 mm pitch). NPT is a tapered US pipe thread. Do not force them together.' },
+  { q: 'Does PTFE tape fix an M22 leak?', a: 'Usually not. M22 high-pressure joints seal on an O-ring around the stem. Tape on the threads can keep the nut from seating and make the leak worse.' },
+  { q: 'Are M22 fittings “universal”?', a: 'The thread is common. The 14 mm and 15 mm stems are not interchangeable. See the comparison page.' },
+];
+---
+<Base title="What M22 means on a pressure washer" description="M22 is a 22 mm metric thread used on many pressure-washer hoses and guns. It is not one size: the inner stem is 14 mm or 15 mm." path="/m22/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / M22</p>
+    <h1>What “M22” actually means</h1>
+    <Answer>
+      M22 names the <em>thread</em>: metric, about 22 mm across. It does not name the seal. The seal is a stem and O-ring that is either 14 mm or 15 mm.
+    </Answer>
+    <p>AR Blue Clean’s own fitting note puts it cleanly: the two versions share the outer thread, so they usually screw together. The stem either seats or it does not. If you only remember one sentence from this site, remember that.</p>
+
+    <h2>Where M22 shows up</h2>
+    <ul>
+      <li>Pump high-pressure outlet</li>
+      <li>Both ends of many consumer hoses</li>
+      <li>Spray-gun inlet</li>
+      <li>Some gun-to-wand joints on cheap kits</li>
+    </ul>
+    <p>It does <strong>not</strong> show up on the garden-hose inlet. That is <a href="/garden-hose-inlet/">GHT</a>.</p>
+
+    <h2>The two sizes</h2>
+    <table>
+      <thead><tr><th></th><th>M22-14 mm</th><th>M22-15 mm</th></tr></thead>
+      <tbody>
+        <tr><td>Thread</td><td>M22</td><td>M22</td></tr>
+        <tr><td>Stem / bore</td><td>~14 mm</td><td>~15 mm</td></tr>
+        <tr><td>Common machines</td><td>Many gas units; most aftermarket hoses</td><td>Many electrics (Sun Joe, some AR Blue Clean)</td></tr>
+        <tr><td>15 mm stem into 14 mm bore</td><td colspan="2">Will not assemble — do not force it</td></tr>
+        <tr><td>14 mm stem into 15 mm bore</td><td colspan="2">Threads on, then leaks under pressure</td></tr>
+      </tbody>
+    </table>
+
+    <h2>How to talk about gender</h2>
+    <p>People argue about “male hose.” Use parts instead:</p>
+    <ul>
+      <li><strong>Nut / collar</strong> — the piece you twist.</li>
+      <li><strong>Stem</strong> — the tube that carries the O-ring into the bore.</li>
+      <li><strong>Bore</strong> — the hole the stem must match.</li>
+    </ul>
+    <p>A hose can have a female nut and a 14 mm stem on one end and something else on the other. Photograph both.</p>
+
+    <p class="related">
+      <a href="/m22-14-vs-15/">14 vs 15 in detail</a>
+      <a href="/measure-m22/">Measure it</a>
+      <a href="/m22-to-quick-connect/">Convert M22 to QC</a>
+    </p>
+    <Faq items={faqs} />
+  </div>
+</Base>

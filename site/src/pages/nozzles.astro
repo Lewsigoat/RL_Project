@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+const faqs = [
+  { q: 'Why won’t the green tip snap into my new gun?', a: 'The gun outlet is probably M22 or 3/8″ QC. Tips are 1/4″ QC. You need a wand or an adapter, not a new color.' },
+  { q: 'Does the number on the tip (25, 40, 3.0) change the plug?', a: 'No. The first numbers are spray angle or orifice. The plug is still 1/4″ QC on consumer tips.' },
+];
+---
+<Base title="Pressure washer nozzle tips" description="Consumer pressure-washer tips use 1/4 inch quick-connect. Colors are spray angle. They will not snap into an M22 gun outlet." path="/nozzles/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Nozzles</p>
+    <h1>Nozzle tips and 1/4″ QC</h1>
+    <Answer>
+      Colored tips are 1/4″ quick-connect. Color is angle, not fitting size. If a tip will not snap on, you are at the wrong joint.
+    </Answer>
+    <table>
+      <thead><tr><th>Common color</th><th>Angle</th><th>Job</th></tr></thead>
+      <tbody>
+        <tr><td>Red</td><td>0°</td><td>Spot; easy to etch concrete and skin</td></tr>
+        <tr><td>Yellow</td><td>15°</td><td>Hard surfaces</td></tr>
+        <tr><td>Green</td><td>25°</td><td>General</td></tr>
+        <tr><td>White</td><td>40°</td><td>Softer or already-clean surfaces</td></tr>
+        <tr><td>Black</td><td>Soap</td><td>Low-pressure chemical; not a “bigger fitting”</td></tr>
+      </tbody>
+    </table>
+    <p>Orifice numbers (2.0, 3.0, 4.0…) should match your machine’s GPM. That is a performance topic. The plug stays 1/4″ QC. See <a href="/qc-14/">1/4″ QC</a> and <a href="/wand/">wands</a>.</p>
+    <Faq items={faqs} />
+  </div>
+</Base>

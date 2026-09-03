@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+
+const faqs = [
+  { q: 'Measure the thread or the stem?', a: 'The stem or the bore. The thread is 22 mm either way and will lie to you.' },
+  { q: 'My reading is 14.3 mm. Is that 14 or 15?', a: '14. M22-14 stems are not laser-perfect. 15 mm parts land near 14.8–15.2 mm. If you are at 14.6, compare to a known 14 mm hose instead of rounding up.' },
+];
+---
+<Base title="How to measure an M22 fitting" description="Measure the M22 stem or bore with a caliper. Do not measure the outer thread — both 14 mm and 15 mm versions are M22." path="/measure-m22/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/m22/">M22</a> / Measure</p>
+    <h1>How to measure M22-14 vs M22-15</h1>
+    <Answer>
+      Use a digital caliper on the male stem diameter or the female bore. You are looking for about 14 mm or about 15 mm. The nut does not matter.
+    </Answer>
+
+    <h2>Tools</h2>
+    <ul>
+      <li>Digital caliper (0.1 mm is enough).</li>
+      <li>Or a known-good M22-14 mm aftermarket hose as a physical gauge.</li>
+      <li>Rag. Dried soap on the stem reads thick.</li>
+    </ul>
+
+    <h2>Male stem</h2>
+    <ol class="steps">
+      <li>Disconnect and wipe the tube that sticks out inside the threads.</li>
+      <li>Close the caliper across that tube, not across the threads.</li>
+      <li>~14.0 mm → M22-14. ~15.0 mm → M22-15.</li>
+    </ol>
+
+    <h2>Female bore</h2>
+    <ol class="steps">
+      <li>Look into the nut. You should see a smooth hole the stem enters, and usually an O-ring.</li>
+      <li>Use the inside jaws of the caliper on that hole, not on the thread crests.</li>
+      <li>The hole matches the stem it wants: 14 or 15.</li>
+    </ol>
+
+    <h2>No caliper</h2>
+    <p>Offer a 14 mm aftermarket hose (the common Home Depot “M22” hose) to the pump. If it threads on and then weeps at idle, the pump is probably 15 mm. If it will not start on the threads without a fight, stop — you may be cross-threading, not size-checking.</p>
+
+    <div class="callout warn">
+      Do not run the washer to “test” a doubtful joint. A pinhole at 2000 PSI is a cut, not a drip.
+    </div>
+    <Faq items={faqs} />
+    <p class="related"><a href="/m22-14-vs-15/">What the numbers mean</a> <a href="/leaks/">Still leaking?</a></p>
+  </div>
+</Base>

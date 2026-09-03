@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+const faqs = [
+  { q: 'Do I convert the pump, the gun, or both?', a: 'Both, if you want a QC hose. Convert only the wand if you just want snap tips on an M22 gun.' },
+  { q: '14 or 15 first?', a: 'Identify M22 stem size first. A 15 mm pump needs a 15 mm adapter or a 15→14 plus a 14 mm QC adapter.' },
+];
+---
+<Base title="M22 to quick-connect adapter" description="Convert an M22 pressure-washer pump or gun to 3/8 inch or 1/4 inch quick-connect without mixing stem sizes." path="/m22-to-quick-connect/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/adapters/">Adapters</a> / M22 to QC</p>
+    <h1>Convert M22 to quick-connect</h1>
+    <Answer>
+      Measure 14 vs 15 first. Put 3/8″ QC on the hose joints and 1/4″ QC on the wand. Do not hang the whole machine off a plastic 1/4″ socket.
+    </Answer>
+    <h2>Typical gas-machine conversion</h2>
+    <ol class="steps">
+      <li>Confirm <a href="/measure-m22/">M22-14 mm</a> on pump and gun (most gas kits).</li>
+      <li>M22-14 male × 3/8″ QC female on the pump outlet.</li>
+      <li>3/8″ QC hose.</li>
+      <li>3/8″ QC male × M22-14 (or the gun’s actual inlet) on the gun.</li>
+      <li>Leave or add 1/4″ QC at the wand for <a href="/nozzles/">tips</a>.</li>
+    </ol>
+    <h2>Typical Sun Joe / 15 mm conversion</h2>
+    <ol class="steps">
+      <li>M22-15 × M22-14 coupler on the machine or hose.</li>
+      <li>Then the same 14 mm → 3/8″ QC stack as above.</li>
+    </ol>
+    <p>Shop Joe’s accessory FAQ is why this pattern exists: many Sun Joe outlets are 15 mm, while the aftermarket is 14 mm.</p>
+    <Faq items={faqs} />
+  </div>
+</Base>

@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+
+const faqs = [
+  { q: 'Can I identify the fitting from the brand name?', a: 'Only as a starting guess. Sun Joe support documents M22-15 mm on many outlets; Ryobi and Greenworks mix sizes. Measure the stem.' },
+  { q: 'Do both ends of the stock hose match?', a: 'Often, not always. Treat the pump outlet and the gun inlet as two fittings.' },
+  { q: 'What if I have no caliper?', a: 'A 14 mm stem is about 0.55 in; 15 mm is about 0.59 in. Side-by-side against a known 14 mm aftermarket hose is enough. A $15 digital caliper is better.' },
+];
+---
+<Base title="Identify your pressure washer fitting" description="Walk each of the five pressure-washer joints and measure M22 stem size, quick-connect body, or a Kärcher clip before you buy a hose or gun." path="/identify/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Identify</p>
+    <h1>Identify the fitting before you order the hose</h1>
+    <Answer>
+      Name the joint, then name the family (M22, quick-connect, GHT, or Kärcher clip), then measure the size inside that family. Brand stickers come last.
+    </Answer>
+
+    <h2>1. Name the joint</h2>
+    <p>Write five labels on a notepad: inlet, pump outlet, hose-to-gun, gun-to-wand, wand-to-tip. Photograph each one in daylight. You are allowed to replace only one joint. Buying a “full kit” is how 14 mm and 15 mm get mixed.</p>
+
+    <h2>2. Sort the family</h2>
+    <table>
+      <thead><tr><th>You see</th><th>Family</th><th>Next page</th></tr></thead>
+      <tbody>
+        <tr><td>Large knurled nut, ~22 mm thread</td><td>M22</td><td><a href="/m22/">M22 overview</a> → <a href="/measure-m22/">measure the stem</a></td></tr>
+        <tr><td>Push collar, steel plug, no big nut</td><td>Quick-connect</td><td><a href="/quick-connect/">1/4″ vs 3/8″</a></td></tr>
+        <tr><td>Garden-hose nut with a rubber washer</td><td>GHT</td><td><a href="/garden-hose-inlet/">Inlet only</a></td></tr>
+        <tr><td>Clip or sliding lock, Kärcher K-series</td><td>Proprietary</td><td><a href="/brands/karcher/">Kärcher</a></td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. Measure inside the family</h2>
+    <ol class="steps">
+      <li>Relieve pressure. Pull the trigger with the pump off. Disconnect the garden hose.</li>
+      <li>For M22, measure the <em>male stem</em> or the <em>female bore</em>, not the thread. See <a href="/measure-m22/">how to measure M22</a>.</li>
+      <li>For quick-connect, compare the plug to a known 1/4″ nozzle tip. If the tip looks like a toothpick next to the hose plug, the hose is 3/8″.</li>
+      <li>Write the result as <code>M22-14</code>, <code>M22-15</code>, <code>QC-1/4</code>, <code>QC-3/8</code>, <code>GHT</code>, or <code>K-clip</code>.</li>
+    </ol>
+
+    <h2>4. Only then shop</h2>
+    <p>If two joints disagree, you need an <a href="/adapters/">adapter</a>, not a second guess. If they agree and the part still leaks, skip to <a href="/leaks/">the leak tree</a>.</p>
+
+    <div class="callout">
+      The garden-hose inlet is never the high-pressure standard. Do not put an M22 adapter on the tap side and call it done.
+    </div>
+    <Faq items={faqs} />
+    <p class="related">
+      <a href="/m22-14-vs-15/">14 vs 15</a>
+      <a href="/brands/">Brand notes</a>
+      <a href="/replacement-hose/">Replacement hose</a>
+    </p>
+  </div>
+</Base>
