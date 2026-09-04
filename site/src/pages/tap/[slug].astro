@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import Answer from '../../components/Answer.astro';
+import { popular } from '../../data/taps.js';
+
+export function getStaticPaths() {
+  return popular.map((p) => ({ params: { slug: p.slug }, props: { item: p } }));
+}
+
+const { item } = Astro.props;
+---
+<Base title={item.title} description={`${item.screw} tap drill is ${item.tap} (${item.series}). 75% thread shop size.`} path={`/tap/${item.slug}/`}>
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / {item.screw}</p>
+    <h1>{item.screw} tap drill</h1>
+    <Answer>
+      Use <strong>{item.tap}</strong> for a standard 75% thread in {item.series}. That is the size on the wall chart. In hard metal, one size larger is easier on the tap.
+    </Answer>
+    <p>This is a tap hole, not a clearance hole. If the screw must slide through, see <a href="/clearance/">clearance</a>.</p>
+    <p>
+      Full charts:
+      {item.series.includes('Metric') ? <a href="/tap-metric/">metric</a> : item.series === 'UNF' ? <a href="/tap-unf/">UNF</a> : <a href="/tap-unc/">UNC</a>}
+      · <a href="/how-tap-drill/">formula</a>
+    </p>
+  </div>
+</Base>

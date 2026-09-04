@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Faq from '../components/Faq.astro';
+
+const faqs = [
+  { q: 'Why 75% thread?', a: 'It is a shop compromise: strong enough in steel and aluminum, and easier to tap than a 100% thread, which binds and breaks taps.' },
+  { q: 'When should I go larger?', a: 'Hard stainless, tool steel, or a dull tap. 65–70% thread (a slightly larger drill) saves taps and still holds in steel.' },
+];
+---
+<Base title="How tap drill size is calculated" description="Tap drill ≈ major diameter minus pitch for 60° threads. That is the 75% thread rule behind the shop charts." path="/how-tap-drill/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / Formula</p>
+    <h1>How tap drill size is calculated</h1>
+    <Answer>
+      For a 60° thread, tap drill ≈ major diameter − pitch. That leaves about 75% of a full theoretical thread. Charts on this site are those rounded shop sizes.
+    </Answer>
+    <h2>Inch example: 1/4-20</h2>
+    <p>Major diameter 0.250″. Pitch is 1/20 = 0.050″. 0.250 − 0.050 = 0.200″. Nearest common bit is <strong>#7 (0.2010″)</strong>.</p>
+    <h2>Metric example: M6 × 1.0</h2>
+    <p>6.0 − 1.0 = 5.0 mm. That is why the coarse chart is a clean 5.0 mm, not “almost 13/64.”</p>
+    <h2>What the percentage means</h2>
+    <p>100% thread is a theoretical sharp V. Real taps never cut that. 75% is the default on wall charts. In tough material, a larger hole (less thread engagement) is often stronger in practice because the tap does not work-harden the hole or snap.</p>
+    <Faq items={faqs} />
+  </div>
+</Base>

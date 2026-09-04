@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { numbered } from '../data/drills.js';
+
+const rows = numbered.map((b) => ({
+  label: b.label,
+  inch: b.inch.toFixed(4),
+  mm: b.mm.toFixed(3),
+}));
+---
+<Base title="Numbered drill bit chart #1 to #80" description="Complete numbered drill chart from #1 (0.2280 in) to #80 (0.0135 in) with millimetre equivalents." path="/numbered/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Numbered</p>
+    <h1>Numbered drill chart (#1–#80)</h1>
+    <Answer>
+      Numbers get <em>smaller</em> as the gauge number rises. #1 is 0.2280″. #80 is 0.0135″. #7 (0.2010″) is the usual 1/4-20 tap drill.
+    </Answer>
+    <p>These are the wire-gauge sizes sold as jobber bits. They exist because 1/64″ steps skip the diameters taps actually want.</p>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'label', label: 'Size' },
+        { key: 'inch', label: 'Inch', mono: true },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+    <p><a href="/letter/">Letter chart</a> · <a href="/tap-drill/">Tap drills that use these</a></p>
+  </div>
+</Base>

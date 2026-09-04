@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import Finder from '../components/Finder.astro';
+import { popular } from '../data/taps.js';
+---
+<Base title="Drill sizes: numbered, letter, fractional, tap" description="Look up numbered, letter, fractional, and metric drill sizes, plus tap-drill and clearance charts. Type a decimal to find the closest bit." path="/">
+  <div class="prose">
+    <p class="crumbs">Drill Chart</p>
+    <h1>What size is that bit?</h1>
+    <p class="lead">Numbered, letter, fractional, and metric drills overlap. This site is the chart, not a guess from the shank stamp.</p>
+    <Answer>
+      Tap a hole with the recommended bit for that thread, not “a bit smaller than the screw.” Clearance holes are larger than the major diameter. Start with the finder or a <a href="/tap-drill/">tap-drill chart</a>.
+    </Answer>
+    <Finder />
+  </div>
+  <div class="cards">
+    <a class="card" href="/numbered/"><h3>Numbered #1–#80</h3><p>Wire-gauge sizes. #7 is the usual 1/4-20 tap drill.</p></a>
+    <a class="card" href="/letter/"><h3>Letter A–Z</h3><p>From 0.234″ to 0.413″. F is a common 5/16-18 tap.</p></a>
+    <a class="card" href="/fractional/"><h3>Fractional inch</h3><p>1/64 through 1″ in lowest terms, with millimetres.</p></a>
+    <a class="card" href="/metric/"><h3>Metric</h3><p>Shop sizes from 0.5 mm to 13 mm, including tap favorites 2.5, 3.3, 5.0, 6.8.</p></a>
+    <a class="card" href="/tap-drill/"><h3>Tap drill</h3><p>UNC, UNF, metric coarse/fine, and NPT pipe.</p></a>
+    <a class="card" href="/clearance/"><h3>Clearance holes</h3><p>Close fit vs free fit so a bolt slides without slop you did not want.</p></a>
+  </div>
+  <div class="prose">
+    <h2>Popular tap drills</h2>
+    <p class="related">
+      {popular.map((p) => <a href={`/tap/${p.slug}/`}>{p.screw}</a>)}
+    </p>
+    <h2>How the four systems sit together</h2>
+    <table>
+      <thead><tr><th>Family</th><th>Range</th><th>Why it exists</th></tr></thead>
+      <tbody>
+        <tr><td><a href="/numbered/">Numbered</a></td><td>#80 (0.0135″) to #1 (0.228″)</td><td>Fills the gaps below 1/4″ that fractions skip</td></tr>
+        <tr><td><a href="/letter/">Letter</a></td><td>A 0.234″ to Z 0.413″</td><td>Fills gaps between 15/64 and 27/64</td></tr>
+        <tr><td><a href="/fractional/">Fractional</a></td><td>1/64 to 1″</td><td>What a hardware aisle actually stocks</td></tr>
+        <tr><td><a href="/metric/">Metric</a></td><td>0.5–13 mm here</td><td>What a metric tap set expects</td></tr>
+      </tbody>
+    </table>
+    <p>A #7 is not “number seven millimetres.” See <a href="/number-vs-letter/">number vs letter vs fractional</a>.</p>
+  </div>
+</Base>

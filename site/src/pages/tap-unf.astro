@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { unf } from '../data/taps.js';
+
+const rows = unf.map((r) => ({
+  screw: r.screw,
+  tap: r.tap,
+  inch: r.inch.toFixed(4),
+  mm: (r.inch * 25.4).toFixed(2),
+}));
+---
+<Base title="UNF tap drill chart" description="Unified National Fine tap-drill sizes including 10-32 (#21) and 1/4-28 (#3)." path="/tap-unf/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / UNF</p>
+    <h1>UNF tap drill chart</h1>
+    <Answer>
+      Fine series uses a larger tap drill than the matching coarse screw of the same major diameter. 10-32 is #21, not #25. 1/4-28 is #3, not #7.
+    </Answer>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'tap', label: 'Tap drill' },
+        { key: 'inch', label: 'Inch', mono: true },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+  </div>
+</Base>

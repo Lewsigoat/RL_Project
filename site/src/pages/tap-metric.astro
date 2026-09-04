@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { metricCoarse, metricFine } from '../data/taps.js';
+
+const coarse = metricCoarse.map((r) => ({ screw: r.screw, tap: r.tap, mm: r.mm.toFixed(2) }));
+const fine = metricFine.map((r) => ({ screw: r.screw, tap: r.tap, mm: r.mm.toFixed(2) }));
+---
+<Base title="Metric tap drill chart" description="Metric coarse and fine tap-drill sizes. M3 uses 2.5 mm, M6 uses 5.0 mm, M8 uses 6.8 mm, M10 uses 8.5 mm." path="/tap-metric/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / Metric</p>
+    <h1>Metric tap drill chart</h1>
+    <Answer>
+      Coarse pitch first: M3 → 2.5 mm, M4 → 3.3 mm, M5 → 4.2 mm, M6 → 5.0 mm, M8 → 6.8 mm, M10 → 8.5 mm. Fine pitch uses a larger hole because the thread is shallower.
+    </Answer>
+    <h2>Coarse (ISO default)</h2>
+    <SizeTable
+      rows={coarse}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'tap', label: 'Tap drill' },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+    <h2>Fine</h2>
+    <SizeTable
+      rows={fine}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'tap', label: 'Tap drill' },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+    <p>Closest inch bit: use the <a href="/">finder</a> on the millimetre value.</p>
+  </div>
+</Base>

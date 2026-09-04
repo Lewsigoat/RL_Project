@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { fractional } from '../data/drills.js';
+
+const rows = fractional.map((b) => ({
+  label: `${b.label}″`,
+  inch: b.inch.toFixed(4),
+  mm: b.mm.toFixed(3),
+}));
+---
+<Base title="Fractional inch drill chart" description="Fractional drill sizes from 1/64 inch to 1 inch in lowest terms, with decimal inch and millimetre equivalents." path="/fractional/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Fractional</p>
+    <h1>Fractional inch drill chart</h1>
+    <Answer>
+      Hardware-store bits are 1/64″ steps, reduced to lowest terms. 8/64 is 1/8. A 5/16″ bit is 0.3125″ — the usual 3/8-16 tap drill.
+    </Answer>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'label', label: 'Fraction' },
+        { key: 'inch', label: 'Decimal in', mono: true },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+  </div>
+</Base>

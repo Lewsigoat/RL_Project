@@ -1,0 +1,89 @@
+---
+import { numbered, letter, fractional, metricGrid } from '../data/drills.js';
+
+const payload = JSON.stringify({
+  numbered: numbered.map((b) => ({ label: b.label, inch: b.inch, mm: b.mm })),
+  letter: letter.map((b) => ({ label: b.label, inch: b.inch, mm: b.mm })),
+  fractional: fractional.map((b) => ({ label: b.label, inch: b.inch, mm: b.mm })),
+  metric: metricGrid.map((b) => ({ label: b.label, inch: b.inch, mm: b.mm })),
+});
+---
+<div class="finder" id="finder">
+  <label for="size-in">Decimal inches, a fraction like 13/64, or millimetres</label>
+  <div class="finder-row">
+    <input id="size-in" type="text" inputmode="decimal" placeholder="0.201 or 5.0 mm" />
+    <select id="size-unit" aria-label="Unit">
+      <option value="auto">Auto</option>
+      <option value="inch">Inch</option>
+      <option value="mm">mm</option>
+    </select>
+  </div>
+  <p class="finder-out" id="size-out">Type a size. Nearest numbered, letter, fractional, and metric bits appear here.</p>
+</div>
+<script type="application/json" id="bit-data" set:html={payload} />
+<script is:inline>
+  (function () {
+    const data = JSON.parse(document.getElementById('bit-data').textContent);
+    const input = document.getElementById('size-in');
+    const unit = document.getElementById('size-unit');
+    const out = document.getElementById('size-out');
+
+    function parse(raw, mode) {
+      const s = raw.trim().toLowerCase();
+      if (!s) return null;
+      const hasMm = /mm/.test(s);
+      const frac = s.match(/^(\d+)\s*\/\s*(\d+)/);
+      let inch;
+      if (frac) inch = Number(frac[1]) / Number(frac[2]);
+      else {
+        const n = parseFloat(s.replace(/[^0-9.]/g, ''));
+        if (!Number.isFinite(n) || n <= 0) return null;
+        const asMm = mode === 'mm' || (mode === 'auto' && (hasMm || n > 2.5));
+        inch = asMm ? n / 25.4 : n;
+      }
+      return inch;
+    }
+
+    function nearest(list, inch) {
+      return list.reduce((best, b) => {
+        const d = Math.abs(b.inch - inch);
+        return !best || d < best.d ? { b, d } : best;
+      }, null);
+    }
+
+    function fmt(inch) {
+      return `${inch.toFixed(4).replace(/0+$/, '').replace(/\.$/, '')}″`;
+    }
+
+    function run() {
+      const inch = parse(input.value, unit.value);
+      if (!inch) {
+        out.textContent = 'Type a size. Nearest numbered, letter, fractional, and metric bits appear here.';
+        return;
+      }
+      const n = nearest(data.numbered, inch);
+      const l = nearest(data.letter, inch);
+      const f = nearest(data.fractional, inch);
+      const m = nearest(data.metric, inch);
+      out.innerHTML =
+        `Closest to <strong>${fmt(inch)}</strong> (${(inch * 25.4).toFixed(2)} mm): ` +
+        `<strong>${n.b.label}</strong> (${fmt(n.b.inch)}), ` +
+        `letter <strong>${l.b.label}</strong> (${fmt(l.b.inch)}), ` +
+        `<strong>${f.b.label}</strong> (${fmt(f.b.inch)}), ` +
+        `<strong>${m.b.label}</strong> (${m.b.mm} mm).`;
+    }
+
+    input.addEventListener('input', run);
+    unit.addEventListener('change', run);
+  })();
+</script>
+<style>
+  .finder { background: var(--bg-2); border: 1px solid var(--line); padding: 1rem; margin: 1.25rem 0 1.5rem; }
+  .finder label { display: block; font-family: var(--ui); font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .finder-row { display: flex; gap: 0.5rem; }
+  .finder input, .finder select {
+    font: inherit; padding: 0.45rem 0.55rem; border: 1px solid var(--line); background: #fff;
+  }
+  .finder input { flex: 1; }
+  .finder-out { margin: 0.75rem 0 0; color: var(--muted); }
+</style>

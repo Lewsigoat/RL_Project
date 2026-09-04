@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { metric } from '../data/drills.js';
+
+const rows = metric.map((b) => ({
+  label: b.label,
+  inch: b.inch.toFixed(4),
+  mm: b.mm.toFixed(1),
+}));
+---
+<Base title="Metric drill bit chart" description="Common metric drill sizes from 0.5 mm to 13 mm, including tap-drill diameters 2.5, 3.3, 4.2, 5.0, 6.8, and 8.5 mm." path="/metric/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Metric</p>
+    <h1>Metric drill chart</h1>
+    <Answer>
+      Metric taps want metric holes. M6 × 1.0 uses 5.0 mm, not “a hair under 1/4″.” M8 × 1.25 uses 6.8 mm.
+    </Answer>
+    <p>This list is the shop set, not every 0.1 mm increment. The homepage finder will still snap to the nearest 0.1 mm.</p>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'label', label: 'Size' },
+        { key: 'mm', label: 'mm', mono: true },
+        { key: 'inch', label: 'Inch', mono: true },
+      ]}
+    />
+    <p><a href="/tap-metric/">Metric tap drills</a></p>
+  </div>
+</Base>
