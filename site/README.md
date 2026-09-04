@@ -1,14 +1,13 @@
-# PW Fit Guide
+# Drill Chart
 
-Static reference site for consumer pressure-washer fittings (M22-14 vs M22-15, quick-connect sizes, GHT inlets, Kärcher clips).
+Numbered, letter, fractional, metric, tap-drill, and clearance reference.
 
 ```bash
 cd site
 npm install
 npm run dev
-npm run build
 ```
 
-Deploy and monetization steps: [DEPLOY.md](DEPLOY.md).
+Open http://localhost:4321/
 
-Niche scoring that chose this topic: [../docs/niche-decision.md](../docs/niche-decision.md).
+Deploy notes: [DEPLOY.md](DEPLOY.md).

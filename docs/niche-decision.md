@@ -1,5 +1,7 @@
 # Niche decision packet
 
+**Live site (2026-09-04):** Drill Chart — numbered / letter / fractional / metric / tap / clearance. Pressure-washer fittings was the scored pick; the operator switched the running site to drill sizes.
+
 Scored 2026-09-03 from live web SERPs (US-English results). Keyword Difficulty tools were not used as the decision. Domains were checked via Cloudflare DNS NS lookups (Status 3 / NXDOMAIN treated as likely available).
 
 ## Chosen niche

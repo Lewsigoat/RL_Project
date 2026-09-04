@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { unc } from '../data/taps.js';
+
+const rows = unc.map((r) => ({
+  screw: r.screw,
+  tap: r.tap,
+  inch: r.inch.toFixed(4),
+  mm: (r.inch * 25.4).toFixed(2),
+}));
+---
+<Base title="UNC tap drill chart" description="Unified National Coarse tap-drill sizes from 1-64 through 1-8, including 8-32, 10-24, 1/4-20, and 3/8-16." path="/tap-unc/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / UNC</p>
+    <h1>UNC tap drill chart</h1>
+    <Answer>
+      These are the usual 75% thread bits. 1/4-20 → #7. 10-24 → #25. 8-32 → #29. 3/8-16 → 5/16″.
+    </Answer>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'tap', label: 'Tap drill' },
+        { key: 'inch', label: 'Inch', mono: true },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+    <p>Need the extra TPI? <a href="/tap-unf/">UNF chart</a>. Formula: <a href="/how-tap-drill/">how tap drill is calculated</a>.</p>
+  </div>
+</Base>

@@ -2,6 +2,6 @@
 
 Pygame reinforcement-learning driving sketch (`main.py`, `objects.py`).
 
-## PW Fit Guide
+## Drill Chart
 
-`site/` is a static Astro reference for consumer pressure-washer fittings — the niche chosen in `docs/niche-decision.md`. Build and deploy notes are in `site/README.md` and `site/DEPLOY.md`.
+`site/` is a static Astro reference for numbered, letter, fractional, metric, tap-drill, and clearance sizes. Run it with `cd site && npm run dev` and open http://localhost:4321/.

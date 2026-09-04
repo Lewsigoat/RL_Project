@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { imperialClear, metricClear } from '../data/clearance.js';
+---
+<Base title="Clearance hole chart" description="Close-fit and free-fit clearance drill sizes for inch screws and metric bolts so the fastener slides without tapping." path="/clearance/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Clearance</p>
+    <h1>Clearance hole chart</h1>
+    <Answer>
+      A clearance hole is larger than the screw’s major diameter. Close fit locates the part. Free fit lets you assemble painted or slightly misaligned plates. This is not a tap drill.
+    </Answer>
+    <h2>Inch screws</h2>
+    <SizeTable
+      rows={imperialClear}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'close', label: 'Close fit' },
+        { key: 'free', label: 'Free fit' },
+      ]}
+    />
+    <h2>Metric</h2>
+    <SizeTable
+      rows={metricClear}
+      columns={[
+        { key: 'screw', label: 'Screw' },
+        { key: 'close', label: 'Close fit' },
+        { key: 'free', label: 'Free fit' },
+      ]}
+    />
+    <p>If you meant to cut threads, go back to <a href="/tap-drill/">tap drill</a>.</p>
+  </div>
+</Base>

@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+---
+<Base title="How to read a drill index" description="How numbered, letter, and fractional bits are laid out in a typical 115-piece drill index and how to find #7 or letter F without guessing." path="/read-index/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Read an index</p>
+    <h1>How to read a drill index</h1>
+    <Answer>
+      A 115-piece index is usually three families: fractions on top or in the lid, numbered down the left, letters in a short row. The stamp on the shank matches the hole label if the bit is in the right pocket.
+    </Answer>
+    <ol class="steps">
+      <li>Read the lid chart. If it says #7 = 0.201, believe the chart over a worn shank.</li>
+      <li>Numbered pockets run #1 (largest) toward #60 or #80 (smallest). Do not assume they run like wire-gauge intuition in the opposite direction — check one known size.</li>
+      <li>Letter pockets are A (small) to Z (large), the opposite of numbered intuition.</li>
+      <li>Missing bit: measure a spare with a pin gauge or caliper and use the <a href="/">finder</a>.</li>
+    </ol>
+    <p>A bit that rattles in its hole was put back wrong. That is how a #29 ends up in the #25 slot and a 10-24 tap blows out.</p>
+  </div>
+</Base>

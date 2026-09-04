@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { letter } from '../data/drills.js';
+
+const rows = letter.map((b) => ({
+  label: b.label,
+  inch: b.inch.toFixed(4),
+  mm: b.mm.toFixed(3),
+}));
+---
+<Base title="Letter drill bit chart A to Z" description="Letter drill sizes A through Z with inch and millimetre diameters. F is 0.257 in; Q is 0.332 in." path="/letter/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Letter</p>
+    <h1>Letter drill chart (A–Z)</h1>
+    <Answer>
+      Letters get larger from A (0.2340″) to Z (0.4130″). They sit just above the numbered set. F is the usual 5/16-18 tap drill. Q is a common 3/8-24 tap drill.
+    </Answer>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'label', label: 'Size' },
+        { key: 'inch', label: 'Inch', mono: true },
+        { key: 'mm', label: 'mm', mono: true },
+      ]}
+    />
+    <p><a href="/numbered/">Numbered chart</a> · <a href="/fractional/">Fractional</a></p>
+  </div>
+</Base>

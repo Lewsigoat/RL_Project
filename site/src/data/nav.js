@@ -1,9 +1,10 @@
 export const nav = [
-  { href: '/identify/', label: 'Identify' },
-  { href: '/m22/', label: 'M22' },
-  { href: '/quick-connect/', label: 'Quick-connect' },
-  { href: '/adapters/', label: 'Adapters' },
-  { href: '/brands/', label: 'Brands' },
+  { href: '/numbered/', label: 'Numbered' },
+  { href: '/letter/', label: 'Letter' },
+  { href: '/fractional/', label: 'Fractional' },
+  { href: '/metric/', label: 'Metric' },
+  { href: '/tap-drill/', label: 'Tap drill' },
+  { href: '/clearance/', label: 'Clearance' },
 ];
 
 export const footer = [

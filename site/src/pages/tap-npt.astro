@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import SizeTable from '../components/SizeTable.astro';
+import { npt } from '../data/taps.js';
+
+const rows = npt.map((r) => ({
+  pipe: r.pipe,
+  tap: r.tap,
+  inch: r.inch.toFixed(4),
+  note: r.note || '—',
+}));
+---
+<Base title="NPT pipe tap drill chart" description="Tap-drill sizes for 1/8, 1/4, 3/8, 1/2, 3/4, and 1 inch NPT. These are not the same as UNC bolts of the same nominal size." path="/tap-npt/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / <a href="/tap-drill/">Tap drill</a> / NPT</p>
+    <h1>NPT tap drill chart</h1>
+    <Answer>
+      Pipe taps are tapered. A 1/4 NPT hole is not a 1/4-20 hole. 1/8 NPT is commonly letter R; 1/4 NPT is 7/16″.
+    </Answer>
+    <SizeTable
+      rows={rows}
+      columns={[
+        { key: 'pipe', label: 'Pipe' },
+        { key: 'tap', label: 'Tap drill' },
+        { key: 'inch', label: 'Inch', mono: true },
+        { key: 'note', label: 'Note' },
+      ]}
+    />
+    <p>NPT sealing is thread interference plus compound. Do not treat this like a machine-screw tap.</p>
+  </div>
+</Base>

@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+---
+<Base title="Number vs letter vs fractional drill bits" description="Numbered drills are below 1/4 inch, letter drills sit above them, and fractions are the 1/64 inch hardware-store set. They overlap but are not the same." path="/number-vs-letter/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Number vs letter</p>
+    <h1>Number vs letter vs fractional</h1>
+    <Answer>
+      Numbered bits (#80–#1) cover 0.0135″ to 0.2280″. Letter bits (A–Z) cover 0.2340″ to 0.4130″. Fractional bits are 1/64″ steps. A #7 is not 7 mm and not 7/32.
+    </Answer>
+    <table>
+      <thead><tr><th>If someone says</th><th>They probably mean</th><th>Not</th></tr></thead>
+      <tbody>
+        <tr><td>#7</td><td>Numbered 0.2010″</td><td>7 mm or 7/32 (0.2188″)</td></tr>
+        <tr><td>F</td><td>Letter 0.2570″</td><td>A 5/16 only if they rounded</td></tr>
+        <tr><td>5.0</td><td>5.0 mm unless they said “five thousandths”</td><td>#5 (0.2055″)</td></tr>
+        <tr><td>13/64</td><td>0.2031″ fractional</td><td>#7 (0.2010″) — close, not the same</td></tr>
+      </tbody>
+    </table>
+    <p>Use the <a href="/">finder</a> when a print says a decimal and your index is stamped with numbers.</p>
+  </div>
+</Base>

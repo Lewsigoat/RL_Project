@@ -1,0 +1,19 @@
+---
+const { rows = [], columns = [] } = Astro.props;
+---
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        {columns.map((c) => <th>{c.label}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          {columns.map((c) => <td class={c.mono ? 'num' : undefined}>{row[c.key]}</td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

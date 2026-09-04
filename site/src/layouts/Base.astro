@@ -9,7 +9,7 @@ const {
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site).href;
-const pageTitle = title.includes('PW Fit Guide') ? title : `${title} — PW Fit Guide`;
+const pageTitle = title.includes('Drill Chart') ? title : `${title} — Drill Chart`;
 ---
 <!doctype html>
 <html lang="en">
@@ -23,14 +23,13 @@ const pageTitle = title.includes('PW Fit Guide') ? title : `${title} — PW Fit 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
-    <!-- Google Search Console: replace content after verification -->
     <meta name="google-site-verification" content="REPLACE_WITH_GSC_TOKEN" />
     <slot name="head" />
   </head>
   <body>
     <header class="site">
       <div class="wrap bar">
-        <a class="logo" href="/">PW Fit<span>Guide</span></a>
+        <a class="logo" href="/">Drill <span>Chart</span></a>
         <nav class="primary" aria-label="Primary">
           {nav.map((item) => (
             <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
@@ -50,7 +49,7 @@ const pageTitle = title.includes('PW Fit Guide') ? title : `${title} — PW Fit 
             <a href={item.href}>{item.label}</a>
           ))}
         </nav>
-        <p>Independent fitting reference. Not affiliated with Sun Joe, Kärcher, Ryobi, Simpson, AR Blue Clean, or their owners. Measure the stem — do not buy from the word “M22” alone.</p>
+        <p>Independent drill-size reference. Number, letter, and fractional diameters follow common ASME B94.11M jobber charts. Tap drills are the usual 75% thread shop sizes — check the tap maker for a critical hole.</p>
       </div>
     </footer>
   </body>

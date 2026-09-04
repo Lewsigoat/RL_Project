@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Answer from '../components/Answer.astro';
+import { popular } from '../data/taps.js';
+---
+<Base title="Tap drill chart" description="Tap-drill sizes for UNC, UNF, metric coarse, metric fine, and NPT. 75% thread shop recommendations." path="/tap-drill/">
+  <div class="prose">
+    <p class="crumbs"><a href="/">Home</a> / Tap drill</p>
+    <h1>Tap drill charts</h1>
+    <Answer>
+      A tap drill is smaller than the screw’s major diameter. For a 60° thread the usual shop rule is major diameter minus pitch, which lands near 75% thread. The charts on this site use those common sizes, not a custom percentage unless noted.
+    </Answer>
+  </div>
+  <div class="cards">
+    <a class="card" href="/tap-unc/"><h3>UNC (coarse)</h3><p>1/4-20, 10-24, 8-32, 3/8-16 and the rest of the inch coarse series.</p></a>
+    <a class="card" href="/tap-unf/"><h3>UNF (fine)</h3><p>10-32, 1/4-28, 3/8-24 — the extra threads per inch.</p></a>
+    <a class="card" href="/tap-metric/"><h3>Metric</h3><p>Coarse and fine. M3 through M24, plus common fine pitches.</p></a>
+    <a class="card" href="/tap-npt/"><h3>NPT pipe</h3><p>1/8 through 1″ tapered pipe. These are not UNC sizes.</p></a>
+    <a class="card" href="/how-tap-drill/"><h3>The formula</h3><p>Why “minus pitch” works and when to use 65% thread in hard metal.</p></a>
+  </div>
+  <div class="prose">
+    <h2>Jump to a size people actually search</h2>
+    <p class="related">{popular.map((p) => <a href={`/tap/${p.slug}/`}>{p.title}</a>)}</p>
+  </div>
+</Base>
