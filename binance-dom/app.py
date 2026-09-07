@@ -83,7 +83,7 @@ def main() -> None:
         st.header("Live updates")
         auto = st.toggle("Auto-refresh", value=False)
         interval = st.slider("Interval (s)", 2, 60, 5, disabled=not auto)
-        if st.button("🔄 Refresh now", use_container_width=True):
+        if st.button("🔄 Refresh now", width="stretch"):
             st.rerun()
 
     if auto:
@@ -129,7 +129,7 @@ def main() -> None:
         height=380, margin=dict(l=10, r=10, t=10, b=10),
         legend=dict(orientation="h", y=1.1),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     st.markdown("### Order book ladder")
     bid_col, ask_col = st.columns(2)
@@ -140,7 +140,7 @@ def main() -> None:
                 {"Price": "{:,.6g}", "Qty": "{:,.4f}",
                  "Size (quote)": "{:,.0f}", "Cumulative (quote)": "{:,.0f}"}
             ).bar(subset=["Size (quote)"], color="#26a69a"),
-            use_container_width=True, height=420,
+            width="stretch", height=420,
         )
     with ask_col:
         st.markdown("**Asks** 🔴")
@@ -149,7 +149,7 @@ def main() -> None:
                 {"Price": "{:,.6g}", "Qty": "{:,.4f}",
                  "Size (quote)": "{:,.0f}", "Cumulative (quote)": "{:,.0f}"}
             ).bar(subset=["Size (quote)"], color="#ef5350"),
-            use_container_width=True, height=420,
+            width="stretch", height=420,
         )
 
     st.markdown("### Walls & market impact")
@@ -159,13 +159,13 @@ def main() -> None:
         bw = da.detect_walls(book.bids, wall_mult)
         st.dataframe(bw.style.format({"price": "{:,.6g}", "qty": "{:,.4f}",
                                       "quote": "{:,.0f}", "size_vs_median": "{:.1f}×"}),
-                     use_container_width=True) if not bw.empty else st.info("None detected.")
+                     width="stretch") if not bw.empty else st.info("None detected.")
     with w2:
         st.markdown("**Ask walls** (potential resistance)")
         aw = da.detect_walls(book.asks, wall_mult)
         st.dataframe(aw.style.format({"price": "{:,.6g}", "qty": "{:,.4f}",
                                       "quote": "{:,.0f}", "size_vs_median": "{:.1f}×"}),
-                     use_container_width=True) if not aw.empty else st.info("None detected.")
+                     width="stretch") if not aw.empty else st.info("None detected.")
     with w3:
         st.markdown(f"**Market order impact** (${order_size:,.0f})")
         buy = da.estimate_market_order(book.asks, order_size)
@@ -177,7 +177,7 @@ def main() -> None:
              "Filled": f"{sell['fill_pct']:.1f}%"},
         ])
         st.dataframe(impact.style.format({"VWAP": "{:,.6g}", "Slippage (bps)": "{:.2f}"}),
-                     use_container_width=True, hide_index=True)
+                     width="stretch", hide_index=True)
 
     with st.expander("Raw order book data"):
         st.json({
