@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Binance DOM</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">Binance <span>DOM</span></div>
+    <form id="controls" autocomplete="off">
+      <label>Quote
+        <select id="quote">
+          <option>USDT</option><option>FDUSD</option><option>USDC</option><option>BTC</option><option>ETH</option><option>BNB</option><option value="">all</option>
+        </select>
+      </label>
+      <label>Ticker
+        <input id="symbol" list="symbols" placeholder="BTCUSDT" value="BTCUSDT" spellcheck="false" />
+        <datalist id="symbols"></datalist>
+      </label>
+      <label>Levels
+        <select id="levels">
+          <option value="5">5 (live)</option><option value="10">10 (live)</option><option value="20" selected>20 (live)</option>
+          <option value="50">50 (poll)</option><option value="100">100 (poll)</option><option value="500">500 (poll)</option>
+        </select>
+      </label>
+      <label>Top-N
+        <input id="topn" type="number" min="1" max="100" value="5" />
+      </label>
+      <button type="submit">Connect</button>
+    </form>
+    <div id="status" class="status off">disconnected</div>
+  </header>
+
+  <section class="metrics">
+    <div class="card"><div class="k">Mid</div><div class="v" id="m-mid">-</div><div class="s" id="m-ticker">-</div></div>
+    <div class="card"><div class="k">Spread</div><div class="v" id="m-spread">-</div><div class="s" id="m-spread-bps">-</div></div>
+    <div class="card"><div class="k">Microprice</div><div class="v" id="m-micro">-</div><div class="s" id="m-skew">-</div></div>
+    <div class="card"><div class="k">Imbalance (top-N)</div><div class="v" id="m-imb">-</div><div class="s"><div class="imbbar"><div id="m-imb-fill"></div></div></div></div>
+    <div class="card"><div class="k">Book depth (quote)</div><div class="v small"><span class="bid" id="m-bidn">-</span> / <span class="ask" id="m-askn">-</span></div><div class="s" id="m-levels">-</div></div>
+    <div class="card signal"><div class="k">Read</div><div class="v small" id="m-signal">-</div><div class="s" id="m-source">-</div></div>
+  </section>
+
+  <main>
+    <section class="panel ladder">
+      <h2>Ladder</h2>
+      <div class="ladder-head"><span>Price</span><span>Size</span><span>Cum (quote)</span></div>
+      <div id="asks" class="rows asks"></div>
+      <div id="mid-row" class="mid-row">-</div>
+      <div id="bids" class="rows bids"></div>
+    </section>
+
+    <section class="panel chart">
+      <h2>Cumulative depth</h2>
+      <canvas id="depth" width="800" height="360"></canvas>
+      <h2>Imbalance history <small>(top-N, last ~5 min)</small></h2>
+      <canvas id="history" width="800" height="120"></canvas>
+    </section>
+
+    <section class="panel side">
+      <h2>Imbalance by distance</h2>
+      <table id="bands"><thead><tr><th>Within</th><th>Bids</th><th>Asks</th><th>Imb</th></tr></thead><tbody></tbody></table>
+      <h2>Market-order slippage</h2>
+      <table id="slip"><thead><tr><th>Size</th><th>Buy</th><th>Sell</th></tr></thead><tbody></tbody></table>
+      <h2>Walls <small>(&ge;4x median size)</small></h2>
+      <ul id="walls"><li class="muted">none</li></ul>
+    </section>
+  </main>
+
+  <footer>Public market data via Binance. Not financial advice.</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
