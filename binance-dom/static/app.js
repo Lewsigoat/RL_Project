@@ -105,7 +105,7 @@
 
     $("m-mid").textContent = fmt(a.mid, priceDecimals);
     $("m-spread").textContent = fmt(a.spread, priceDecimals);
-    $("m-spread-bps").textContent = `${a.spread_bps.toFixed(2)} bps`;
+    $("m-spread-bps").textContent = `${a.spread_bps.toFixed(3)} bps`;
     $("m-micro").textContent = fmt(a.microprice, priceDecimals);
     $("m-skew").textContent = `${signed(a.microprice_skew_bps)} bps vs mid`;
     $("m-imb").textContent = signed(a.imbalance_top, 3);
@@ -139,7 +139,7 @@
     };
     els.asks.innerHTML = msg.asks.slice(0, n).map((l, i) => row(l, a.cumulative_asks[i])).reverse().join("");
     els.bids.innerHTML = msg.bids.slice(0, n).map((l, i) => row(l, a.cumulative_bids[i])).join("");
-    els.midRow.innerHTML = `mid <b>${fmt(a.mid, priceDecimals)}</b> · spread ${a.spread_bps.toFixed(2)} bps`;
+    els.midRow.innerHTML = `mid <b>${fmt(a.mid, priceDecimals)}</b> · spread ${a.spread_bps.toFixed(3)} bps`;
   }
 
   function renderBands(a) {

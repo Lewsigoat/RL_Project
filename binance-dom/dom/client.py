@@ -53,7 +53,11 @@ def snap_depth_limit(limit: int) -> int:
 
 
 class BinanceError(RuntimeError):
-    pass
+    """Upstream unreachable or returned an unexpected error."""
+
+
+class BadRequest(BinanceError):
+    """Binance rejected the request (e.g. unknown symbol); retrying won't help."""
 
 
 class BinanceClient:
@@ -79,7 +83,7 @@ class BinanceClient:
                     continue
                 if r.status_code == 400:
                     # Bad symbol etc. - no point retrying other hosts.
-                    raise BinanceError(r.json().get("msg", r.text))
+                    raise BadRequest(r.json().get("msg", r.text))
                 r.raise_for_status()
                 self._preferred = host
                 return r.json()

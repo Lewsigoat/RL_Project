@@ -15,11 +15,11 @@ from typing import Any
 
 import websockets
 from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from .analytics import OrderBook, analyze
-from .client import BinanceClient, BinanceError, stream_url, ws_urls
+from .client import BadRequest, BinanceClient, BinanceError, stream_url, ws_urls
 
 log = logging.getLogger("dom")
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
@@ -65,6 +65,8 @@ def _analysis_payload(symbol: str, raw: dict[str, Any], top_n: int, wall_ratio: 
 async def api_symbols(quote: str | None = None, q: str | None = None, limit: int = Query(500, le=5000)):
     try:
         syms = await _client().symbols(quote=quote)
+    except BadRequest as e:
+        raise HTTPException(400, str(e))
     except BinanceError as e:
         raise HTTPException(502, str(e))
     if q:
@@ -77,6 +79,8 @@ async def api_symbols(quote: str | None = None, q: str | None = None, limit: int
 async def api_depth(symbol: str, limit: int = Query(100, ge=1, le=5000)):
     try:
         return await _client().depth(symbol, limit)
+    except BadRequest as e:
+        raise HTTPException(400, str(e))
     except BinanceError as e:
         raise HTTPException(502, str(e))
 
@@ -91,6 +95,8 @@ async def api_analysis(
     try:
         raw = await _client().depth(symbol, limit)
         return _analysis_payload(symbol, raw, top_n, wall_ratio, source="rest")
+    except BadRequest as e:
+        raise HTTPException(400, str(e))
     except BinanceError as e:
         raise HTTPException(502, str(e))
     except ValueError as e:
@@ -101,6 +107,8 @@ async def api_analysis(
 async def api_ticker(symbol: str):
     try:
         return await _client().ticker_24h(symbol)
+    except BadRequest as e:
+        raise HTTPException(400, str(e))
     except BinanceError as e:
         raise HTTPException(502, str(e))
 
@@ -218,6 +226,11 @@ async def ws_depth(
 @app.get("/", include_in_schema=False)
 async def index():
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return Response(status_code=204)
 
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
