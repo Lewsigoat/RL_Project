@@ -60,8 +60,18 @@ def make_walk_forward_splits(
         raise ValueError(f"Need at least {minimum_groups} event groups, found {group_count}")
 
     holdout_count = max(1, math.ceil(group_count * config.study.holdout_fraction))
-    development_groups = group_timing.iloc[:-holdout_count].copy()
-    holdout_groups = group_timing.iloc[-holdout_count:].copy()
+    fractional_start = pd.Timestamp(group_timing.iloc[-holdout_count]["first_forecast_cutoff"])
+    latest_cutoff = pd.Timestamp(group_timing["first_forecast_cutoff"].max())
+    minimum_time_start = latest_cutoff - pd.Timedelta(
+        weeks=config.inference.minimum_effective_weeks
+    )
+    holdout_boundary = min(fractional_start, minimum_time_start)
+    holdout_groups = group_timing.loc[
+        group_timing["first_forecast_cutoff"] >= holdout_boundary
+    ].copy()
+    development_groups = group_timing.loc[
+        group_timing["first_forecast_cutoff"] < holdout_boundary
+    ].copy()
     if len(development_groups) < config.study.development_folds + 1:
         raise ValueError("Development population is too small for requested folds")
 

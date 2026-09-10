@@ -1,6 +1,6 @@
 # Präregistriertes Analyseprotokoll
 
-Version: 1.1
+Version: 1.2
 Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf
 
 Amendment 1.1 (vor Modelltraining und ohne Einsicht in Modellresultate):
@@ -11,6 +11,13 @@ konfigurierte Obergrenze gleichmäßig auf Kalendermonate verteilt und je Monat
 bewusste Liquiditätsselektion verbessert historische Preisabdeckung, begrenzt
 die Zielpopulation aber auf die volumenstärkeren verfügbaren Verträge je
 Monat. Grund, Zeitpunkt und Auswirkung werden im Bericht ausgewiesen.
+
+Amendment 1.2 (vor Modelltraining und ohne Einsicht in Modellresultate):
+Der Holdout beginnt beim früheren der beiden Zeitpunkte „letzte 20 % der
+Eventgruppen“ und „30 Kalenderwochen vor dem letzten Cutoff“. Damit kann
+stark wachsendes Marktvolumen die letzten 20 % nicht künstlich auf wenige
+Wochen verdichten. Die Eventzahl des Holdouts kann dadurch über 20 % liegen;
+das Modell erhält entsprechend weniger Entwicklungsdaten.
 Primärkonfiguration: `configs/study.yaml`
 
 Dieses Dokument legt die konfirmatorische Analyse fest. Spätere technisch
@@ -130,8 +137,9 @@ Robustheitsanalyse entfernt alle Textmerkmale.
 
 Eventgruppen werden nach ihrem frühesten Prognose-Cutoff sortiert.
 
-1. Die letzten 20 % der Eventgruppen bilden den unangetasteten
-   konfirmatorischen Holdout.
+1. Mindestens die letzten 20 % der Eventgruppen und mindestens die letzten
+   30 Kalenderwochen bilden den unangetasteten konfirmatorischen Holdout; der
+   frühere Startzeitpunkt gilt.
 2. Die ersten 80 % bilden die Entwicklungskohorte.
 3. Innerhalb der Entwicklungskohorte werden drei chronologische,
    expandierende Validierungsfolds verwendet.
