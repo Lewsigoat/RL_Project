@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polymarket-forecast"
+version = "0.1.0"
+description = "Leakage-aware forecasting study for binary Polymarket contracts"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Polymarket Forecast Study Contributors" }]
+dependencies = [
+  "duckdb",
+  "fsspec",
+  "httpx",
+  "joblib",
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "pyarrow",
+  "PyYAML",
+  "scikit-learn",
+  "scipy",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy",
+  "pandas-stubs",
+  "pytest",
+  "pytest-cov",
+  "respx",
+  "ruff",
+  "types-PyYAML",
+]
+gcs = ["gcsfs"]
+
+[project.scripts]
+polymarket-study = "polymarket_forecast.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+markers = [
+  "integration: tests that use the network or a larger on-disk fixture",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["B", "C4", "E", "F", "I", "N", "PERF", "PL", "RUF", "SIM", "UP"]
+ignore = ["PLR0913"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["PLR2004", "S101"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["polymarket_forecast"]
+warn_unreachable = true
+show_error_codes = true
+
+[tool.coverage.run]
+branch = true
+source = ["polymarket_forecast"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
