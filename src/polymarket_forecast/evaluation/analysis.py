@@ -115,9 +115,7 @@ def _slice_metrics(predictions: pd.DataFrame) -> pd.DataFrame:
         )
     result = pd.DataFrame(rows)
     if not result.empty:
-        result["model_minus_market_brier"] = (
-            result["model_brier"] - result["market_brier"]
-        )
+        result["model_minus_market_brier"] = result["model_brier"] - result["market_brier"]
     return result
 
 
@@ -125,9 +123,7 @@ def _contract_weighted_sensitivity(predictions: pd.DataFrame) -> dict[str, Any]:
     y = predictions["label"].to_numpy(dtype=float)
     model_loss = (predictions["model_probability"].to_numpy(dtype=float) - y) ** 2
     market_loss = (predictions["market_probability"].to_numpy(dtype=float) - y) ** 2
-    climate_loss = (
-        predictions["category_climatology_probability"].to_numpy(dtype=float) - y
-    ) ** 2
+    climate_loss = (predictions["category_climatology_probability"].to_numpy(dtype=float) - y) ** 2
     return {
         "analysis": "contract_weighted",
         "contracts": int(len(predictions)),
@@ -148,6 +144,7 @@ def _testable_sensitivity(
         "event_groups": int(frame["event_group_id"].nunique()),
         "effective_weeks": int(
             pd.to_datetime(frame["forecast_cutoff"], utc=True)
+            .dt.tz_localize(None)
             .dt.to_period("W-SUN")
             .nunique()
         ),
@@ -202,9 +199,7 @@ def evaluate_predictions(
         _contract_weighted_sensitivity(predictions),
         _testable_sensitivity(
             "clob_winner_labels_only",
-            predictions.loc[
-                predictions["label_source"] == "clob_winner_crosschecked_gamma"
-            ],
+            predictions.loc[predictions["label_source"] == "clob_winner_crosschecked_gamma"],
             config,
         ),
         _testable_sensitivity(

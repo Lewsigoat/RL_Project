@@ -6,7 +6,7 @@ import hashlib
 import re
 from dataclasses import dataclass
 from datetime import timedelta
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -39,8 +39,7 @@ def _price_at_or_before(history: pd.DataFrame, target: pd.Timestamp) -> float:
 
 def _trajectory_features(history: pd.DataFrame, cutoff: pd.Timestamp) -> dict[str, float]:
     recent = history.loc[
-        (history["timestamp"] > cutoff - pd.Timedelta(days=7))
-        & (history["timestamp"] <= cutoff)
+        (history["timestamp"] > cutoff - pd.Timedelta(days=7)) & (history["timestamp"] <= cutoff)
     ]
     prices = recent["price"].astype(float)
     last_price = float(prices.iloc[-1])
@@ -50,8 +49,7 @@ def _trajectory_features(history: pd.DataFrame, cutoff: pd.Timestamp) -> dict[st
         "market_logit": float(np.log(clipped / (1 - clipped))),
         "price_return_24h": last_price
         - _price_at_or_before(history, cutoff - pd.Timedelta(days=1)),
-        "price_return_7d": last_price
-        - _price_at_or_before(history, cutoff - pd.Timedelta(days=7)),
+        "price_return_7d": last_price - _price_at_or_before(history, cutoff - pd.Timedelta(days=7)),
         "price_mean_7d": float(prices.mean()),
         "price_std_7d": float(prices.std(ddof=0)),
         "price_min_7d": float(prices.min()),
@@ -105,7 +103,8 @@ def build_cohort(
     }
     max_staleness = pd.Timedelta(hours=config.study.max_price_staleness_hours)
 
-    for market in clean_markets.itertuples(index=False):
+    for raw_market in clean_markets.itertuples(index=False):
+        market = cast(Any, raw_market)
         market_id = str(market.market_id)
         history = grouped_prices.get(market_id)
         for horizon_days in config.study.horizons_days:

@@ -57,9 +57,7 @@ def make_walk_forward_splits(
     group_count = len(group_timing)
     minimum_groups = config.study.development_folds + 2
     if group_count < minimum_groups:
-        raise ValueError(
-            f"Need at least {minimum_groups} event groups, found {group_count}"
-        )
+        raise ValueError(f"Need at least {minimum_groups} event groups, found {group_count}")
 
     holdout_count = max(1, math.ceil(group_count * config.study.holdout_fraction))
     development_groups = group_timing.iloc[:-holdout_count].copy()
@@ -86,9 +84,7 @@ def make_walk_forward_splits(
         validation_groups = set(chunks[fold_number].tolist())
         earlier_groups = set(np.concatenate(chunks[:fold_number]).tolist())
         validation_mask = working["event_group_id"].astype(str).isin(validation_groups)
-        validation_start = pd.Timestamp(
-            working.loc[validation_mask, "forecast_cutoff"].min()
-        )
+        validation_start = pd.Timestamp(working.loc[validation_mask, "forecast_cutoff"].min())
         label_available_before = validation_start - embargo
         group_resolution = development_groups.set_index("event_group_id")["final_resolution"]
         eligible_train_groups = {
@@ -179,9 +175,7 @@ def audit_split_plan(
 ) -> None:
     """Validate event isolation and past-label availability in every fold."""
     holdout_groups = set(cohort.iloc[plan.holdout_indices]["event_group_id"].astype(str))
-    final_train_groups = set(
-        cohort.iloc[plan.final_train_indices]["event_group_id"].astype(str)
-    )
+    final_train_groups = set(cohort.iloc[plan.final_train_indices]["event_group_id"].astype(str))
     if holdout_groups.intersection(final_train_groups):
         raise AssertionError("An event group crosses final training and holdout")
     embargo = pd.Timedelta(days=config.study.embargo_days)

@@ -1,0 +1,78 @@
+{
+  "source": {
+    "retrieved_at": "2026-09-10T17:35:00Z",
+    "gamma_url": "https://gamma-api.polymarket.com/markets?closed=true&limit=5&end_date_min=2026-08-01T00%3A00%3A00Z&end_date_max=2026-08-10T00%3A00%3A00Z&uma_resolution_status=resolved&order=volumeNum&ascending=false",
+    "clob_market_url": "https://clob.polymarket.com/markets/0x7162118722a6abe965c964e8c694ff0f232221d9bb2263bd92e5902633381893",
+    "clob_history_url": "https://clob.polymarket.com/prices-history?market=61122849617506817837555062824416940793332636909568241444602408963781913414334&startTs=1784505600&endTs=1785542400&fidelity=60",
+    "note": "Curated real public snapshot; price points are a deterministic subset of the source response."
+  },
+  "gamma_market": {
+    "id": "2507607",
+    "question": "Kharg Island no longer under Iranian control by July 31?",
+    "conditionId": "0x7162118722a6abe965c964e8c694ff0f232221d9bb2263bd92e5902633381893",
+    "questionID": "0x1480ce2a55ba834634501faa13ee32293b075ec00d6f98d1107d7f9ce98e6b92",
+    "slug": "kharg-island-no-longer-under-iranian-control-by-july-31",
+    "endDate": "2026-08-01T03:59:00Z",
+    "createdAt": "2026-06-11T17:07:44.248967Z",
+    "updatedAt": "2026-08-21T18:19:12.777445Z",
+    "closedTime": "2026-08-01 06:04:39+00",
+    "description": "This market will resolve to Yes if Kharg Island is no longer under Iranian control by July 31, 2026, 11:59 PM ET. Otherwise, this market will resolve to No.",
+    "outcomes": "[\"Yes\", \"No\"]",
+    "outcomePrices": "[\"0\", \"1\"]",
+    "clobTokenIds": "[\"61122849617506817837555062824416940793332636909568241444602408963781913414334\", \"46234664383113214034787313853742859435218314985155582830237659971348787896010\"]",
+    "umaResolutionStatus": "resolved",
+    "volumeNum": 6273478.590044998,
+    "liquidityNum": 0,
+    "negRisk": false,
+    "events": [
+      {
+        "id": "267102",
+        "title": "Kharg Island no longer under Iranian control by...?",
+        "endDate": "2027-01-01T04:59:00Z"
+      }
+    ]
+  },
+  "clob_market": {
+    "condition_id": "0x7162118722a6abe965c964e8c694ff0f232221d9bb2263bd92e5902633381893",
+    "is_50_50_outcome": false,
+    "tags": [
+      "Iran",
+      "Strait of Hormuz",
+      "Geopolitics"
+    ],
+    "tokens": [
+      {
+        "token_id": "61122849617506817837555062824416940793332636909568241444602408963781913414334",
+        "outcome": "Yes",
+        "price": 0,
+        "winner": false
+      },
+      {
+        "token_id": "46234664383113214034787313853742859435218314985155582830237659971348787896010",
+        "outcome": "No",
+        "price": 1,
+        "winner": true
+      }
+    ]
+  },
+  "price_history": {
+    "history": [
+      {"t": 1784505628, "p": 0.0375},
+      {"t": 1784588407, "p": 0.0215},
+      {"t": 1784667632, "p": 0.0160},
+      {"t": 1784750410, "p": 0.0235},
+      {"t": 1784829634, "p": 0.0230},
+      {"t": 1784912420, "p": 0.0365},
+      {"t": 1784948434, "p": 0.0285},
+      {"t": 1784995225, "p": 0.0165},
+      {"t": 1785074432, "p": 0.0080},
+      {"t": 1785157235, "p": 0.0055},
+      {"t": 1785236446, "p": 0.0035},
+      {"t": 1785319246, "p": 0.0035},
+      {"t": 1785402011, "p": 0.0015},
+      {"t": 1785466813, "p": 0.0005},
+      {"t": 1785484811, "p": 0.0010},
+      {"t": 1785538812, "p": 0.0005}
+    ]
+  }
+}

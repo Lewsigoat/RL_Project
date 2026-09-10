@@ -62,13 +62,9 @@ def event_score_differences(
     y = working["label"].to_numpy(dtype=float)
     working["model_loss"] = (working["model_probability"].to_numpy(dtype=float) - y) ** 2
     working["market_loss"] = (working["market_probability"].to_numpy(dtype=float) - y) ** 2
-    working["climatology_loss"] = (
-        working[climatology_column].to_numpy(dtype=float) - y
-    ) ** 2
+    working["climatology_loss"] = (working[climatology_column].to_numpy(dtype=float) - y) ** 2
     working["market_improvement"] = working["market_loss"] - working["model_loss"]
-    working["climatology_improvement"] = (
-        working["climatology_loss"] - working["model_loss"]
-    )
+    working["climatology_improvement"] = working["climatology_loss"] - working["model_loss"]
     event = (
         working.groupby("event_group_id", as_index=False)
         .agg(
@@ -83,7 +79,7 @@ def event_score_differences(
         .sort_values(["forecast_cutoff", "event_group_id"])
         .reset_index(drop=True)
     )
-    event["week"] = event["forecast_cutoff"].dt.to_period("W-SUN").astype(str)
+    event["week"] = event["forecast_cutoff"].dt.tz_localize(None).dt.to_period("W-SUN").astype(str)
     return event
 
 
@@ -123,9 +119,7 @@ def block_bootstrap_means(
     if center:
         values = values - values.mean(axis=0, keepdims=True)
     week_values = {
-        week: values[
-            event_differences["week"].astype(str).to_numpy() == week
-        ]
+        week: values[event_differences["week"].astype(str).to_numpy() == week]
         for week in unique_weeks
     }
     rng = np.random.default_rng(seed)
@@ -158,9 +152,7 @@ def _test_one_baseline(
         float(np.quantile(uncentered_draws[:, column_index], alpha / 2)),
         float(np.quantile(uncentered_draws[:, column_index], 1 - alpha / 2)),
     )
-    baseline_loss_column = (
-        "market_loss" if baseline == "market" else "climatology_loss"
-    )
+    baseline_loss_column = "market_loss" if baseline == "market" else "climatology_loss"
     baseline_loss = float(event[baseline_loss_column].mean())
     model_loss = float(event["model_loss"].mean())
     skill = 1 - model_loss / baseline_loss if baseline_loss > 0 else float("nan")

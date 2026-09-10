@@ -5,9 +5,10 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
-from typing import Any, Mapping
+from typing import Any
 
 import pandas as pd
 
@@ -142,8 +143,8 @@ async def collect_markets_async(
     exclusions = list(pre_exclusions)
     for market_id, raw in deduplicated.items():
         condition_id = str(raw["conditionId"])
-        response = clob_responses.get(condition_id)
-        clob_payload = _safe_json_object(response) if response is not None else {}
+        clob_response = clob_responses.get(condition_id)
+        clob_payload = _safe_json_object(clob_response) if clob_response is not None else {}
         record, exclusion = normalize_market(raw, clob_payload)
         if exclusion is not None:
             exclusions.append(exclusion)
@@ -160,9 +161,7 @@ async def collect_markets_async(
             )
             continue
         if record.closed_time > config.study.data_cutoff:
-            exclusions.append(
-                Exclusion(market_id=market_id, reason="resolution_after_data_cutoff")
-            )
+            exclusions.append(Exclusion(market_id=market_id, reason="resolution_after_data_cutoff"))
             continue
         markets.append(record)
 
@@ -171,14 +170,11 @@ async def collect_markets_async(
     for market in markets:
         start = max(
             market.created_at,
-            market.event_time
-            - timedelta(days=max(max_horizon, config.api.history_lookback_days)),
+            market.event_time - timedelta(days=max(max_horizon, config.api.history_lookback_days)),
         )
         end = min(market.event_time, market.closed_time, config.study.data_cutoff)
         if start >= end:
-            exclusions.append(
-                Exclusion(market_id=market.market_id, reason="empty_history_window")
-            )
+            exclusions.append(Exclusion(market_id=market.market_id, reason="empty_history_window"))
             continue
         history_requests[market.market_id] = (
             market.yes_token_id,

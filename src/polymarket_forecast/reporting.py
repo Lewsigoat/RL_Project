@@ -8,13 +8,13 @@ from typing import Any
 
 import matplotlib
 import numpy as np
-import pandas as pd
+from matplotlib.figure import Figure
 
 from polymarket_forecast.config import ProjectConfig
 from polymarket_forecast.data.storage import ResearchStorage
 
 matplotlib.use("Agg")
-from matplotlib import pyplot as plt  # noqa: E402
+from matplotlib import pyplot as plt
 
 
 def _latest_run(storage: ResearchStorage) -> str:
@@ -25,7 +25,7 @@ def _latest_run(storage: ResearchStorage) -> str:
 
 
 def _save_figure(
-    figure: plt.Figure,
+    figure: Figure,
     storage: ResearchStorage,
     relative: str,
     export_directory: Path,
@@ -65,8 +65,7 @@ def generate_plots(
         figure.text(
             0.01,
             -0.02,
-            "Quelle: Polymarket Gamma/CLOB · konfirmatorischer Holdout · "
-            "Mittelung zuerst je Event",
+            "Quelle: Polymarket Gamma/CLOB · konfirmatorischer Holdout · Mittelung zuerst je Event",
             fontsize=8,
         )
         paths.append(
@@ -117,7 +116,9 @@ def generate_plots(
         )
 
     power = storage.read_parquet(f"{run_id}/power_simulation.parquet")
-    power = power.loc[power["scenario"].isin(["half_mpe", "minimum_practical_effect", "double_mpe"])]
+    power = power.loc[
+        power["scenario"].isin(["half_mpe", "minimum_practical_effect", "double_mpe"])
+    ]
     if not power.empty:
         figure, axis = plt.subplots(figsize=(8.5, 5))
         for scenario, group in power.groupby("scenario"):
@@ -207,15 +208,9 @@ def generate_report(
     primary = report_storage.read_json(f"{run_id}/primary_test.json")
     metrics = report_storage.read_parquet(f"{run_id}/system_metrics.parquet")
     blocks = report_storage.read_parquet(f"{run_id}/block_robustness.parquet")
-    slices = report_storage.read_parquet(f"{run_id}/slice_metrics.parquet")
-    sensitivity = report_storage.read_parquet(f"{run_id}/sensitivity.parquet")
-    ablations = report_storage.read_parquet(f"{run_id}/ablation_metrics.parquet")
-    power = report_storage.read_parquet(f"{run_id}/power_simulation.parquet")
     secondary = report_storage.read_parquet(f"{run_id}/secondary_horizons.parquet")
     training = artifact_storage.read_json(f"runs/{run_id}/training_summary.json")
-    scoreboard = artifact_storage.read_parquet(
-        f"runs/{run_id}/development_scoreboard.parquet"
-    )
+    scoreboard = artifact_storage.read_parquet(f"runs/{run_id}/development_scoreboard.parquet")
     data_run_id = str(summary["data_run_id"])
     build = data_storage.read_json(f"processed/{data_run_id}/build_summary.json")
     data_manifest = data_storage.read_json(f"processed/{data_run_id}/manifest.json")
@@ -250,7 +245,8 @@ def generate_report(
     )
 
     secondary_lines = []
-    for row in secondary.itertuples(index=False):
+    for raw_row in secondary.itertuples(index=False):
+        row: Any = raw_row
         if row.status == "ok":
             secondary_lines.append(
                 f"- {int(row.horizon_days)} Tage: Modell `{row.selected_model}`, "
@@ -279,14 +275,14 @@ Vergangenheit geschätzte Basisrate. Die Studie verwendet einen
 ereignisgruppierten, chronologischen Walk-forward-Entwurf, sperrt die
 Modellauswahl vor dem Holdout und bewertet Wahrscheinlichkeiten primär mit dem
 Brier Score. Im konfirmatorischen Holdout liegen
-{int(summary['holdout_rows'])} Verträge aus
-{int(summary['holdout_event_groups'])} Eventgruppen und {effective_weeks}
-Kalenderwochen vor. Gewählt wurde `{summary['selected_model']}`.
+{int(summary["holdout_rows"])} Verträge aus
+{int(summary["holdout_event_groups"])} Eventgruppen und {effective_weeks}
+Kalenderwochen vor. Gewählt wurde `{summary["selected_model"]}`.
 
 Der eventgewichtete Brier Score beträgt
-{_format_number(model['event_weighted_brier'])} für das Modell,
-{_format_number(market['event_weighted_brier'])} für den Markt und
-{_format_number(climate['event_weighted_brier'])} für die Kategorie-Basisrate.
+{_format_number(model["event_weighted_brier"])} für das Modell,
+{_format_number(market["event_weighted_brier"])} für den Markt und
+{_format_number(climate["event_weighted_brier"])} für die Kategorie-Basisrate.
 {conclusion} Diese Aussage betrifft Forecast Skill, nicht handelbare Rendite.
 
 ## 1. Motivation und Forschungsfrage
@@ -346,13 +342,13 @@ Horizontanalysen, aber keine nachträgliche Auswahl günstiger Subgruppen.
 
 ## 4. Daten und Speicherung
 
-Der Collector hat {int(source_counts['gamma_rows'])} Gamma-Zeilen abgerufen,
-{int(source_counts['normalized_markets'])} binäre Märkte normalisiert und
-{int(source_counts['price_points'])} CLOB-Preispunkte gespeichert.
-{int(source_counts['exclusions'])} Ausschlussprotokolle wurden erzeugt.
+Der Collector hat {int(source_counts["gamma_rows"])} Gamma-Zeilen abgerufen,
+{int(source_counts["normalized_markets"])} binäre Märkte normalisiert und
+{int(source_counts["price_points"])} CLOB-Preispunkte gespeichert.
+{int(source_counts["exclusions"])} Ausschlussprotokolle wurden erzeugt.
 Nach Horizont- und Zeitprüfung enthält die Gesamtkohorte
-{int(build['cohort_rows'])} Markt-Horizont-Zeilen; davon
-{int(build['primary_rows'])} am 7-Tage-Horizont.
+{int(build["cohort_rows"])} Markt-Horizont-Zeilen; davon
+{int(build["primary_rows"])} am 7-Tage-Horizont.
 
 Rohantworten wurden unter Run-ID `{data_run_id}` mit URL, Parametern,
 UTC-Abrufzeit und SHA-256 gespeichert. Normalisierte Parquets und eine
@@ -374,11 +370,11 @@ Für Markt \(P\) und Kategorie-Climatology \(C\) wurden vorab definiert:
 H_{{0P}}:\\Delta_P\\le0,\\quad H_{{0C}}:\\Delta_C\\le0.
 \\]
 
-Das Signifikanzniveau ist \(\\alpha=0{str(config.inference.alpha).replace('.', ',')}\).
+Das Signifikanzniveau ist \(\\alpha=0{str(config.inference.alpha).replace(".", ",")}\).
 Die globale Behauptung verlangt die Verwerfung beider Nullhypothesen; ihr
 p-Wert ist daher \(\\max(p_P,p_C)\). Die minimale praktisch relevante
 Brier-Verbesserung ist
-{str(config.inference.minimum_practical_effect).replace('.', ',')}.
+{str(config.inference.minimum_practical_effect).replace(".", ",")}.
 `P0 < 0,05` wäre keine korrekte Schreibweise: \(H_0\) bezeichnet die
 Nullhypothese, \(\\alpha\) den Schwellenwert und \(p\) den berechneten
 p-Wert.
@@ -388,10 +384,10 @@ p-Wert.
 Die Entwicklung verglich regularisierte Text-/Metadaten-Logistik,
 Gradient Boosting, ein Markt-Residualmodell mit festem Markt-Logit-Offset und
 ein validierungsgewichtetes Ensemble. Die Entwicklungssieger-Konfiguration
-`{best_development['candidate']}` erzielte einen eventgewichteten
+`{best_development["candidate"]}` erzielte einen eventgewichteten
 Validierungs-Brier von
-{_format_number(best_development['event_weighted_brier'])}. Für die finale
-Anpassung standen {int(training['final_train_rows'])} Zeilen zur Verfügung;
+{_format_number(best_development["event_weighted_brier"])}. Für die finale
+Anpassung standen {int(training["final_train_rows"])} Zeilen zur Verfügung;
 erst danach wurde der Holdout ausgewertet.
 
 Der Split ist eventgruppiert. Für jeden Validierungsfold durften nur Labels
@@ -404,23 +400,23 @@ Textvektorisierung, Imputation und Kalibration wurden pro Fold neu angepasst.
 Modell gegen Markt:
 
 - mittlere Brier-Verbesserung:
-  {_format_number(market_test['mean_brier_improvement'])}
-- einseitiger p-Wert: {_format_p(market_test['p_value_one_sided'])}
+  {_format_number(market_test["mean_brier_improvement"])}
+- einseitiger p-Wert: {_format_p(market_test["p_value_one_sided"])}
 - einseitige 95%-Untergrenze:
-  {_format_number(market_test['lower_bound_one_sided_95'])}
-- Brier Skill Score: {_format_number(market_test['brier_skill_score'])}
+  {_format_number(market_test["lower_bound_one_sided_95"])}
+- Brier Skill Score: {_format_number(market_test["brier_skill_score"])}
 
 Modell gegen Kategorie-Basisrate:
 
 - mittlere Brier-Verbesserung:
-  {_format_number(climate_test['mean_brier_improvement'])}
-- einseitiger p-Wert: {_format_p(climate_test['p_value_one_sided'])}
+  {_format_number(climate_test["mean_brier_improvement"])}
+- einseitiger p-Wert: {_format_p(climate_test["p_value_one_sided"])}
 - einseitige 95%-Untergrenze:
-  {_format_number(climate_test['lower_bound_one_sided_95'])}
-- Brier Skill Score: {_format_number(climate_test['brier_skill_score'])}
+  {_format_number(climate_test["lower_bound_one_sided_95"])}
+- Brier Skill Score: {_format_number(climate_test["brier_skill_score"])}
 
 Der globale Intersection-Union-p-Wert beträgt
-{_format_p(primary['global_intersection_union_p'])}. {conclusion}
+{_format_p(primary["global_intersection_union_p"])}. {conclusion}
 
 ![Eventgewichtete Brier Scores](results/brier_comparison.png)
 
@@ -433,7 +429,7 @@ Der globale Intersection-Union-p-Wert beträgt
 ![Powerkurve](results/power_curve.png)
 
 Die Blocklängen-Sensitivität wurde für
-{', '.join(str(int(value)) for value in blocks['block_length_weeks'])}
+{", ".join(str(int(value)) for value in blocks["block_length_weeks"])}
 Wochen berechnet. Weitere vorab benannte Prüfungen umfassen nur
 CLOB-Winner-Labels, den Ausschluss von NegRisk-Verträgen, das Entfernen der
 größten Eventgruppe, Vertragsgewichtung und Modellablationen. Die
@@ -498,8 +494,8 @@ python3 -m venv .venv
 .venv/bin/pytest
 ```
 
-Konfiguration: `{config.sha256}`  
-Daten-Run: `{data_run_id}`  
+Konfiguration: `{config.sha256}`
+Daten-Run: `{data_run_id}`
 Studien-Run: `{run_id}`
 """
     report_destination = Path(report_path)
@@ -515,13 +511,13 @@ Out-of-sample-Validierung.
 
 {conclusion}
 
-- Gesperrtes Modell: `{summary['selected_model']}`
-- Holdout: {int(summary['holdout_rows'])} Verträge aus
-  {int(summary['holdout_event_groups'])} Events
-- Modell-Brier: {_format_number(model['event_weighted_brier'])}
-- Markt-Brier: {_format_number(market['event_weighted_brier'])}
-- Kategorie-Basisrate-Brier: {_format_number(climate['event_weighted_brier'])}
-- Globaler Primär-p-Wert: {_format_p(primary['global_intersection_union_p'])}
+- Gesperrtes Modell: `{summary["selected_model"]}`
+- Holdout: {int(summary["holdout_rows"])} Verträge aus
+  {int(summary["holdout_event_groups"])} Events
+- Modell-Brier: {_format_number(model["event_weighted_brier"])}
+- Markt-Brier: {_format_number(market["event_weighted_brier"])}
+- Kategorie-Basisrate-Brier: {_format_number(climate["event_weighted_brier"])}
+- Globaler Primär-p-Wert: {_format_p(primary["global_intersection_union_p"])}
 
 Der [vollständige deutsche Bericht](reports/final_report_de.md) erklärt
 Methodik, Resultate, Power und Grenzen. Das Design wurde vor dem Ergebnislauf

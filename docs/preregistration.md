@@ -1,7 +1,7 @@
 # Präregistriertes Analyseprotokoll
 
-Version: 1.0  
-Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf  
+Version: 1.0
+Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf
 Primärkonfiguration: `configs/study.yaml`
 
 Dieses Dokument legt die konfirmatorische Analyse fest. Spätere technisch

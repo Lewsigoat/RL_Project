@@ -6,7 +6,7 @@ import argparse
 import json
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from polymarket_forecast.config import load_config
 from polymarket_forecast.pipeline import (
@@ -70,8 +70,8 @@ def _parser() -> argparse.ArgumentParser:
 
 
 def _jsonable(value: Any) -> Any:
-    if is_dataclass(value):
-        return asdict(value)
+    if is_dataclass(value) and not isinstance(value, type):
+        return asdict(cast(Any, value))
     if hasattr(value, "to_dict"):
         return value.to_dict(orient="records")
     if isinstance(value, Path):

@@ -7,8 +7,9 @@ import hashlib
 import io
 import json
 import posixpath
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 import duckdb
 import fsspec

@@ -24,9 +24,7 @@ def _sample_mean_vectors(
     centered = event_differences.copy()
     centered[columns] = centered[columns] - centered[columns].mean()
     values_by_week = {
-        week: centered.loc[centered["week"].astype(str) == week, columns].to_numpy(
-            dtype=float
-        )
+        week: centered.loc[centered["week"].astype(str) == week, columns].to_numpy(dtype=float)
         for week in weeks
     }
     block_length = min(block_length_weeks, len(weeks))
@@ -38,8 +36,7 @@ def _sample_mean_vectors(
         sampled_weeks: list[str] = []
         for start in starts:
             sampled_weeks.extend(
-                str(weeks[(start + offset) % len(weeks)])
-                for offset in range(block_length)
+                str(weeks[(start + offset) % len(weeks)]) for offset in range(block_length)
             )
         selected = sampled_weeks[:sample_weeks]
         sample = np.concatenate([values_by_week[week] for week in selected])

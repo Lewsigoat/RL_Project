@@ -123,9 +123,7 @@ def build_dataset(
         f"{prefix}/cohort_exclusions.parquet",
         result.exclusions,
     )
-    primary = result.cohort.loc[
-        result.cohort["horizon_days"] == config.study.primary_horizon_days
-    ]
+    primary = result.cohort.loc[result.cohort["horizon_days"] == config.study.primary_horizon_days]
     summary = BuildSummary(
         data_run_id=resolved_run_id,
         cohort_rows=int(len(result.cohort)),
@@ -170,10 +168,8 @@ def _enrich_selected_oof(
     selected["global_climatology_probability"] = np.nan
     for fold in splits.folds:
         train = primary.iloc[fold.train_indices]
-        validation_indices = set(int(index) for index in fold.validation_indices)
-        mask = (selected["fold"] == fold.fold) & selected["row_index"].isin(
-            validation_indices
-        )
+        validation_indices = {int(index) for index in fold.validation_indices}
+        mask = (selected["fold"] == fold.fold) & selected["row_index"].isin(validation_indices)
         validation = primary.loc[selected.loc[mask, "row_index"].astype(int)]
         y = train["label"].to_numpy(dtype=int)
         category_model = ClimatologyModel(
@@ -184,15 +180,18 @@ def _enrich_selected_oof(
             config.model.category_prior_strength,
             use_category=False,
         ).fit(train, y)
-        selected.loc[mask, "category_climatology_probability"] = (
-            category_model.predict_probability(validation)
+        selected.loc[mask, "category_climatology_probability"] = category_model.predict_probability(
+            validation
         )
-        selected.loc[mask, "global_climatology_probability"] = (
-            global_model.predict_probability(validation)
+        selected.loc[mask, "global_climatology_probability"] = global_model.predict_probability(
+            validation
         )
-    if selected[
-        ["category_climatology_probability", "global_climatology_probability"]
-    ].isna().any().any():
+    if (
+        selected[["category_climatology_probability", "global_climatology_probability"]]
+        .isna()
+        .any()
+        .any()
+    ):
         raise AssertionError("OOF baseline probabilities were not fully assigned")
     return selected.sort_values("row_index").reset_index(drop=True)
 
@@ -207,9 +206,7 @@ def train_study(
     artifact_storage = ResearchStorage(config.paths.artifacts_uri)
     resolved_data_run = data_run_id or _latest_data_run(data_storage)
     resolved_study_run = study_run_id or datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    cohort = data_storage.read_parquet(
-        f"processed/{resolved_data_run}/cohort.parquet"
-    )
+    cohort = data_storage.read_parquet(f"processed/{resolved_data_run}/cohort.parquet")
     primary = (
         cohort.loc[cohort["horizon_days"] == config.study.primary_horizon_days]
         .sort_values(["forecast_cutoff", "event_group_id", "market_id"])
@@ -251,9 +248,7 @@ def train_study(
         development_rows=int(len(splits.development_indices)),
         final_train_rows=int(len(splits.final_train_indices)),
         holdout_rows=int(len(splits.holdout_indices)),
-        holdout_event_groups=int(
-            primary.iloc[splits.holdout_indices]["event_group_id"].nunique()
-        ),
+        holdout_event_groups=int(primary.iloc[splits.holdout_indices]["event_group_id"].nunique()),
         model_sha256=model_hash,
     )
     artifact_storage.write_json(
@@ -367,17 +362,13 @@ def _evaluate_secondary_horizons(
     result = pd.DataFrame(rows)
     valid = result.loc[result["status"] == "ok"]
     if not valid.empty:
-        adjusted = holm_adjust(
-            {
-                f"horizon_{int(row.horizon_days)}": float(row.global_p_value)
-                for row in valid.itertuples()
-            }
-        )
+        p_values: dict[str, float] = {}
+        for raw_row in valid.itertuples():
+            row: Any = raw_row
+            p_values[f"horizon_{int(row.horizon_days)}"] = float(row.global_p_value)
+        adjusted = holm_adjust(p_values)
         result["holm_adjusted_global_p"] = result["horizon_days"].map(
-            {
-                int(name.removeprefix("horizon_")): value
-                for name, value in adjusted.items()
-            }
+            {int(name.removeprefix("horizon_")): value for name, value in adjusted.items()}
         )
     return result
 

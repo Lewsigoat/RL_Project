@@ -80,7 +80,7 @@ class SklearnFrameModel:
         return self
 
     def predict_proba(self, frame: pd.DataFrame) -> np.ndarray:
-        result = self.estimator.predict_proba(frame)  # type: ignore[attr-defined]
+        result = self.estimator.predict_proba(frame)
         return np.asarray(result, dtype=float)
 
 
@@ -179,7 +179,7 @@ class MarketResidualModel:
             self.probability_clip,
             1 - self.probability_clip,
         )
-        return np.log(probability / (1 - probability))
+        return np.asarray(np.log(probability / (1 - probability)), dtype=float)
 
     def fit(self, frame: pd.DataFrame, y: np.ndarray) -> MarketResidualModel:
         transformer = _structured_transformer(
@@ -203,8 +203,7 @@ class MarketResidualModel:
             gradient = np.concatenate(
                 [
                     [float(np.mean(residual))],
-                    design.T @ residual / max(len(y), 1)
-                    + self.l2 * coefficients / max(len(y), 1),
+                    design.T @ residual / max(len(y), 1) + self.l2 * coefficients / max(len(y), 1),
                 ]
             )
             return loss_value, gradient
@@ -357,7 +356,11 @@ def candidate_definitions(
 
         def make_text(c: float = c_value) -> ProbabilityModel:
             transformers: list[tuple[str, Any, Any]] = [
-                ("structured", _structured_transformer(numeric, categorical, dense=False), numeric + categorical)
+                (
+                    "structured",
+                    _structured_transformer(numeric, categorical, dense=False),
+                    numeric + categorical,
+                )
             ]
             if include_text:
                 transformers.append(
@@ -460,7 +463,7 @@ def _positive_probability(
     clip: float,
 ) -> np.ndarray:
     probability = np.asarray(model.predict_proba(frame), dtype=float)[:, 1]
-    return np.clip(probability, clip, 1 - clip)
+    return np.asarray(np.clip(probability, clip, 1 - clip), dtype=float)
 
 
 def _fit_candidate(
@@ -509,9 +512,7 @@ def develop_models(
     scores: list[dict[str, Any]] = []
     for (candidate, family), group in oof.groupby(["candidate", "family"]):
         loss = (group["probability"] - group["label"]) ** 2
-        event_brier = (
-            group.assign(loss=loss).groupby("event_group_id")["loss"].mean().mean()
-        )
+        event_brier = group.assign(loss=loss).groupby("event_group_id")["loss"].mean().mean()
         scores.append(
             {
                 "candidate": candidate,
@@ -528,9 +529,7 @@ def develop_models(
                 "event_groups": int(group["event_group_id"].nunique()),
             }
         )
-    scoreboard = pd.DataFrame(scores).sort_values(
-        ["event_weighted_brier", "candidate"]
-    )
+    scoreboard = pd.DataFrame(scores).sort_values(["event_weighted_brier", "candidate"])
 
     best_by_family = (
         scoreboard.sort_values("event_weighted_brier")
@@ -557,10 +556,7 @@ def develop_models(
         ensemble_probability = sum(pivot[name] * weights[name] for name in component_names)
         ensemble_loss = (ensemble_probability - pivot["label"]) ** 2
         ensemble_brier = float(
-            pivot.assign(loss=ensemble_loss)
-            .groupby("event_group_id")["loss"]
-            .mean()
-            .mean()
+            pivot.assign(loss=ensemble_loss).groupby("event_group_id")["loss"].mean().mean()
         )
         ensemble_row = pd.DataFrame(
             [
@@ -617,10 +613,7 @@ def train_locked_system(
         required = sorted(development.ensemble_weights)
     else:
         required = [development.selected_name]
-    models = {
-        name: _fit_candidate(definitions[name], train)
-        for name in required
-    }
+    models = {name: _fit_candidate(definitions[name], train) for name in required}
     y = train["label"].to_numpy(dtype=int)
     global_climatology = ClimatologyModel(
         config.model.category_prior_strength,
@@ -663,9 +656,7 @@ def fit_ablation_predictions(
         residuals = [item for item in definitions if item.family == "market_residual"]
         definition = min(
             residuals,
-            key=lambda item: abs(
-                float(item.name.rsplit("c", maxsplit=1)[-1]) - 1.0
-            ),
+            key=lambda item: abs(float(item.name.rsplit("c", maxsplit=1)[-1]) - 1.0),
         )
         model = _fit_candidate(definition, train)
         output[name] = _positive_probability(model, test, config.model.probability_clip)

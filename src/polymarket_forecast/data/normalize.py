@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
-from typing import Any, Mapping, Sequence
+from typing import Any
 
 from polymarket_forecast.data.schemas import Exclusion, MarketRecord, PricePoint
 
@@ -38,7 +40,7 @@ def _float_or_none(value: Any) -> float | None:
     if value in {None, ""}:
         return None
     parsed = float(value)
-    return parsed if parsed == parsed else None
+    return parsed if math.isfinite(parsed) else None
 
 
 def _first_event(raw: Mapping[str, Any]) -> Mapping[str, Any]:
