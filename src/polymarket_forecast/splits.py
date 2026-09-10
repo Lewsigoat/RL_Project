@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -61,11 +62,17 @@ def make_walk_forward_splits(
 
     holdout_count = max(1, math.ceil(group_count * config.study.holdout_fraction))
     fractional_start = pd.Timestamp(group_timing.iloc[-holdout_count]["first_forecast_cutoff"])
-    latest_cutoff = pd.Timestamp(group_timing["first_forecast_cutoff"].max())
-    minimum_time_start = latest_cutoff - pd.Timedelta(
-        weeks=config.inference.minimum_effective_weeks
-    )
-    holdout_boundary = min(fractional_start, minimum_time_start)
+    descending = group_timing.sort_values("first_forecast_cutoff", ascending=False)
+    observed_weeks: set[str] = set()
+    effective_week_start = fractional_start
+    for raw_row in descending.itertuples(index=False):
+        row: Any = raw_row
+        cutoff = pd.Timestamp(row.first_forecast_cutoff)
+        observed_weeks.add(str(cutoff.tz_localize(None).to_period("W-SUN")))
+        effective_week_start = cutoff
+        if len(observed_weeks) >= config.inference.minimum_effective_weeks:
+            break
+    holdout_boundary = min(fractional_start, effective_week_start)
     holdout_groups = group_timing.loc[
         group_timing["first_forecast_cutoff"] >= holdout_boundary
     ].copy()

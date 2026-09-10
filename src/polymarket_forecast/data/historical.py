@@ -242,7 +242,9 @@ def build_historical_v1_cohort(
                 block_timestamp,
                 p_event,
                 h.horizon_days,
-                epoch(close_at) - h.horizon_days * 86400 AS cutoff_epoch
+                least(epoch(close_at), epoch(resolved_at)) AS event_epoch,
+                least(epoch(close_at), epoch(resolved_at))
+                    - h.horizon_days * 86400 AS cutoff_epoch
             FROM read_parquet('{glob_path}', union_by_name = true)
             CROSS JOIN (VALUES {horizons}) AS h(horizon_days)
             WHERE lower(resolution_status) = 'resolved'
@@ -261,7 +263,7 @@ def build_historical_v1_cohort(
             condition_id AS market_id,
             horizon_days,
             min(opens_at) AS created_at,
-            max(close_at) AS event_time,
+            max(event_epoch) AS event_epoch,
             max(resolved_at) AS closed_time,
             max(cutoff_epoch) AS cutoff_epoch,
             max(block_timestamp) AS price_epoch,
@@ -294,7 +296,7 @@ def build_historical_v1_cohort(
         return pd.DataFrame(columns=COHORT_COLUMNS)
 
     aggregate["created_at"] = pd.to_datetime(aggregate["created_at"], utc=True)
-    aggregate["event_time"] = pd.to_datetime(aggregate["event_time"], utc=True)
+    aggregate["event_time"] = pd.to_datetime(aggregate["event_epoch"], unit="s", utc=True)
     aggregate["closed_time"] = pd.to_datetime(aggregate["closed_time"], utc=True)
     aggregate["forecast_cutoff"] = pd.to_datetime(aggregate["cutoff_epoch"], unit="s", utc=True)
     aggregate["price_timestamp"] = pd.to_datetime(aggregate["price_epoch"], unit="s", utc=True)

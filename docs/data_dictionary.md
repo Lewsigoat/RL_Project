@@ -42,8 +42,10 @@ und erzeugt unmittelbar Vertrag-Horizont-Zeilen; Walletadressen werden nicht
 in die Studienkohorte übernommen. `p_event` ist bereits auf die
 Referenz-Eventwahrscheinlichkeit normalisiert. `winning_outcome_label` dient
 ausschließlich als Ziel, `resolved_at` ausschließlich als
-Label-Verfügbarkeitszeit. V1- und V2-Zeilen teilen anschließend dasselbe
-`cohort`-Schema.
+Label-Verfügbarkeitszeit. Weil V1 keinen eigenen Event-Start enthält, wird
+der frühere Zeitpunkt aus `close_at` und `resolved_at` als retrospektiver
+Anker verwendet; diese Einschränkung wird im Bericht ausdrücklich markiert.
+V1- und V2-Zeilen teilen anschließend dasselbe `cohort`-Schema.
 
 Rohdaten, Walletdaten und große Parquets werden nicht in Git versioniert.
 Kleine reale Testfixtures, Manifeste und aggregierte Resultate dürfen

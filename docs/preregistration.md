@@ -1,6 +1,6 @@
 # Präregistriertes Analyseprotokoll
 
-Version: 1.2
+Version: 1.3
 Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf
 
 Amendment 1.1 (vor Modelltraining und ohne Einsicht in Modellresultate):
@@ -14,10 +14,21 @@ Monat. Grund, Zeitpunkt und Auswirkung werden im Bericht ausgewiesen.
 
 Amendment 1.2 (vor Modelltraining und ohne Einsicht in Modellresultate):
 Der Holdout beginnt beim früheren der beiden Zeitpunkte „letzte 20 % der
-Eventgruppen“ und „30 Kalenderwochen vor dem letzten Cutoff“. Damit kann
+Eventgruppen“ und „frühester Cutoff, der rückwärts mindestens 30 tatsächlich
+beobachtete Prognosewochen umfasst“. Damit kann
 stark wachsendes Marktvolumen die letzten 20 % nicht künstlich auf wenige
 Wochen verdichten. Die Eventzahl des Holdouts kann dadurch über 20 % liegen;
 das Modell erhält entsprechend weniger Entwicklungsdaten.
+
+Amendment 1.3 (vor Modelltraining und ohne Einsicht in Modellresultate):
+Die V1-Schicht enthält keinen separaten realen Event-Start. Für diese Zeilen
+ist der Ereignisanker deshalb der frühere Zeitpunkt aus `close_at` und
+`resolved_at`. Das verhindert, dass ein Cutoff nach einer vorzeitigen
+Auflösung liegt, und vermeidet eine künstliche Häufung an administrativen
+Jahres-/Monatsenddaten. Diese rückblickend bekannte Auflösungszeit schwächt
+die prospektive Interpretation; V2-Zeilen behalten die im Hauptprotokoll
+definierte Event-Zeitpriorität. Beide Quellen werden zusätzlich getrennt
+berichtet.
 Primärkonfiguration: `configs/study.yaml`
 
 Dieses Dokument legt die konfirmatorische Analyse fest. Spätere technisch
@@ -97,6 +108,9 @@ Der Ereignisanker wird in dieser Priorität gewählt:
 3. `events[0].eventDate` (00:00 UTC),
 4. `endDate`.
 
+Für die gepinnte V1-Schicht ohne Event-Start gilt abweichend
+`min(close_at, resolved_at)`.
+
 Eine Beobachtung ist nur gültig, wenn ihr Prognose-Cutoff sowohl nach
 `createdAt` als auch strikt vor `closedTime` liegt. Damit kann eine
 nachträgliche vorzeitige Auflösung nicht als Feature einfließen.
@@ -137,9 +151,9 @@ Robustheitsanalyse entfernt alle Textmerkmale.
 
 Eventgruppen werden nach ihrem frühesten Prognose-Cutoff sortiert.
 
-1. Mindestens die letzten 20 % der Eventgruppen und mindestens die letzten
-   30 Kalenderwochen bilden den unangetasteten konfirmatorischen Holdout; der
-   frühere Startzeitpunkt gilt.
+1. Mindestens die letzten 20 % der Eventgruppen und mindestens 30
+   tatsächlich beobachtete Prognosewochen bilden den unangetasteten
+   konfirmatorischen Holdout; der frühere Startzeitpunkt gilt.
 2. Die ersten 80 % bilden die Entwicklungskohorte.
 3. Innerhalb der Entwicklungskohorte werden drei chronologische,
    expandierende Validierungsfolds verwendet.

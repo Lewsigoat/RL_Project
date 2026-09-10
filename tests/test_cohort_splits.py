@@ -58,6 +58,13 @@ def test_walk_forward_split_keeps_events_isolated_and_labels_past(
     holdout_groups = set(primary.iloc[plan.holdout_indices]["event_group_id"])
     train_groups = set(primary.iloc[plan.final_train_indices]["event_group_id"])
     assert holdout_groups.isdisjoint(train_groups)
+    holdout_weeks = (
+        primary.iloc[plan.holdout_indices]["forecast_cutoff"]
+        .dt.tz_localize(None)
+        .dt.to_period("W-SUN")
+        .nunique()
+    )
+    assert holdout_weeks >= small_config.inference.minimum_effective_weeks
     for fold in plan.folds:
         train = primary.iloc[fold.train_indices]
         validation = primary.iloc[fold.validation_indices]
