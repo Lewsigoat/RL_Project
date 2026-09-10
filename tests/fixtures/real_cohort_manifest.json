@@ -1,0 +1,15 @@
+{
+  "contains_wallet_data": false,
+  "dataset_revision": "5aa1b9d52316a8b2e789e81c8ae42c7ed532e8aa",
+  "event_groups": 111,
+  "file": "real_cohort.parquet",
+  "license": "CC-BY-4.0 for Polymarket-v1 rows; public API provenance documented for V2 rows",
+  "observed_weeks": 65,
+  "rows": 112,
+  "schema_version": "1",
+  "selection": "Primary 7-day cohort, chronological first two rows per observed UTC week; deterministic, test-only, not an analysis sample.",
+  "sha256": "9e56eb10fdbcb760c4dfdf055ea0dbe6d7f5b93cdf36ada7a7570d0fde071a47",
+  "source": "TimeSeventeen/Polymarket-v1 daily_aligned plus Polymarket Gamma/CLOB",
+  "source_cohort_sha256": "3d9e0cb06ed803b8a5608718ec89da8c104b1158b12754356b4dbc563bdcf1f8",
+  "source_data_run": "real-20260910-v2"
+}

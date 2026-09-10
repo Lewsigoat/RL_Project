@@ -1,0 +1,7 @@
+ablation,event_weighted_brier
+market_only,0.11851578760861958
+full_model,0.10965709605345846
+without_text,0.11377776619761633
+without_trajectory,0.1125916371994108
+without_category,0.10990278091658626
+without_time,0.11025246287243998

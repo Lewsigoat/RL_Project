@@ -88,6 +88,13 @@ def calibration_fit(
     if len(np.unique(y)) < 2:
         return CalibrationFit(float("nan"), float("nan"), False)
     logit = np.log(p / (1 - p))
+    if float(np.ptp(logit)) < 1e-12:
+        base_rate = float(np.clip(y.mean(), clip, 1 - clip))
+        return CalibrationFit(
+            intercept=float(np.log(base_rate / (1 - base_rate))),
+            slope=float("nan"),
+            converged=False,
+        )
 
     def objective(parameters: np.ndarray) -> tuple[float, np.ndarray]:
         linear = parameters[0] + parameters[1] * logit

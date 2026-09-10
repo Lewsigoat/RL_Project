@@ -53,6 +53,17 @@ def test_proper_scores_and_calibration() -> None:
     assert np.isfinite(calibration.slope)
 
 
+def test_constant_forecast_has_no_identifiable_calibration_slope() -> None:
+    calibration = calibration_fit(
+        np.asarray([0, 1, 0, 1]),
+        np.full(4, 0.5),
+    )
+
+    assert calibration.intercept == 0
+    assert np.isnan(calibration.slope)
+    assert not calibration.converged
+
+
 def test_holm_adjustment_is_monotone() -> None:
     adjusted = holm_adjust({"a": 0.01, "b": 0.03, "c": 0.5})
 

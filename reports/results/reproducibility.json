@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "verified_at": "2026-09-10T18:20:00Z",
+  "reference_study_run": "study-20260910-v13",
+  "reproduction_study_run": "study-reproduction-20260910",
+  "data_run_id": "real-20260910-v2",
+  "config_sha256": "5dea8ded67b29751daf4a7ca3f186c0dc320e8e6449b9ed94a10127469ede823",
+  "reference_model_artifact_sha256": "47ea07c7505c9023b5d27cdd2d07c52e865d6eeaab0975983c0aaf707af8e842",
+  "reproduction_model_artifact_sha256": "2767cb21f558ea3cf8fda5b6d5bf77ecddd784dbb00c2f17bc271a6f1c9018f7",
+  "model_artifact_hash_note": "The serialized payload embeds the run identifier, so independent run archives intentionally have different byte hashes.",
+  "exact_matches": {
+    "primary_test": true,
+    "holdout_predictions": true,
+    "system_metrics": true,
+    "block_robustness": true,
+    "ablation_metrics": true,
+    "power_simulation": true,
+    "secondary_horizons": true,
+    "development_scoreboard": true,
+    "development_oof": true,
+    "split_assignments": true
+  },
+  "global_intersection_union_p": 0.053,
+  "reproduction_passed": true
+}

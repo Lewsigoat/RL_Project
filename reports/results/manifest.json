@@ -1,0 +1,18 @@
+{
+  "config_sha256": "5dea8ded67b29751daf4a7ca3f186c0dc320e8e6449b9ed94a10127469ede823",
+  "exported_at": "2026-09-10T18:20:57.316928+00:00",
+  "files": [
+    "evaluation_summary.json",
+    "primary_test.json",
+    "system_metrics.csv",
+    "block_robustness.csv",
+    "slice_metrics.csv",
+    "sensitivity.csv",
+    "ablation_metrics.csv",
+    "power_simulation.csv",
+    "secondary_horizons.csv",
+    "reproducibility.json"
+  ],
+  "raw_data_included": false,
+  "study_run_id": "study-reproduction-20260910"
+}

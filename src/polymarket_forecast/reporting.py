@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import io
+import json
 from pathlib import Path
 from typing import Any
 
@@ -55,8 +56,18 @@ def generate_plots(
         "event_weighted_brier"
     )
     if not metrics.empty:
+        system_labels = {
+            "model": "Modell",
+            "market": "Markt",
+            "calibrated_market": "Kalibrierter Markt",
+            "category_climatology": "Kategorie-Basisrate",
+            "global_climatology": "Globale Basisrate",
+        }
         figure, axis = plt.subplots(figsize=(9, 4.8))
-        axis.barh(metrics["system"], metrics["event_weighted_brier"])
+        axis.barh(
+            metrics["system"].map(system_labels),
+            metrics["event_weighted_brier"],
+        )
         axis.invert_yaxis()
         axis.set_title("Eventgewichteter Brier Score im 7-Tage-Holdout")
         axis.set_xlabel("Mittlerer Brier Score (kleiner ist besser)")
@@ -65,7 +76,8 @@ def generate_plots(
         figure.text(
             0.01,
             -0.02,
-            "Quelle: Polymarket Gamma/CLOB · konfirmatorischer Holdout · Mittelung zuerst je Event",
+            "Quelle: Polymarket-v1 und Gamma/CLOB · konfirmatorischer Holdout · "
+            "Mittelung zuerst je Event",
             fontsize=8,
         )
         paths.append(
@@ -83,13 +95,18 @@ def generate_plots(
         & (reliability["count"] > 0)
     ]
     if not reliability.empty:
+        reliability_labels = {
+            "model": "Modell",
+            "market": "Markt",
+            "category_climatology": "Kategorie-Basisrate",
+        }
         figure, axis = plt.subplots(figsize=(6.8, 6))
         for system, group in reliability.groupby("system"):
             axis.plot(
                 group["mean_probability"],
                 group["observed_rate"],
                 marker="o",
-                label=str(system),
+                label=reliability_labels[str(system)],
             )
         axis.plot([0, 1], [0, 1], linestyle="--", color="black", label="ideal")
         axis.set_xlim(0, 1)
@@ -102,7 +119,7 @@ def generate_plots(
         figure.text(
             0.01,
             -0.02,
-            "Quelle: Polymarket Gamma/CLOB · feste Wahrscheinlichkeitsbins · "
+            "Quelle: Polymarket-v1 und Gamma/CLOB · feste Wahrscheinlichkeitsbins · "
             "leere Bins ausgelassen",
             fontsize=8,
         )
@@ -120,13 +137,18 @@ def generate_plots(
         power["scenario"].isin(["half_mpe", "minimum_practical_effect", "double_mpe"])
     ]
     if not power.empty:
+        scenario_labels = {
+            "half_mpe": "Halbe Mindestwirkung (0,0025)",
+            "minimum_practical_effect": "Mindestwirkung (0,005)",
+            "double_mpe": "Doppelte Mindestwirkung (0,010)",
+        }
         figure, axis = plt.subplots(figsize=(8.5, 5))
         for scenario, group in power.groupby("scenario"):
             axis.plot(
                 group["sample_weeks"],
                 group["joint_rejection_rate"],
                 marker="o",
-                label=str(scenario),
+                label=scenario_labels[str(scenario)],
             )
         axis.axhline(
             config.inference.target_power,
@@ -208,12 +230,26 @@ def generate_report(
     primary = report_storage.read_json(f"{run_id}/primary_test.json")
     metrics = report_storage.read_parquet(f"{run_id}/system_metrics.parquet")
     blocks = report_storage.read_parquet(f"{run_id}/block_robustness.parquet")
+    sensitivity = report_storage.read_parquet(f"{run_id}/sensitivity.parquet")
+    ablations = report_storage.read_parquet(f"{run_id}/ablation_metrics.parquet")
+    power = report_storage.read_parquet(f"{run_id}/power_simulation.parquet")
     secondary = report_storage.read_parquet(f"{run_id}/secondary_horizons.parquet")
+    holdout_predictions = report_storage.read_parquet(f"{run_id}/holdout_predictions.parquet")
     training = artifact_storage.read_json(f"runs/{run_id}/training_summary.json")
     scoreboard = artifact_storage.read_parquet(f"runs/{run_id}/development_scoreboard.parquet")
     data_run_id = str(summary["data_run_id"])
     build = data_storage.read_json(f"processed/{data_run_id}/build_summary.json")
     data_manifest = data_storage.read_json(f"processed/{data_run_id}/manifest.json")
+    historical_summary_path = f"processed/{data_run_id}/historical_collection_summary.json"
+    historical_collection: dict[str, Any] = (
+        data_storage.read_json(historical_summary_path)
+        if data_storage.exists(historical_summary_path)
+        else {
+            "downloaded_files": 0,
+            "total_bytes": 0,
+            "dataset_revision": "not-used",
+        }
+    )
 
     metric_by_system = metrics.set_index("system")
     model = metric_by_system.loc["model"]
@@ -221,6 +257,12 @@ def generate_report(
     climate = metric_by_system.loc["category_climatology"]
     market_test = primary["market"]
     climate_test = primary["climatology"]
+    effective_weeks = int(summary["effective_weeks"])
+    mpe_rows = power.loc[power["scenario"] == "minimum_practical_effect"].copy()
+    mpe_rows["distance"] = (mpe_rows["sample_weeks"] - effective_weeks).abs()
+    mpe_row = mpe_rows.sort_values(["distance", "sample_weeks"]).iloc[0]
+    development_power_weeks = int(mpe_row["observed_weeks"])
+    simulated_mpe_power = float(mpe_row["joint_rejection_rate"])
     minimum_power = summary.get("required_weeks_for_target_power")
     power_text = (
         f"Die Simulation schätzt mindestens {minimum_power} Kalenderwochen für "
@@ -232,7 +274,12 @@ def generate_report(
             f"{config.inference.target_power:.0%} bei der Mindestwirkung."
         )
     )
-    effective_weeks = int(summary["effective_weeks"])
+    power_text += (
+        f" Beim Rasterpunkt von {int(mpe_row['sample_weeks'])} Wochen beträgt "
+        "die geschätzte gemeinsame Power nur "
+        f"{_format_number(simulated_mpe_power * 100, 1)} %; "
+        f"Grundlage sind {development_power_weeks} beobachtete OOF-Wochen."
+    )
     week_warning = (
         f"Die {effective_weeks} effektiven Holdout-Wochen liegen unter der "
         f"präregistrierten Zielgröße von {config.inference.minimum_effective_weeks}; "
@@ -248,8 +295,11 @@ def generate_report(
     for raw_row in secondary.itertuples(index=False):
         row: Any = raw_row
         if row.status == "ok":
+            horizon_label = (
+                "1 Tag" if int(row.horizon_days) == 1 else f"{int(row.horizon_days)} Tage"
+            )
             secondary_lines.append(
-                f"- {int(row.horizon_days)} Tage: Modell `{row.selected_model}`, "
+                f"- {horizon_label}: Modell `{row.selected_model}`, "
                 f"{int(row.event_groups)} Events, globaler Holm-korrigierter "
                 f"p-Wert {_format_p(getattr(row, 'holm_adjusted_global_p', np.nan))}."
             )
@@ -263,7 +313,23 @@ def generate_report(
 
     best_development = scoreboard.iloc[0]
     source_counts = data_manifest["source_counts"]
+    source_counts_holdout = holdout_predictions["label_source"].value_counts()
+    contract_weighted = sensitivity.loc[sensitivity["analysis"] == "contract_weighted"].iloc[0]
+    ablation_scores = ablations.set_index("ablation")["event_weighted_brier"]
+    historical_gib = float(historical_collection["total_bytes"]) / 1024**3
     conclusion = _decision_text(primary)
+    reproduction_path = Path(report_path).parent / "results" / "reproducibility.json"
+    reproduction_paragraph = ""
+    if reproduction_path.exists():
+        reproduction = json.loads(reproduction_path.read_text(encoding="utf-8"))
+        if reproduction.get("reproduction_passed"):
+            reproduction_paragraph = (
+                "Ein zweiter unabhängiger Trainings- und Evaluationslauf "
+                f"(`{reproduction['reproduction_study_run']}`) aus demselben "
+                "unveränderlichen Daten-Run reproduzierte Primärtest, "
+                "Holdout-Prognosen, Modellwahl, Scores, Power und "
+                "Sekundäranalysen exakt."
+            )
     report = rf"""# Vorhersage binärer Polymarket-Verträge
 
 ## Abstract
@@ -302,19 +368,19 @@ Primärtests.
 
 ## 2. Mathematischer Hintergrund
 
-Für Ergebnis \(Y\\in\\{{0,1\\}}\) und Prognose \(p\\in[0,1]\) gilt
+Für Ergebnis \(Y\in\{{0,1\}}\) und Prognose \(p\in[0,1]\) gilt
 
-\\[
+\[
 BS(p,Y)=(p-Y)^2.
-\\]
+\]
 
 Der Brier Score ist ein *proper scoring rule*: Im Erwartungswert wird eine
 ehrliche Wahrscheinlichkeit belohnt. Analysis tritt in der logistischen
 Abbildung
 
-\\[
-\\operatorname{{logit}}(p)=\\log\\frac{{p}}{{1-p}}
-\\]
+\[
+\operatorname{{logit}}(p)=\log\frac{{p}}{{1-p}}
+\]
 
 und in der Optimierung differenzierbarer Verlustfunktionen auf. Integralideen
 erscheinen als Erwartungswerte über die unbekannte Ergebnisverteilung;
@@ -322,9 +388,9 @@ empirisch werden sie durch Mittelwerte und Resampling approximiert.
 
 Der Vergleichseffekt ist
 
-\\[
-\\Delta_b=E_g[\\,BS(p_b,Y)-BS(p_M,Y)\\,],
-\\]
+\[
+\Delta_b=E_g[\,BS(p_b,Y)-BS(p_M,Y)\,],
+\]
 
 wobei zuerst innerhalb zusammengehöriger Verträge und dann gleichgewichtet
 über Events \(g\) gemittelt wird. Positive Werte sprechen für das Modell.
@@ -353,6 +419,15 @@ Nach Horizont- und Zeitprüfung enthält die Gesamtkohorte
 Polymarket-v1-Zeilen mit {int(build.get("api_cohort_rows", 0))}
 Gamma/CLOB-V2-Zeilen.
 
+Die historische Quelle umfasst
+{int(historical_collection["downloaded_files"])} tägliche Parquets
+({_format_number(historical_gib, 2)} GiB) der exakt gepinnten Revision
+`{historical_collection["dataset_revision"]}`. Im Holdout stammen
+{int(source_counts_holdout.get("polymarket_v1_chain_aligned", 0))} Zeilen aus
+der chain-ausgerichteten V1-Schicht und
+{int(source_counts_holdout.get("clob_winner_crosschecked_gamma", 0))} aus der
+Gamma/CLOB-V2-Schicht.
+
 Rohantworten wurden unter Run-ID `{data_run_id}` mit URL, Parametern,
 UTC-Abrufzeit und SHA-256 gespeichert. Normalisierte Parquets und eine
 DuckDB-Datei trennen `markets`, `events`, `price_points`, `resolutions`,
@@ -365,21 +440,27 @@ keine Modellmerkmale. Preise müssen am oder vor dem individuellen Cutoff
 liegen und höchstens {config.study.max_price_staleness_hours} Stunden alt
 sein.
 
+Für V1 ist die Marktbaseline der letzte normalisierte On-chain-Trade
+(`p_event`) vor dem Cutoff; für V2 ist sie der letzte CLOB-Historienpunkt.
+Mangels separatem V1-Eventstart wird dort der frühere Zeitpunkt aus
+`close_at` und `resolved_at` als retrospektiver Anker verwendet. Diese
+Quellen- und Ankerheterogenität ist eine zentrale Generalisierungsgrenze.
+
 ## 5. Hypothesen
 
 Für Markt \(P\) und Kategorie-Climatology \(C\) wurden vorab definiert:
 
-\\[
-H_{{0P}}:\\Delta_P\\le0,\\quad H_{{0C}}:\\Delta_C\\le0.
-\\]
+\[
+H_{{0P}}:\Delta_P\le0,\quad H_{{0C}}:\Delta_C\le0.
+\]
 
-Das Signifikanzniveau ist \(\\alpha=0{str(config.inference.alpha).replace(".", ",")}\).
+Das Signifikanzniveau ist \(\alpha={str(config.inference.alpha).replace(".", ",")}\).
 Die globale Behauptung verlangt die Verwerfung beider Nullhypothesen; ihr
-p-Wert ist daher \(\\max(p_P,p_C)\). Die minimale praktisch relevante
+p-Wert ist daher \(\max(p_P,p_C)\). Die minimale praktisch relevante
 Brier-Verbesserung ist
 {str(config.inference.minimum_practical_effect).replace(".", ",")}.
 `P0 < 0,05` wäre keine korrekte Schreibweise: \(H_0\) bezeichnet die
-Nullhypothese, \(\\alpha\) den Schwellenwert und \(p\) den berechneten
+Nullhypothese, \(\alpha\) den Schwellenwert und \(p\) den berechneten
 p-Wert.
 
 ## 6. Modelle und Experiment
@@ -421,6 +502,24 @@ Modell gegen Kategorie-Basisrate:
 Der globale Intersection-Union-p-Wert beträgt
 {_format_p(primary["global_intersection_union_p"])}. {conclusion}
 
+Der beobachtete Marktvergleich von
+{_format_number(market_test["mean_brier_improvement"])} liegt zwar über der
+Mindestwirkung von
+{_format_number(config.inference.minimum_practical_effect)}, aber seine
+einseitige 95%-Untergrenze von
+{_format_number(market_test["lower_bound_one_sided_95"])} nicht. Zudem liegt
+der nullzentrierte Bootstrap-p-Wert mit
+{_format_p(market_test["p_value_one_sided"])} knapp über \(\alpha\). Das
+präregistrierte Kriterium verlangt beides und bleibt daher unerfüllt. Die
+Abweichung zwischen Perzentilintervall und nullzentriertem Test ist bei der
+schiefen, stark nach Wochen variierenden Bootstrap-Verteilung möglich; die
+Entscheidungsregel wird nicht nachträglich geändert.
+
+Bei Vertragsgewichtung statt gleicher Eventgewichtung fällt die
+Marktverbesserung auf
+{_format_number(contract_weighted["market_improvement"])}. Das zeigt, dass
+die positive Primärdifferenz nicht über alle Einzelverträge gleichmäßig ist.
+
 ![Eventgewichtete Brier Scores](results/brier_comparison.png)
 
 ![Reliability](results/reliability.png)
@@ -433,7 +532,17 @@ Der globale Intersection-Union-p-Wert beträgt
 
 Die Blocklängen-Sensitivität wurde für
 {", ".join(str(int(value)) for value in blocks["block_length_weeks"])}
-Wochen berechnet. Weitere vorab benannte Prüfungen umfassen nur
+Wochen berechnet. Die Markt-p-Werte liegen dabei zwischen
+{_format_p(blocks["market_p_value"].min())} und
+{_format_p(blocks["market_p_value"].max())}; keine alternative Blocklänge
+ändert die Primärentscheidung.
+
+Die gesperrte Modellfamilie erreicht in der Refit-Ablation einen Brier Score
+von {_format_number(ablation_scores["full_model"])}. Ohne Text steigt er auf
+{_format_number(ablation_scores["without_text"])}, ohne Preisverlauf auf
+{_format_number(ablation_scores["without_trajectory"])} und ohne Kategorie
+auf {_format_number(ablation_scores["without_category"])}. Diese Werte sind
+diagnostisch und keine neuen Primärtests. Weitere vorab benannte Prüfungen umfassen nur
 CLOB-Winner-Labels, den Ausschluss von NegRisk-Verträgen, das Entfernen der
 größten Eventgruppe, Vertragsgewichtung und Modellablationen. Die
 maschinenlesbaren Resultate liegen in [`reports/results`](results/).
@@ -451,23 +560,39 @@ als neue konfirmatorische Hypothesen interpretiert werden.
    vollständig prospektive Vorhersagekampagne.
 2. Die CLOB-Preishistorie ist gesampelt und enthält kein vollständiges
    historisches Orderbuch.
-3. Gamma-Metadaten können nachträglich aktualisiert worden sein. Der
+3. V1 nutzt den letzten On-chain-Trade, V2 einen CLOB-Historienpunkt. Diese
+   Baselines sind beide zeitgerecht, aber mikrostrukturell nicht identisch.
+4. Der V1-Anker `min(close_at, resolved_at)` ist rückblickend bekannt. Er
+   verhindert Outcome-Leakage in den Merkmalen, bildet aber keine vollständig
+   prospektiv planbare Deadline ab.
+5. Gamma-Metadaten können nachträglich aktualisiert worden sein. Der
    textfreie Robustheitstest reduziert, beseitigt aber nicht jede
    Quellenunsicherheit.
-4. V2-Verträge desselben Gamma-Events werden gruppiert. Für V1 rekonstruiert
+6. V2-Verträge desselben Gamma-Events werden gruppiert. Für V1 rekonstruiert
    eine konservative Kombination aus Kategorie, Enddatum und bereinigtem Slug
    logische Familien; weiter entfernte Abhängigkeiten können verbleiben.
-5. Ein Brier-Vorteil garantiert nach Spread, Gebühren, Slippage und Latenz
+7. Ein Brier-Vorteil garantiert nach Spread, Gebühren, Slippage und Latenz
    keinen Handelsgewinn.
-6. Ein Foundation-Model wurde bewusst nicht als konfirmatorische Komponente
+8. Ein Foundation-Model wurde bewusst nicht als konfirmatorische Komponente
    eingesetzt, um schwer prüfbare Trainingsdatenkontamination zu vermeiden.
-7. API-Lücken und strenge Frischekriterien reduzieren die effektive
+9. Trotz 675 Holdout-Events schätzt die Entwicklungs-Simulation bei der
+   kleinen Mindestwirkung nur geringe Power; 155 finale Trainingszeilen
+   begrenzen außerdem die Modellstabilität.
+10. API-Lücken und strenge Frischekriterien reduzieren die effektive
    Stichprobe. Power und Konfidenzintervalle sind deshalb entscheidender als
    die bloße Vertragsanzahl.
 
 ## 10. Schlussfolgerung
 
 {conclusion}
+
+Deskriptiv ist das Ensemble klar besser als die Basisrate und um
+{_format_number(market_test["mean_brier_improvement"])} Brier-Punkte besser
+als der Markt. Konfirmatorisch scheitert gerade der schwierigere
+Marktvergleich mit \(p={_format_p(market_test["p_value_one_sided"])}\)
+knapp am vorab gesetzten Niveau und sichert die praktische Mindestwirkung
+nicht ab. Die Forschungsfrage wird daher mit „vielversprechender Effekt,
+aber noch kein belastbarer Nachweis gegenüber dem Markt“ beantwortet.
 
 Die fachlich zulässige Aussage ist auf die dokumentierte Population, den
 7-Tage-Horizont, den Daten-Cutoff und den gesperrten Modellprozess begrenzt.
@@ -476,6 +601,8 @@ Evidenz unter der erreichten Power. Der stärkste nächste Test wäre eine
 zweite, vorab timestamped prospektive Kohorte ohne erneute Modellauswahl.
 
 ## 11. Reproduzierbarkeit
+
+{reproduction_paragraph}
 
 ```bash
 python3 -m venv .venv
@@ -526,6 +653,9 @@ Out-of-sample-Validierung.
 Der [vollständige deutsche Bericht](reports/final_report_de.md) erklärt
 Methodik, Resultate, Power und Grenzen. Das Design wurde vor dem Ergebnislauf
 in [`docs/preregistration.md`](docs/preregistration.md) festgelegt.
+Ein unabhängiger zweiter Lauf reproduzierte alle entscheidungsrelevanten
+Tabellen exakt; der Vergleich steht in
+[`reports/results/reproducibility.json`](reports/results/reproducibility.json).
 
 ## Schnellstart
 

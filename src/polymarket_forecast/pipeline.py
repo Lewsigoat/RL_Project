@@ -42,6 +42,7 @@ from polymarket_forecast.splits import SplitPlan, make_walk_forward_splits
 @dataclass(frozen=True)
 class BuildSummary:
     data_run_id: str
+    config_sha256: str
     cohort_rows: int
     api_cohort_rows: int
     historical_cohort_rows: int
@@ -160,6 +161,7 @@ def build_dataset(
     primary = combined.loc[combined["horizon_days"] == config.study.primary_horizon_days]
     summary = BuildSummary(
         data_run_id=resolved_run_id,
+        config_sha256=config.sha256,
         cohort_rows=int(len(combined)),
         api_cohort_rows=int(len(result.cohort)),
         historical_cohort_rows=int(len(historical)),
@@ -588,7 +590,14 @@ def export_result_tables(
         "study_run_id": run_id,
         "exported_at": datetime.now(UTC).isoformat(),
         "config_sha256": config.sha256,
-        "files": [path.name for path in exported],
+        "files": [
+            *[path.name for path in exported],
+            *(
+                ["reproducibility.json"]
+                if (target / "reproducibility.json").exists()
+                else []
+            ),
+        ],
         "raw_data_included": False,
     }
     manifest_path = target / "manifest.json"

@@ -1,0 +1,4 @@
+block_length_weeks,market_improvement,market_p_value,climatology_improvement,climatology_p_value,global_p_value,superior_to_both
+2,0.008858691555161152,0.1525,0.1481295250476162,0.0001,0.1525,False
+8,0.008858691555161152,0.0671,0.1481295250476162,0.0001,0.0671,False
+13,0.008858691555161152,0.0859,0.1481295250476162,0.0001,0.0859,False
