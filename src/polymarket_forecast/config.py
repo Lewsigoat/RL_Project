@@ -49,6 +49,7 @@ class StudyConfig:
 class ApiConfig:
     gamma_base_url: str
     clob_base_url: str
+    history_start: datetime
     page_size: int
     max_markets: int
     request_timeout_seconds: float
@@ -56,7 +57,27 @@ class ApiConfig:
     concurrency: int
     price_fidelity_minutes: int
     history_lookback_days: int
+    monthly_stratified_sampling: bool
+    sampling_order: str
     user_agent: str
+
+
+@dataclass(frozen=True)
+class HistoricalConfig:
+    enabled: bool
+    repository: str
+    revision: str
+    layer: str
+    start_date: datetime
+    end_date: datetime
+    download_concurrency: int
+    license: str
+
+    def __post_init__(self) -> None:
+        if self.start_date >= self.end_date:
+            raise ValueError("historical start_date must precede end_date")
+        if self.download_concurrency < 1:
+            raise ValueError("historical download_concurrency must be positive")
 
 
 @dataclass(frozen=True)
@@ -100,6 +121,7 @@ class PathsConfig:
 class ProjectConfig:
     study: StudyConfig
     api: ApiConfig
+    historical: HistoricalConfig
     model: ModelConfig
     inference: InferenceConfig
     paths: PathsConfig
@@ -112,6 +134,9 @@ class ProjectConfig:
         payload.pop("source_path", None)
         payload["study"]["study_start"] = self.study.study_start.isoformat()
         payload["study"]["data_cutoff"] = self.study.data_cutoff.isoformat()
+        payload["api"]["history_start"] = self.api.history_start.isoformat()
+        payload["historical"]["start_date"] = self.historical.start_date.isoformat()
+        payload["historical"]["end_date"] = self.historical.end_date.isoformat()
         return payload
 
     @property
@@ -138,6 +163,7 @@ def load_config(path: str | Path = "configs/study.yaml") -> ProjectConfig:
 
     study_raw = _require_mapping(raw["study"], "study")
     api_raw = _require_mapping(raw["api"], "api")
+    historical_raw = _require_mapping(raw["historical"], "historical")
     model_raw = _require_mapping(raw["model"], "model")
     inference_raw = _require_mapping(raw["inference"], "inference")
     paths_raw = _require_mapping(raw["paths"], "paths")
@@ -157,6 +183,7 @@ def load_config(path: str | Path = "configs/study.yaml") -> ProjectConfig:
     api = ApiConfig(
         gamma_base_url=str(api_raw["gamma_base_url"]).rstrip("/"),
         clob_base_url=str(api_raw["clob_base_url"]).rstrip("/"),
+        history_start=parse_utc(str(api_raw["history_start"])),
         page_size=int(api_raw["page_size"]),
         max_markets=int(api_raw["max_markets"]),
         request_timeout_seconds=float(api_raw["request_timeout_seconds"]),
@@ -164,7 +191,19 @@ def load_config(path: str | Path = "configs/study.yaml") -> ProjectConfig:
         concurrency=int(api_raw["concurrency"]),
         price_fidelity_minutes=int(api_raw["price_fidelity_minutes"]),
         history_lookback_days=int(api_raw["history_lookback_days"]),
+        monthly_stratified_sampling=bool(api_raw["monthly_stratified_sampling"]),
+        sampling_order=str(api_raw["sampling_order"]),
         user_agent=str(api_raw["user_agent"]),
+    )
+    historical = HistoricalConfig(
+        enabled=bool(historical_raw["enabled"]),
+        repository=str(historical_raw["repository"]),
+        revision=str(historical_raw["revision"]),
+        layer=str(historical_raw["layer"]),
+        start_date=parse_utc(str(historical_raw["start_date"])),
+        end_date=parse_utc(str(historical_raw["end_date"])),
+        download_concurrency=int(historical_raw["download_concurrency"]),
+        license=str(historical_raw["license"]),
     )
     model = ModelConfig(
         random_seed=int(model_raw["random_seed"]),
@@ -194,6 +233,7 @@ def load_config(path: str | Path = "configs/study.yaml") -> ProjectConfig:
     return ProjectConfig(
         study=study,
         api=api,
+        historical=historical,
         model=model,
         inference=inference,
         paths=paths,

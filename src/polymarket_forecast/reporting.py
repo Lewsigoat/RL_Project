@@ -348,7 +348,10 @@ Der Collector hat {int(source_counts["gamma_rows"])} Gamma-Zeilen abgerufen,
 {int(source_counts["exclusions"])} Ausschlussprotokolle wurden erzeugt.
 Nach Horizont- und Zeitprüfung enthält die Gesamtkohorte
 {int(build["cohort_rows"])} Markt-Horizont-Zeilen; davon
-{int(build["primary_rows"])} am 7-Tage-Horizont.
+{int(build["primary_rows"])} am 7-Tage-Horizont. Die Gesamtkohorte kombiniert
+{int(build.get("historical_cohort_rows", 0))} gepinnte
+Polymarket-v1-Zeilen mit {int(build.get("api_cohort_rows", 0))}
+Gamma/CLOB-V2-Zeilen.
 
 Rohantworten wurden unter Run-ID `{data_run_id}` mit URL, Parametern,
 UTC-Abrufzeit und SHA-256 gespeichert. Normalisierte Parquets und eine
@@ -451,8 +454,9 @@ als neue konfirmatorische Hypothesen interpretiert werden.
 3. Gamma-Metadaten können nachträglich aktualisiert worden sein. Der
    textfreie Robustheitstest reduziert, beseitigt aber nicht jede
    Quellenunsicherheit.
-4. Verträge desselben Gamma-Events werden gruppiert; weiter entfernte
-   logische Abhängigkeiten können verbleiben.
+4. V2-Verträge desselben Gamma-Events werden gruppiert. Für V1 rekonstruiert
+   eine konservative Kombination aus Kategorie, Enddatum und bereinigtem Slug
+   logische Familien; weiter entfernte Abhängigkeiten können verbleiben.
 5. Ein Brier-Vorteil garantiert nach Spread, Gebühren, Slippage und Latenz
    keinen Handelsgewinn.
 6. Ein Foundation-Model wurde bewusst nicht als konfirmatorische Komponente

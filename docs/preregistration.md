@@ -1,7 +1,16 @@
 # Präregistriertes Analyseprotokoll
 
-Version: 1.0
+Version: 1.1
 Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf
+
+Amendment 1.1 (vor Modelltraining und ohne Einsicht in Modellresultate):
+Die Gamma-API begrenzt Offset-Paginierung. Um statt eines einzelnen kurzen
+Zeitfensters mindestens 30 zeitliche Blöcke abzudecken, wird die
+konfigurierte Obergrenze gleichmäßig auf Kalendermonate verteilt und je Monat
+über den stabilen Keyset-Endpunkt nach `volumeNum` absteigend gezogen. Diese
+bewusste Liquiditätsselektion verbessert historische Preisabdeckung, begrenzt
+die Zielpopulation aber auf die volumenstärkeren verfügbaren Verträge je
+Monat. Grund, Zeitpunkt und Auswirkung werden im Bericht ausgewiesen.
 Primärkonfiguration: `configs/study.yaml`
 
 Dieses Dokument legt die konfirmatorische Analyse fest. Spätere technisch
@@ -50,6 +59,11 @@ Eingeschlossen werden Polymarket-Verträge, die:
 - zum Prognosezeitpunkt bereits handelbar waren,
 - eine Preisbeobachtung strikt vor dem Prognosezeitpunkt besitzen und
 - zwischen dem konfigurierten Studienbeginn und Daten-Cutoff liegen.
+
+Der maximale Abrufumfang beträgt 2.500 Gamma-Märkte. Bei 32
+Kalendermonats-Strata werden bis zu 79 nach terminalem Volumen absteigend
+sortierte Kandidaten je Monat abgerufen. Terminales Volumen definiert hier
+nur die retrospektive Stichprobenpopulation; es ist kein Modellmerkmal.
 
 Ausgeschlossen werden:
 

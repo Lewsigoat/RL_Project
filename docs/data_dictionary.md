@@ -27,6 +27,24 @@ Rohzeile enthält Request-URL, Parameter, UTC-Abrufzeit, HTTP-Status, SHA-256
 und den unveränderten UTF-8-Responsebody. Das Manifest enthält zusätzlich
 Konfigurationshash, Tabellenhashes und Zeilenzahlen.
 
+Die Standardkonfiguration verwendet monatliche Strata und zieht je Monat bis
+zum gleichen Kontingent über Gamma-Keyset-Paginierung, nach `volumeNum`
+absteigend. Dadurch deckt die Kohorte die gesamte Studienzeit ab, ist aber
+eine explizite Stichprobe volumenstärkerer Märkte und keine Zufallsstichprobe
+aller Polymarket-Verträge. Das terminale Volumen steuert nur diese
+retrospektive Auswahl und bleibt aus der Featurematrix ausgeschlossen.
+
+Für die Zeit vor der CLOB-V2-Migration ergänzt der Collector die gepinnte
+CC-BY-4.0-Schicht `daily_aligned` aus
+`TimeSeventeen/Polymarket-v1`. Jeder tägliche Parquet-Download erhält URL,
+Revision, Dateigröße und SHA-256. DuckDB liest diese Dateien spaltenorientiert
+und erzeugt unmittelbar Vertrag-Horizont-Zeilen; Walletadressen werden nicht
+in die Studienkohorte übernommen. `p_event` ist bereits auf die
+Referenz-Eventwahrscheinlichkeit normalisiert. `winning_outcome_label` dient
+ausschließlich als Ziel, `resolved_at` ausschließlich als
+Label-Verfügbarkeitszeit. V1- und V2-Zeilen teilen anschließend dasselbe
+`cohort`-Schema.
+
 Rohdaten, Walletdaten und große Parquets werden nicht in Git versioniert.
 Kleine reale Testfixtures, Manifeste und aggregierte Resultate dürfen
 versioniert werden, sofern Quelle und Lizenzhinweis erhalten bleiben.

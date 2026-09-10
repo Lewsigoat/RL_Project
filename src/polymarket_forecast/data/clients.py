@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 from collections.abc import Mapping
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from urllib.parse import urlencode
 
@@ -15,6 +16,22 @@ import httpx
 from polymarket_forecast.config import ApiConfig
 
 RETRYABLE_STATUS = {408, 425, 429, 500, 502, 503, 504}
+
+
+def _next_month(value: datetime) -> datetime:
+    if value.month == 12:
+        return value.replace(year=value.year + 1, month=1, day=1)
+    return value.replace(month=value.month + 1, day=1)
+
+
+def _month_strata(start: datetime, end: datetime) -> list[tuple[datetime, datetime]]:
+    cursor = start.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    strata: list[tuple[datetime, datetime]] = []
+    while cursor <= end:
+        following = _next_month(cursor)
+        strata.append((max(start, cursor), min(end, following - timedelta(microseconds=1))))
+        cursor = following
+    return strata
 
 
 @dataclass(frozen=True)
@@ -51,7 +68,7 @@ class PolymarketClient:
         url: str,
         params: Mapping[str, Any] | None = None,
         *,
-        allow_not_found: bool = False,
+        accepted_error_statuses: frozenset[int] = frozenset(),
     ) -> SourceResponse:
         parameters = dict(params or {})
         last_error: Exception | None = None
@@ -59,7 +76,7 @@ class PolymarketClient:
             try:
                 response = await client.get(url, params=parameters, headers=self._headers)
                 retrieved_at = datetime.now(UTC)
-                if allow_not_found and response.status_code == 404:
+                if response.status_code in accepted_error_statuses:
                     return SourceResponse(
                         url=url,
                         parameters=parameters,
@@ -93,35 +110,55 @@ class PolymarketClient:
         end_date_min: datetime,
         end_date_max: datetime,
     ) -> list[SourceResponse]:
-        """Page over recently closed Gamma markets in deterministic order."""
+        """Collect deterministic keyset pages, optionally stratified by month."""
         responses: list[SourceResponse] = []
-        offset = 0
+        strata = (
+            _month_strata(end_date_min, end_date_max)
+            if self.config.monthly_stratified_sampling
+            else [(end_date_min, end_date_max)]
+        )
+        per_stratum = math.ceil(self.config.max_markets / len(strata))
+        total_rows = 0
         timeout = httpx.Timeout(self.config.request_timeout_seconds)
         async with httpx.AsyncClient(timeout=timeout, follow_redirects=True) as client:
-            while offset < self.config.max_markets:
-                limit = min(self.config.page_size, self.config.max_markets - offset)
-                params = {
-                    "closed": "true",
-                    "uma_resolution_status": "resolved",
-                    "end_date_min": end_date_min.isoformat(),
-                    "end_date_max": end_date_max.isoformat(),
-                    "limit": limit,
-                    "offset": offset,
-                    "order": "endDate",
-                    "ascending": "false",
-                }
-                response = await self._request(
-                    client,
-                    f"{self.config.gamma_base_url}/markets",
-                    params,
-                )
-                payload = response.json()
-                if not isinstance(payload, list):
-                    raise TypeError("Gamma /markets response must be a JSON array")
-                responses.append(response)
-                if len(payload) < limit:
-                    break
-                offset += len(payload)
+            for stratum_start, stratum_end in strata:
+                stratum_rows = 0
+                after_cursor: str | None = None
+                while stratum_rows < per_stratum and total_rows < self.config.max_markets:
+                    limit = min(
+                        self.config.page_size,
+                        per_stratum - stratum_rows,
+                        self.config.max_markets - total_rows,
+                    )
+                    params: dict[str, Any] = {
+                        "closed": "true",
+                        "uma_resolution_status": "resolved",
+                        "end_date_min": stratum_start.isoformat(),
+                        "end_date_max": stratum_end.isoformat(),
+                        "limit": limit,
+                        "order": self.config.sampling_order,
+                        "ascending": "false",
+                    }
+                    if after_cursor:
+                        params["after_cursor"] = after_cursor
+                    response = await self._request(
+                        client,
+                        f"{self.config.gamma_base_url}/markets/keyset",
+                        params,
+                    )
+                    payload = response.json()
+                    if not isinstance(payload, dict) or not isinstance(
+                        payload.get("markets"), list
+                    ):
+                        raise TypeError("Gamma /markets/keyset response must contain markets")
+                    markets = payload["markets"]
+                    responses.append(response)
+                    stratum_rows += len(markets)
+                    total_rows += len(markets)
+                    after_cursor_value = payload.get("next_cursor")
+                    after_cursor = str(after_cursor_value) if after_cursor_value else None
+                    if len(markets) < limit or not after_cursor:
+                        break
         return responses
 
     async def get_clob_markets(
@@ -139,7 +176,7 @@ class PolymarketClient:
                     response = await self._request(
                         client,
                         f"{self.config.clob_base_url}/markets/{condition_id}",
-                        allow_not_found=True,
+                        accepted_error_statuses=frozenset({404}),
                     )
                     results[condition_id] = response
 
@@ -167,10 +204,10 @@ class PolymarketClient:
                 start_ts: int,
                 end_ts: int,
             ) -> None:
+                del start_ts, end_ts
                 params = {
                     "market": token_id,
-                    "startTs": start_ts,
-                    "endTs": end_ts,
+                    "interval": "max",
                     "fidelity": self.config.price_fidelity_minutes,
                 }
                 async with semaphore:
@@ -178,6 +215,7 @@ class PolymarketClient:
                         client,
                         f"{self.config.clob_base_url}/prices-history",
                         params,
+                        accepted_error_statuses=frozenset({400, 404}),
                     )
 
             await asyncio.gather(

@@ -6,7 +6,7 @@ import asyncio
 import hashlib
 import json
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -37,7 +37,7 @@ class CollectionSummary:
 
 
 def _safe_json_object(response: SourceResponse) -> Mapping[str, Any]:
-    if response.status_code == 404:
+    if response.status_code != 200:
         return {}
     payload = response.json()
     if not isinstance(payload, dict):
@@ -93,7 +93,7 @@ async def collect_markets_async(
 
     client = PolymarketClient(config.api)
     gamma_responses = await client.list_closed_markets(
-        end_date_min=config.study.study_start,
+        end_date_min=max(config.study.study_start, config.api.history_start),
         end_date_max=config.study.data_cutoff,
     )
     provenance: list[ProvenanceRecord] = []
@@ -101,8 +101,10 @@ async def collect_markets_async(
     for page_index, response in enumerate(gamma_responses):
         provenance.append(_provenance(f"gamma_page_{page_index:04d}", response))
         payload = response.json()
+        if isinstance(payload, dict):
+            payload = payload.get("markets")
         if not isinstance(payload, list):
-            raise TypeError("Gamma page must contain an array")
+            raise TypeError("Gamma page must contain a markets array")
         gamma_rows.extend(
             {str(key): value for key, value in row.items()}
             for row in payload
@@ -206,10 +208,19 @@ async def collect_markets_async(
         price_points.extend(points)
         exclusions.extend(point_exclusions)
 
-    market_frame = _records_frame(markets)
-    price_frame = _records_frame(price_points)
+    market_frame = _records_frame(
+        markets,
+        [field.name for field in fields(MarketRecord)],
+    )
+    price_frame = _records_frame(
+        price_points,
+        [field.name for field in fields(PricePoint)],
+    )
     exclusion_frame = _records_frame(exclusions, ["market_id", "reason", "detail"])
-    provenance_frame = _records_frame(provenance)
+    provenance_frame = _records_frame(
+        provenance,
+        [field.name for field in fields(ProvenanceRecord)],
+    )
 
     event_frame = (
         market_frame.groupby("event_id", as_index=False)

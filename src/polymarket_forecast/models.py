@@ -639,10 +639,13 @@ def fit_ablation_predictions(
     train: pd.DataFrame,
     test: pd.DataFrame,
     config: ProjectConfig,
+    *,
+    selected_name: str,
+    ensemble_weights: dict[str, float] | None = None,
 ) -> pd.DataFrame:
-    """Fit preregistered ablations with one fixed residual specification."""
+    """Refit the locked model family after removing preregistered feature sets."""
     settings = {
-        "full_residual": {},
+        "full_model": {},
         "without_text": {"include_text": False},
         "without_trajectory": {"include_trajectory": False},
         "without_category": {"include_category": False},
@@ -652,12 +655,29 @@ def fit_ablation_predictions(
         "market_only": test["market_probability"].to_numpy(dtype=float)
     }
     for name, options in settings.items():
-        definitions = candidate_definitions(config, **options)
-        residuals = [item for item in definitions if item.family == "market_residual"]
-        definition = min(
-            residuals,
-            key=lambda item: abs(float(item.name.rsplit("c", maxsplit=1)[-1]) - 1.0),
-        )
-        model = _fit_candidate(definition, train)
-        output[name] = _positive_probability(model, test, config.model.probability_clip)
+        definitions = {
+            definition.name: definition for definition in candidate_definitions(config, **options)
+        }
+        if selected_name == "ensemble":
+            if not ensemble_weights:
+                raise ValueError("Ensemble ablation requires locked component weights")
+            component_predictions = {}
+            for component in ensemble_weights:
+                model = _fit_candidate(definitions[component], train)
+                component_predictions[component] = _positive_probability(
+                    model,
+                    test,
+                    config.model.probability_clip,
+                )
+            ensemble_probability = np.zeros(len(test), dtype=float)
+            for component, weight in ensemble_weights.items():
+                ensemble_probability += weight * component_predictions[component]
+            output[name] = ensemble_probability
+        else:
+            model = _fit_candidate(definitions[selected_name], train)
+            output[name] = _positive_probability(
+                model,
+                test,
+                config.model.probability_clip,
+            )
     return pd.DataFrame(output, index=test.index)

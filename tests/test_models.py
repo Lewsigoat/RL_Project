@@ -33,6 +33,8 @@ def test_candidate_development_locking_and_ablations(
         primary.iloc[splits.final_train_indices],
         holdout,
         small_config,
+        selected_name=development.selected_name,
+        ensemble_weights=development.ensemble_weights,
     )
 
     assert not development.scoreboard.empty
@@ -49,7 +51,7 @@ def test_candidate_development_locking_and_ablations(
     assert ((predictions > 0) & (predictions < 1)).all().all()
     assert set(ablations) == {
         "market_only",
-        "full_residual",
+        "full_model",
         "without_text",
         "without_trajectory",
         "without_category",

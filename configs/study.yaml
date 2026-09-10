@@ -13,6 +13,7 @@ study:
 api:
   gamma_base_url: "https://gamma-api.polymarket.com"
   clob_base_url: "https://clob.polymarket.com"
+  history_start: "2026-04-29T00:00:00Z"
   page_size: 100
   max_markets: 2500
   request_timeout_seconds: 30
@@ -20,7 +21,19 @@ api:
   concurrency: 8
   price_fidelity_minutes: 60
   history_lookback_days: 45
+  monthly_stratified_sampling: true
+  sampling_order: "volumeNum"
   user_agent: "polymarket-forecast-study/0.1 (+research)"
+
+historical:
+  enabled: true
+  repository: "TimeSeventeen/Polymarket-v1"
+  revision: "5aa1b9d52316a8b2e789e81c8ae42c7ed532e8aa"
+  layer: "daily_aligned"
+  start_date: "2024-01-01T00:00:00Z"
+  end_date: "2026-04-28T23:59:59Z"
+  download_concurrency: 8
+  license: "CC-BY-4.0"
 
 model:
   random_seed: 20260910

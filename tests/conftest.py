@@ -25,6 +25,7 @@ def small_config(tmp_path: Path) -> ProjectConfig:
             bootstrap_repetitions=199,
             power_repetitions=200,
         ),
+        historical=replace(config.historical, enabled=False),
         paths=replace(
             config.paths,
             data_uri=str(tmp_path / "data"),

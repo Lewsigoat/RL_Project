@@ -74,9 +74,11 @@ stellt chain-abgeleitete V1-Fills und CTF-Lebenszyklusdaten von November 2022
 bis April 2026 als Parquet bereit [@polymarketv1_2026]. Der Datensatz ist eine
 wichtige Referenz für Auflösungsprovenienz und Maker-/Taker-Analyse. Er
 enthält jedoch kein vollständiges historisches Limit-Orderbuch, endet mit der
-V2-Migration und ist für den kompakten Standardlauf dieser Arbeit unnötig
-groß. Der implementierte Collector nutzt deshalb offizielle APIs und kann
-später durch eine gepinnte Polymarket-v1-Quelle ergänzt werden.
+V2-Migration und ist als vollständiger Trade-Tape groß. Diese Arbeit pinnt
+deshalb die CC-BY-4.0-Revision
+`5aa1b9d52316a8b2e789e81c8ae42c7ed532e8aa`, lädt nur die tägliche,
+bereinigte Standard-Binary-Schicht und aggregiert sie per DuckDB direkt zu
+Cutoff-Merkmalen. V2-Märkte werden separat über die offiziellen APIs ergänzt.
 
 ### Domain-spezifische Kalibration
 

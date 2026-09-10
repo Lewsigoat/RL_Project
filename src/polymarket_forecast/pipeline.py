@@ -16,6 +16,10 @@ import pandas as pd
 from polymarket_forecast.cohort import CohortResult, build_cohort
 from polymarket_forecast.config import ProjectConfig
 from polymarket_forecast.data.collector import CollectionSummary, collect_markets
+from polymarket_forecast.data.historical import (
+    build_historical_v1_cohort,
+    collect_historical_v1,
+)
 from polymarket_forecast.data.storage import ResearchStorage
 from polymarket_forecast.evaluation.analysis import EvaluationBundle, evaluate_predictions
 from polymarket_forecast.evaluation.bootstrap import (
@@ -39,6 +43,8 @@ from polymarket_forecast.splits import SplitPlan, make_walk_forward_splits
 class BuildSummary:
     data_run_id: str
     cohort_rows: int
+    api_cohort_rows: int
+    historical_cohort_rows: int
     primary_rows: int
     event_groups: int
     exclusions: int
@@ -100,11 +106,23 @@ def collect_data(
     *,
     run_id: str | None = None,
 ) -> CollectionSummary:
-    return collect_markets(
+    storage = ResearchStorage(config.paths.data_uri)
+    summary = collect_markets(
         config,
-        ResearchStorage(config.paths.data_uri),
+        storage,
         run_id=run_id,
     )
+    historical = collect_historical_v1(
+        config,
+        storage,
+        run_id=summary.run_id,
+    )
+    if historical is not None:
+        storage.write_json(
+            f"processed/{summary.run_id}/historical_collection_summary.json",
+            asdict(historical),
+        )
+    return summary
 
 
 def build_dataset(
@@ -118,15 +136,33 @@ def build_dataset(
     markets = data_storage.read_parquet(f"{prefix}/markets.parquet")
     prices = data_storage.read_parquet(f"{prefix}/price_points.parquet")
     result: CohortResult = build_cohort(markets, prices, config)
-    cohort_hash = data_storage.write_parquet(f"{prefix}/cohort.parquet", result.cohort)
+    historical = (
+        build_historical_v1_cohort(
+            config,
+            data_storage,
+            run_id=resolved_run_id,
+        )
+        if config.historical.enabled
+        else pd.DataFrame(columns=result.cohort.columns)
+    )
+    combined = pd.concat([historical, result.cohort], ignore_index=True)
+    if not combined.empty:
+        combined = (
+            combined.sort_values(["forecast_cutoff", "market_id", "horizon_days"])
+            .drop_duplicates(["market_id", "horizon_days"], keep="last")
+            .reset_index(drop=True)
+        )
+    cohort_hash = data_storage.write_parquet(f"{prefix}/cohort.parquet", combined)
     data_storage.write_parquet(
         f"{prefix}/cohort_exclusions.parquet",
         result.exclusions,
     )
-    primary = result.cohort.loc[result.cohort["horizon_days"] == config.study.primary_horizon_days]
+    primary = combined.loc[combined["horizon_days"] == config.study.primary_horizon_days]
     summary = BuildSummary(
         data_run_id=resolved_run_id,
-        cohort_rows=int(len(result.cohort)),
+        cohort_rows=int(len(combined)),
+        api_cohort_rows=int(len(result.cohort)),
+        historical_cohort_rows=int(len(historical)),
         primary_rows=int(len(primary)),
         event_groups=int(primary["event_group_id"].nunique()),
         exclusions=int(len(result.exclusions)),
@@ -436,7 +472,13 @@ def evaluate_study(
 
     final_train = primary.iloc[splits.final_train_indices]
     holdout = primary.iloc[splits.holdout_indices]
-    ablations = fit_ablation_predictions(final_train, holdout, config)
+    ablations = fit_ablation_predictions(
+        final_train,
+        holdout,
+        config,
+        selected_name=development.selected_name,
+        ensemble_weights=development.ensemble_weights,
+    )
     ablation_rows = []
     for column in ablations:
         loss = (ablations[column].to_numpy() - holdout["label"].to_numpy()) ** 2
