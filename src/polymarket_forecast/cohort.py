@@ -13,6 +13,38 @@ import pandas as pd
 
 from polymarket_forecast.config import ProjectConfig
 
+COHORT_COLUMNS = [
+    "market_id",
+    "event_id",
+    "event_group_id",
+    "question_fingerprint",
+    "horizon_days",
+    "forecast_cutoff",
+    "price_timestamp",
+    "price_age_hours",
+    "market_probability",
+    "market_logit",
+    "price_return_24h",
+    "price_return_7d",
+    "price_mean_7d",
+    "price_std_7d",
+    "price_min_7d",
+    "price_max_7d",
+    "history_points_7d",
+    "contract_age_days",
+    "time_to_event_days",
+    "question_length",
+    "description_length",
+    "text",
+    "category",
+    "neg_risk",
+    "label",
+    "label_source",
+    "created_at",
+    "event_time",
+    "closed_time",
+]
+
 
 @dataclass(frozen=True)
 class CohortResult:
@@ -179,7 +211,7 @@ def build_cohort(
                 }
             )
 
-    cohort = pd.DataFrame(rows)
+    cohort = pd.DataFrame(rows, columns=COHORT_COLUMNS)
     if not cohort.empty:
         cohort = cohort.sort_values(
             ["forecast_cutoff", "event_group_id", "market_id", "horizon_days"]

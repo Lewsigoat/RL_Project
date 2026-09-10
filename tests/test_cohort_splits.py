@@ -21,6 +21,17 @@ def test_cohort_uses_only_fresh_past_prices(small_config: ProjectConfig) -> None
     assert not {"final_volume", "final_liquidity"}.intersection(result.cohort.columns)
 
 
+def test_empty_eligible_cohort_retains_schema(small_config: ProjectConfig) -> None:
+    markets, prices = synthetic_source_frames(event_count=1)
+    prices = prices.iloc[0:0]
+
+    result = build_cohort(markets, prices, small_config)
+
+    assert result.cohort.empty
+    assert "horizon_days" in result.cohort
+    assert len(result.exclusions) == len(small_config.study.horizons_days)
+
+
 def test_cohort_audit_rejects_future_price(small_config: ProjectConfig) -> None:
     markets, prices = synthetic_source_frames(event_count=4)
     cohort = build_cohort(markets, prices, small_config).cohort
