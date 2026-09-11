@@ -132,6 +132,7 @@ def simulate_study_returns(
         "oof_unit": oof_summary,
         "holdout_unit": unit_summary,
         "holdout_compounding": compound_summary,
+        "cost_sensitivity": costs.to_dict(orient="records"),
         "tests": {
             "strategy_pnl_vs_cash": strategy_test.to_dict(),
             "excess_pnl_vs_favorite": excess_test.to_dict(),
@@ -173,6 +174,25 @@ def _format_signed(value: float, digits: int = 4) -> str:
     return f"{value:.{digits}f}"
 
 
+def _cost_table(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return "_Cost-sensitivity table unavailable._"
+    header = [
+        "| Half-spread | Taker fee | Trades | Return on deployed | Total PnL |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    body = [
+        "| "
+        f"{_format_signed(float(row['half_spread']), 2)} | "
+        f"{_format_signed(float(row['taker_fee_rate']), 2)} | "
+        f"{int(row['trades'])} | "
+        f"{_format_signed(float(row['return_on_deployed']))} | "
+        f"{_format_signed(float(row['total_strategy_pnl']))} |"
+        for row in rows
+    ]
+    return "\n".join([*header, *body])
+
+
 def generate_return_report(
     summary: dict[str, Any],
     *,
@@ -181,8 +201,10 @@ def generate_return_report(
     """Write a standalone English diagnostic report for the trading simulation."""
     locked = summary["locked_spec"]
     unit = summary["holdout_unit"]
+    oof = summary["oof_unit"]
     compound = summary["holdout_compounding"]
     tests = summary["tests"]
+    costs = summary.get("cost_sensitivity", [])
     cash_test: dict[str, Any] = tests["strategy_pnl_vs_cash"]
     favorite_test: dict[str, Any] = tests["excess_pnl_vs_favorite"]
     destination = Path(report_path)
@@ -230,6 +252,12 @@ This book is path-independent and is the primary economic diagnostic.
 - Total excess vs favorite: {_format_signed(unit["total_excess_pnl"])}
 - Return on deployed capital: {_format_signed(unit["return_on_deployed"])}
 
+Development OOF lock (unit book, not the holdout): {oof["trades"]} trades,
+return on deployed {_format_signed(oof["return_on_deployed"])}, hit rate
+{_format_signed(oof["hit_rate"])}. The lock is thin; Kelly and stake caps
+do not change the unit-book score, so the smallest conservative size in
+the winning edge bucket was kept.
+
 Mean event strategy PnL vs cash: {_format_signed(cash_test["mean"])},
 one-sided p = {_format_signed(cash_test["p_value_one_sided"])},
 95% interval [{_format_signed(cash_interval[0])}, {_format_signed(cash_interval[1])}].
@@ -251,6 +279,16 @@ reserve cash until resolution; new trades can spend only free cash.
 - Compound return: {_format_signed(compound.get("compound_return", float("nan")))}
 - Max drawdown: {_format_signed(compound.get("max_drawdown", float("nan")))}
 - Weekly Sharpe: {_format_signed(compound.get("weekly_sharpe", float("nan")))}
+
+The compounding path is an illustration, not the inferential test. Paper
+Sharpe values ignore capacity, latency, and correlated fill risk.
+
+## Cost sensitivity on the locked signals
+
+Holdout unit-book return on deployed capital after changing costs. This
+grid is diagnostic and was not used to pick the strategy.
+
+{_cost_table(costs)}
 
 ## Limits
 
