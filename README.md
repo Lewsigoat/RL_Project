@@ -31,6 +31,14 @@ python3 -m venv .venv
 .venv/bin/polymarket-study run --config configs/study.yaml
 ```
 
+A separate, post-hoc paper-trading diagnostic locks an edge/Kelly book on
+development out-of-fold forecasts and then simulates holdout excess returns
+after spread and fees:
+
+```bash
+.venv/bin/polymarket-study simulate-returns --config configs/study.yaml
+```
+
 Ein bestehender Daten-Run kann ohne erneuten API-Abruf reproduziert werden:
 
 ```bash
