@@ -14,7 +14,10 @@ preregistered Brier decision.
 - `holdout_equity.csv`: cash, reserved capital, and equity path.
 - `holdout_event_returns.csv`: event-collapsed PnL for block inference.
 - `cost_sensitivity.csv`: holdout unit-book results under alternate costs.
-- `equity_curve.png`, `excess_pnl_histogram.png`, `cost_sensitivity.png`.
+- `fee_risk_adjusted.csv`: Sharpe, Sortino, information ratio, CAGR, and
+  Calmar at the locked half-spread across taker-fee levels.
+- `equity_curve.png`, `excess_pnl_histogram.png`, `cost_sensitivity.png`,
+  `fee_risk_adjusted.png`.
 
 The written interpretation is in
 [`../../excess_return_simulation.md`](../../excess_return_simulation.md).

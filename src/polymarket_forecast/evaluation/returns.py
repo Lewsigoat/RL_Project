@@ -305,12 +305,12 @@ def max_drawdown(equity: pd.Series) -> float:
     return float(drawdown.min())
 
 
-def weekly_sharpe(equity: pd.DataFrame) -> float:
+def weekly_equity_returns(equity: pd.DataFrame) -> pd.Series:
     if equity.empty or len(equity) < 3:
-        return float("nan")
+        return pd.Series(dtype=float)
     curve = equity.copy()
     curve["timestamp"] = pd.to_datetime(curve["timestamp"], utc=True)
-    weekly = (
+    return (
         curve.set_index("timestamp")["equity"]
         .sort_index()
         .resample("W-SUN")
@@ -319,9 +319,70 @@ def weekly_sharpe(equity: pd.DataFrame) -> float:
         .pct_change()
         .dropna()
     )
-    if len(weekly) < 2 or float(weekly.std(ddof=1)) == 0:
+
+
+def weekly_trade_returns(
+    trades: pd.DataFrame,
+    *,
+    pnl_column: str = "strategy_pnl",
+) -> pd.Series:
+    """Deployed-capital returns by resolution week. Risk-free rate is cash, 0."""
+    if trades.empty:
+        return pd.Series(dtype=float)
+    working = trades.copy()
+    time_column = "event_time" if "event_time" in working.columns else "forecast_cutoff"
+    working[time_column] = pd.to_datetime(working[time_column], utc=True)
+    working["week"] = working[time_column].dt.tz_localize(None).dt.to_period("W-SUN")
+    weekly = working.groupby("week", as_index=False).agg(
+        pnl=(pnl_column, "sum"),
+        deployed=("cash_outlay", "sum"),
+    )
+    deployed = weekly["deployed"].to_numpy(dtype=float)
+    pnl = weekly["pnl"].to_numpy(dtype=float)
+    returns = np.divide(pnl, deployed, out=np.zeros(len(weekly), dtype=float), where=deployed > 0)
+    return pd.Series(returns, dtype=float)
+
+
+def sharpe_ratio(returns: pd.Series | np.ndarray, *, periods_per_year: int = 52) -> float:
+    values = np.asarray(returns, dtype=float)
+    values = values[np.isfinite(values)]
+    if len(values) < 2:
         return float("nan")
-    return float(weekly.mean() / weekly.std(ddof=1) * np.sqrt(52))
+    volatility = float(values.std(ddof=1))
+    if volatility < 1e-12:
+        return float("nan")
+    return float(values.mean() / volatility * np.sqrt(periods_per_year))
+
+
+def sortino_ratio(returns: pd.Series | np.ndarray, *, periods_per_year: int = 52) -> float:
+    values = np.asarray(returns, dtype=float)
+    values = values[np.isfinite(values)]
+    downside = values[values < 0]
+    if len(values) < 2 or len(downside) < 1:
+        return float("nan")
+    downside_vol = float(downside.std(ddof=1))
+    if downside_vol < 1e-12:
+        return float("nan")
+    return float(values.mean() / downside_vol * np.sqrt(periods_per_year))
+
+
+def annualized_return(compound_return: float, weeks: float) -> float:
+    if weeks < 1 or not np.isfinite(compound_return) or compound_return <= -1:
+        return float("nan")
+    return float((1.0 + compound_return) ** (52.0 / weeks) - 1.0)
+
+
+def calmar_ratio(compound_return: float, drawdown: float, weeks: float) -> float:
+    if not np.isfinite(compound_return) or not np.isfinite(drawdown) or drawdown >= 0:
+        return float("nan")
+    growth = annualized_return(compound_return, weeks)
+    if not np.isfinite(growth):
+        return float("nan")
+    return float(growth / abs(drawdown))
+
+
+def weekly_sharpe(equity: pd.DataFrame) -> float:
+    return sharpe_ratio(weekly_equity_returns(equity))
 
 
 def summarize_book(
@@ -353,13 +414,37 @@ def summarize_book(
         summary["return_on_deployed"] = (
             summary["total_strategy_pnl"] / summary["deployed_capital"]
         )
+    strategy_weeks = weekly_trade_returns(trades, pnl_column="strategy_pnl")
+    excess_weeks = weekly_trade_returns(trades, pnl_column="excess_pnl")
+    summary["weeks"] = int(len(strategy_weeks))
+    summary["weekly_sharpe"] = sharpe_ratio(strategy_weeks)
+    summary["weekly_sortino"] = sortino_ratio(strategy_weeks)
+    summary["information_ratio"] = sharpe_ratio(excess_weeks)
     if equity is not None and not equity.empty and starting_bankroll is not None:
         final_equity = float(equity["equity"].iloc[-1])
+        equity_weeks = weekly_equity_returns(equity)
+        timestamps = pd.to_datetime(equity["timestamp"], utc=True)
+        span_weeks = max(
+            float((timestamps.max() - timestamps.min()) / pd.Timedelta(days=7)),
+            1.0,
+        )
         summary["starting_bankroll"] = starting_bankroll
         summary["final_equity"] = final_equity
         summary["compound_return"] = final_equity / starting_bankroll - 1.0
         summary["max_drawdown"] = max_drawdown(equity["equity"])
-        summary["weekly_sharpe"] = weekly_sharpe(equity)
+        summary["equity_weeks"] = int(len(equity_weeks))
+        summary["calendar_weeks"] = span_weeks
+        summary["weekly_sharpe"] = sharpe_ratio(equity_weeks)
+        summary["weekly_sortino"] = sortino_ratio(equity_weeks)
+        summary["annualized_return"] = annualized_return(
+            summary["compound_return"],
+            span_weeks,
+        )
+        summary["calmar"] = calmar_ratio(
+            summary["compound_return"],
+            summary["max_drawdown"],
+            span_weeks,
+        )
     return summary
 
 
@@ -425,4 +510,44 @@ def cost_sensitivity_table(
                     **summary,
                 }
             )
+    return pd.DataFrame(rows)
+
+
+def fee_risk_table(
+    predictions: pd.DataFrame,
+    locked: StrategySpec,
+    fees: tuple[float, ...],
+) -> pd.DataFrame:
+    """Locked-spread fee sweep with unit and compounding risk-adjusted returns."""
+    rows: list[dict[str, Any]] = []
+    for fee in fees:
+        spec = replace(locked, taker_fee_rate=fee)
+        signals = build_signals(predictions, spec)
+        unit_trades = simulate_unit_book(signals, spec)
+        compound_trades, equity = simulate_compounding_book(signals, spec)
+        unit = summarize_book(unit_trades)
+        compound = summarize_book(
+            compound_trades,
+            equity=equity,
+            starting_bankroll=spec.starting_bankroll,
+        )
+        rows.append(
+            {
+                "half_spread": spec.half_spread,
+                "taker_fee_rate": fee,
+                "unit_trades": unit["trades"],
+                "unit_weeks": unit["weeks"],
+                "unit_return_on_deployed": unit["return_on_deployed"],
+                "unit_weekly_sharpe": unit["weekly_sharpe"],
+                "unit_weekly_sortino": unit["weekly_sortino"],
+                "unit_information_ratio": unit["information_ratio"],
+                "compound_trades": compound["trades"],
+                "compound_return": compound.get("compound_return", float("nan")),
+                "compound_annualized_return": compound.get("annualized_return", float("nan")),
+                "compound_max_drawdown": compound.get("max_drawdown", float("nan")),
+                "compound_weekly_sharpe": compound.get("weekly_sharpe", float("nan")),
+                "compound_weekly_sortino": compound.get("weekly_sortino", float("nan")),
+                "compound_calmar": compound.get("calmar", float("nan")),
+            }
+        )
     return pd.DataFrame(rows)

@@ -8,12 +8,16 @@ import numpy as np
 import pandas as pd
 
 from polymarket_forecast.evaluation.returns import (
+    calmar_ratio,
     event_return_table,
+    fee_risk_table,
     max_drawdown,
     mean_return_test,
     select_strategy,
+    sharpe_ratio,
     simulate_compounding_book,
     simulate_unit_book,
+    sortino_ratio,
 )
 from polymarket_forecast.strategy import (
     StrategyConfig,
@@ -162,3 +166,25 @@ def test_strategy_yaml_loads() -> None:
     config = load_strategy_config("configs/strategy.yaml")
     assert config.name == "edge_threshold_fractional_kelly"
     assert len(config.candidates()) == 16
+    assert 0.05 in config.cost_taker_fee_rates
+
+
+def test_sharpe_sortino_and_calmar_known_values() -> None:
+    steady = pd.Series([0.009, 0.010, 0.011, 0.010])
+    mixed = pd.Series([0.02, -0.02, 0.02, -0.02])
+    assert sharpe_ratio(steady, periods_per_year=52) > 10
+    assert abs(sharpe_ratio(mixed, periods_per_year=52)) < 1e-12
+    mostly_up = pd.Series([0.02, 0.03, 0.01, -0.004, -0.006])
+    assert sortino_ratio(mostly_up, periods_per_year=52) > sharpe_ratio(
+        mostly_up, periods_per_year=52
+    )
+    assert abs(calmar_ratio(0.20, -0.10, 52.0) - 2.0) < 1e-12
+
+
+def test_fee_risk_table_one_row_per_fee() -> None:
+    fees = (0.0, 0.02, 0.05)
+    table = fee_risk_table(_predictions(), _spec(), fees)
+    assert list(table["taker_fee_rate"]) == list(fees)
+    zero_fee = float(table.loc[table["taker_fee_rate"] == 0.0, "unit_return_on_deployed"].iloc[0])
+    high_fee = float(table.loc[table["taker_fee_rate"] == 0.05, "unit_return_on_deployed"].iloc[0])
+    assert zero_fee >= high_fee

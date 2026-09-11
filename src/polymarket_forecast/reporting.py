@@ -751,7 +751,7 @@ def generate_return_plots(
                 group["half_spread"],
                 group["return_on_deployed"],
                 marker="o",
-                label=f"fee {float(cast(Any, fee)):.0%}",
+                label=f"fee {float(cast(Any, fee)):.1%}",
             )
         axis.axhline(0, color="black", linewidth=1)
         axis.set_title("Holdout return on deployed capital by cost assumption")
@@ -761,5 +761,46 @@ def generate_return_plots(
         axis.grid(alpha=0.25)
         paths.append(
             _save_figure(figure, storage, f"{prefix}/cost_sensitivity.png", destination)
+        )
+
+    fee_risk_path = f"{prefix}/fee_risk_adjusted.parquet"
+    if storage.exists(fee_risk_path):
+        fee_risk = storage.read_parquet(fee_risk_path)
+    else:
+        fee_risk = pd.DataFrame()
+    if not fee_risk.empty:
+        figure, axis = plt.subplots(figsize=(8.6, 4.8))
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["unit_weekly_sharpe"],
+            marker="o",
+            label="Unit-book Sharpe",
+        )
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["compound_weekly_sharpe"],
+            marker="s",
+            label="Compounding Sharpe",
+        )
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["unit_information_ratio"],
+            marker="^",
+            label="Information ratio vs favorite",
+        )
+        axis.axhline(0, color="black", linewidth=1)
+        axis.set_title("Annualized risk-adjusted returns versus taker fee")
+        axis.set_xlabel("Taker fee on cash spent")
+        axis.set_ylabel("Annualized ratio")
+        axis.legend()
+        axis.grid(alpha=0.25)
+        figure.text(
+            0.01,
+            -0.02,
+            "Locked 1-cent half-spread · weekly returns · cash as risk-free rate",
+            fontsize=8,
+        )
+        paths.append(
+            _save_figure(figure, storage, f"{prefix}/fee_risk_adjusted.png", destination)
         )
     return paths

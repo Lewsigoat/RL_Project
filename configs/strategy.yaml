@@ -20,7 +20,7 @@ grid:
 
 cost_sensitivity:
   half_spreads: [0.00, 0.01, 0.02, 0.03]
-  taker_fee_rates: [0.00, 0.01, 0.02]
+  taker_fee_rates: [0.00, 0.005, 0.01, 0.015, 0.02, 0.03, 0.05]
 
 inference:
   bootstrap_repetitions: 9999

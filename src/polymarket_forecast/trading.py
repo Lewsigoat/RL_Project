@@ -14,6 +14,7 @@ from polymarket_forecast.data.storage import ResearchStorage
 from polymarket_forecast.evaluation.returns import (
     cost_sensitivity_table,
     event_return_table,
+    fee_risk_table,
     mean_return_test,
     select_strategy,
     simulate_compounding_book,
@@ -97,6 +98,7 @@ def simulate_study_returns(
         alpha=inference.alpha,
     )
     costs = cost_sensitivity_table(holdout, locked, strategy)
+    fee_risk = fee_risk_table(holdout, locked, strategy.cost_taker_fee_rates)
     unit_summary = summarize_book(holdout_unit)
     compound_summary = summarize_book(
         holdout_compound,
@@ -113,6 +115,7 @@ def simulate_study_returns(
     report_storage.write_parquet(f"{prefix}/holdout_equity.parquet", equity)
     report_storage.write_parquet(f"{prefix}/holdout_event_returns.parquet", holdout_events)
     report_storage.write_parquet(f"{prefix}/cost_sensitivity.parquet", costs)
+    report_storage.write_parquet(f"{prefix}/fee_risk_adjusted.parquet", fee_risk)
 
     payload = {
         "schema_version": "1",
@@ -133,6 +136,7 @@ def simulate_study_returns(
         "holdout_unit": unit_summary,
         "holdout_compounding": compound_summary,
         "cost_sensitivity": costs.to_dict(orient="records"),
+        "fee_risk_adjusted": fee_risk.to_dict(orient="records"),
         "tests": {
             "strategy_pnl_vs_cash": strategy_test.to_dict(),
             "excess_pnl_vs_favorite": excess_test.to_dict(),
@@ -149,6 +153,7 @@ def simulate_study_returns(
     equity.to_csv(trading_export / "holdout_equity.csv", index=False)
     holdout_events.to_csv(trading_export / "holdout_event_returns.csv", index=False)
     costs.to_csv(trading_export / "cost_sensitivity.csv", index=False)
+    fee_risk.to_csv(trading_export / "fee_risk_adjusted.csv", index=False)
     _write_json(trading_export / "summary.json", payload)
 
     return ReturnSimulationSummary(
@@ -178,16 +183,43 @@ def _cost_table(rows: list[dict[str, Any]]) -> str:
     if not rows:
         return "_Cost-sensitivity table unavailable._"
     header = [
-        "| Half-spread | Taker fee | Trades | Return on deployed | Total PnL |",
-        "|---|---:|---:|---:|---:|",
+        "| Half-spread | Taker fee | Trades | RoC | Weekly Sharpe | Sortino | Info ratio |",
+        "|---|---:|---:|---:|---:|---:|---:|",
     ]
     body = [
         "| "
         f"{_format_signed(float(row['half_spread']), 2)} | "
-        f"{_format_signed(float(row['taker_fee_rate']), 2)} | "
+        f"{_format_signed(float(row['taker_fee_rate']), 3)} | "
         f"{int(row['trades'])} | "
         f"{_format_signed(float(row['return_on_deployed']))} | "
-        f"{_format_signed(float(row['total_strategy_pnl']))} |"
+        f"{_format_signed(float(row.get('weekly_sharpe', float('nan'))))} | "
+        f"{_format_signed(float(row.get('weekly_sortino', float('nan'))))} | "
+        f"{_format_signed(float(row.get('information_ratio', float('nan'))))} |"
+        for row in rows
+    ]
+    return "\n".join([*header, *body])
+
+
+def _fee_risk_table(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return "_Fee risk table unavailable._"
+    header = [
+        "| Fee | Unit RoC | Unit Sharpe | Unit Sortino | IR vs fav | "
+        "CAGR | Comp Sharpe | Comp Sortino | Max DD | Calmar |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    body = [
+        "| "
+        f"{_format_signed(float(row['taker_fee_rate']), 3)} | "
+        f"{_format_signed(float(row['unit_return_on_deployed']))} | "
+        f"{_format_signed(float(row['unit_weekly_sharpe']))} | "
+        f"{_format_signed(float(row['unit_weekly_sortino']))} | "
+        f"{_format_signed(float(row['unit_information_ratio']))} | "
+        f"{_format_signed(float(row['compound_annualized_return']))} | "
+        f"{_format_signed(float(row['compound_weekly_sharpe']))} | "
+        f"{_format_signed(float(row['compound_weekly_sortino']))} | "
+        f"{_format_signed(float(row['compound_max_drawdown']))} | "
+        f"{_format_signed(float(row['compound_calmar']))} |"
         for row in rows
     ]
     return "\n".join([*header, *body])
@@ -205,6 +237,7 @@ def generate_return_report(
     compound = summary["holdout_compounding"]
     tests = summary["tests"]
     costs = summary.get("cost_sensitivity", [])
+    fee_risk = summary.get("fee_risk_adjusted", [])
     cash_test: dict[str, Any] = tests["strategy_pnl_vs_cash"]
     favorite_test: dict[str, Any] = tests["excess_pnl_vs_favorite"]
     destination = Path(report_path)
@@ -283,10 +316,18 @@ reserve cash until resolution; new trades can spend only free cash.
 The compounding path is an illustration, not the inferential test. Paper
 Sharpe values ignore capacity, latency, and correlated fill risk.
 
-## Cost sensitivity on the locked signals
+## Risk-adjusted returns by fee
 
-Holdout unit-book return on deployed capital after changing costs. This
-grid is diagnostic and was not used to pick the strategy.
+Locked half-spread {locked["half_spread"]}. Sharpe and Sortino use weekly
+returns versus cash (risk-free rate 0) and are annualized with
+`sqrt(52)`. The information ratio uses weekly excess versus the matched
+favorite. Calmar is annualized compounding return divided by absolute
+max drawdown. This grid is diagnostic and was not used to pick the
+strategy.
+
+{_fee_risk_table(fee_risk)}
+
+Unit-book cost grid, including alternate spreads:
 
 {_cost_table(costs)}
 
