@@ -1,0 +1,37 @@
+{
+  "alpha": 0.05,
+  "block_length_weeks": 4,
+  "climatology": {
+    "baseline": "climatology",
+    "brier_skill_score": 0.5746206859569203,
+    "confidence_interval_two_sided_95": [
+      0.12559513618885776,
+      0.208763163785282
+    ],
+    "lower_bound_one_sided_95": 0.1288763332055019,
+    "mean_brier_improvement": 0.1481295250476162,
+    "p_value_one_sided": 0.0001,
+    "practically_relevant": true,
+    "superior_at_alpha": true
+  },
+  "effective_weeks": 30,
+  "event_groups": 675,
+  "global_intersection_union_p": 0.053,
+  "market": {
+    "baseline": "market",
+    "brier_skill_score": 0.07474693231939367,
+    "confidence_interval_two_sided_95": [
+      0.0009502808421992207,
+      0.019613863367092643
+    ],
+    "lower_bound_one_sided_95": 0.002048972785766627,
+    "mean_brier_improvement": 0.008858691555161152,
+    "p_value_one_sided": 0.053,
+    "practically_relevant": false,
+    "superior_at_alpha": false
+  },
+  "minimum_practical_effect": 0.005,
+  "practically_superior_to_both": false,
+  "repetitions": 9999,
+  "superior_to_both": false
+}

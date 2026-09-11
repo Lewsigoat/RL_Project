@@ -1,0 +1,78 @@
+study:
+  protocol_version: "2.0"
+  study_start: "2022-11-21T00:00:00Z"
+  data_cutoff: "2026-08-31T23:59:59Z"
+  horizons_days: [7, 30, 1]
+  primary_horizon_days: 7
+  max_price_staleness_hours: 6
+  holdout_fraction: 0.20
+  split_strategy: "strict_chronological_groups"
+  development_folds: 5
+  minimum_inner_train_groups: 50
+  embargo_days: 30
+  include_neg_risk: true
+  enforce_fingerprint_isolation: true
+
+api:
+  gamma_base_url: "https://gamma-api.polymarket.com"
+  clob_base_url: "https://clob.polymarket.com"
+  data_base_url: "https://data-api.polymarket.com"
+  history_start: "2026-04-29T00:00:00Z"
+  page_size: 100
+  full_inventory: true
+  max_markets: null
+  request_timeout_seconds: 30
+  max_retries: 4
+  concurrency: 12
+  price_fidelity_minutes: 60
+  history_lookback_days: 45
+  monthly_stratified_sampling: false
+  sampling_order: "endDate"
+  collect_trades: true
+  trade_page_size: 10000
+  user_agent: "polymarket-forecast-study/0.2 (+research)"
+
+historical:
+  enabled: true
+  repository: "TimeSeventeen/Polymarket-v1"
+  revision: "5aa1b9d52316a8b2e789e81c8ae42c7ed532e8aa"
+  layer: "daily_aligned"
+  additional_layers: ["daily_aligned_multi"]
+  start_date: "2022-11-21T00:00:00Z"
+  end_date: "2026-04-28T23:59:59Z"
+  download_concurrency: 8
+  license: "CC-BY-4.0"
+
+corpus:
+  contract_metadata_coverage_target: 0.95
+  resolution_coverage_target: 0.95
+  partition_rows: 250000
+  retain_wallets: false
+  derive_prices_from_trades: true
+
+model:
+  random_seed: 20260910
+  text_max_features: 20000
+  text_min_document_frequency: 2
+  logistic_c_values: [0.01, 0.1, 1.0, 10.0]
+  residual_l2_values: [0.1, 1.0, 10.0, 100.0]
+  boosting_learning_rates: [0.02, 0.05]
+  boosting_leaf_nodes: [15, 31]
+  ensemble_minimum_brier_gain: 0.001
+  category_prior_strength: 20.0
+  probability_clip: 0.000001
+
+inference:
+  alpha: 0.05
+  minimum_practical_effect: 0.005
+  bootstrap_repetitions: 9999
+  block_length_weeks: 4
+  robustness_block_lengths_weeks: [2, 8, 13]
+  power_repetitions: 5000
+  target_power: 0.90
+  minimum_effective_weeks: 30
+
+paths:
+  data_uri: "data"
+  artifacts_uri: "artifacts"
+  reports_uri: "reports/generated"

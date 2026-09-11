@@ -1,0 +1,12 @@
+{
+  "data_run_id": "real-20260910-v2",
+  "effective_weeks": 30,
+  "global_p_value": 0.053,
+  "holdout_event_groups": 675,
+  "holdout_rows": 889,
+  "practically_superior_to_both": false,
+  "required_weeks_for_target_power": null,
+  "selected_model": "ensemble",
+  "study_run_id": "study-reproduction-20260910",
+  "superior_to_both": false
+}

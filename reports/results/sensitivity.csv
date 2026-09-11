@@ -1,0 +1,5 @@
+analysis,contracts,event_groups,market_improvement,climatology_improvement,effective_weeks,status,market_p_value,climatology_p_value,global_p_value,superior_to_both
+contract_weighted,889,675,0.003161959517352922,0.14480510606877284,,,,,,
+clob_winner_labels_only,63,55,0.0164557819194546,0.12688111013729442,3.0,ok,0.0001,0.0001,0.0001,True
+exclude_neg_risk,830,624,0.008040439140244252,0.14807937045601746,29.0,ok,0.0839,0.0001,0.0839,False
+remove_largest_event,878,674,0.008845164935215208,0.147921648862891,30.0,ok,0.0537,0.0001,0.0537,False
