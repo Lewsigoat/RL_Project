@@ -1,5 +1,135 @@
 # Präregistriertes Analyseprotokoll
 
+## Geltendes Protokoll 2.0: erweiterter 80/20-Lauf
+
+Version: 2.0
+Festgelegt: 11. September 2026, vor Erhebung der erweiterten V2-Daten und vor
+Training des neuen Modells
+Primärkonfiguration: `configs/study.yaml`
+
+Das Protokoll 2.0 ersetzt für den neuen Lauf die Split- und Modellregeln des
+Vorgängers. Die bereits veröffentlichten Resultate aus Version 1.3 bleiben
+als Entwicklungswissen erhalten. Weil sich die neue historische Testperiode
+mit früher inspizierten Ereignissen überschneiden kann, ist der 80/20-Lauf
+ein stärkerer retrospektiver Benchmark, aber kein vollständig neuer
+konfirmatorischer Nachweis. Eine nach Modellsperre erhobene prospektive
+Kohorte bleibt die definitive Bestätigung.
+
+### Forschungsfrage und Primärziel
+
+Kann ein skalierbares Modell mit ausschließlich am Cutoff verfügbaren
+Vertrags-, Preis- und Handelsflussdaten den Ausgang späterer binärer
+Polymarket-Verträge besser vorhersagen als sowohl der rohe zeitgleiche
+Marktpreis als auch eine ausschließlich auf früheren Trainingsdaten
+angepasste Marktkalibration?
+
+Primär sind Verträge sieben Tage vor dem festgelegten Ereignisanker. Die
+gepaarte, innerhalb logischer Eventgruppen gemittelte
+Brier-Verbesserung lautet
+
+\[
+\Delta_b=E_g[BS(p_b,Y)-BS(p_M,Y)].
+\]
+
+Ein positiver Wert spricht für das Modell. Die Gesamtbehauptung erfordert:
+
+1. einseitig \(p<0{,}05\) gegen den rohen Markt,
+2. einseitig \(p<0{,}05\) gegen den past-only kalibrierten Markt,
+3. positive einseitige 95%-Untergrenzen beider Effekte,
+4. keine wesentliche Verschlechterung von Log Loss oder Kalibration und
+5. robuste Richtung in V1-, V2-, Standard- und NegRisk-Sensitivitäten.
+
+Die minimale praktisch relevante Brier-Verbesserung bleibt 0,005. Ein
+niedrigerer Testverlust allein ist kein Erfolgsnachweis.
+
+### Corpus und Abdeckung
+
+Der Datenkorpus soll nahezu vollständig sein, nicht jeder Vertrag muss
+modellierbar sein:
+
+- V1: gepinnte CC-BY-4.0-Schichten `daily_aligned` und
+  `daily_aligned_multi` ab 21. November 2022 bis zur V2-Migration.
+- V2: vollständige Gamma-Keyset-Inventarisierung bis zum Daten-Cutoff,
+  kanonische Gewinner-/Auflösungsdaten und verfügbare Exchange-Fills.
+- Alle bekannten Verträge bleiben im Coverage-Ledger, auch wenn sie keinen
+  frischen 1-/7-/30-Tage-Preis besitzen.
+- 50/50-, void-, widersprüchliche oder nicht eindeutig aufgelöste Verträge
+  werden als Ausschluss protokolliert, nicht still entfernt.
+- Vollständige historische Limit-Orderbücher sind nicht Teil des
+  Vollständigkeitsanspruchs, da off-chain Resting Orders und Cancels nicht
+  aus der Blockchain rekonstruiert werden können.
+
+Zielwerte sind mindestens 95 % Metadaten- und 95 % Labelabdeckung relativ
+zum inventarisierten Universum. Preis-/Trade-Abdeckung wird separat
+ausgewiesen und ist eine Eigenschaft der Marktaktivität, kein
+Collector-Erfolgskriterium.
+
+### Strikter äußerer 80/20-Split
+
+1. Gamma-Event-ID, NegRisk-Parent, logische Familie und
+   Frage-Fingerprint werden vor dem Split zu unteilbaren Gruppen verbunden.
+2. Gruppen werden nach ihrem ersten Prognose-Cutoff und danach stabil nach
+   Gruppen-ID sortiert.
+3. Exakt die ersten \(G-\lceil0{,}20G\rceil\) Gruppen bilden Entwicklung und
+   Training; exakt die letzten \(\lceil0{,}20G\rceil\) Gruppen bilden den
+   Test.
+4. Unterschiedliche Gruppengrößen dürfen das Zeilenverhältnis von 80/20
+   abweichen lassen; maßgeblich ist das Gruppenverhältnis.
+5. Die Mindestzahl von 30 beobachteten Testwochen ist nur ein
+   Evidenz-/Power-Gate. Sie darf den Split nicht verschieben.
+6. Kein Testscore und keine Testprognose wird während Modellauswahl,
+   Kalibration, Ensembling oder Featureauswahl gelesen.
+
+Innerhalb der ersten 80 % werden fünf purged Expanding-Window-Folds
+verwendet. Jeder innere Trainingsfold muss mindestens 50 Eventgruppen
+enthalten. Trainingslabels müssen mindestens 30 Tage vor dem ersten
+Validierungscutoff aufgelöst sein. Imputer, Skalierer, Texttransformation,
+Kalibratoren, Hyperparameter und Ensemblegewichte werden pro Fold neu
+angepasst.
+
+### Features und Modelle
+
+Zulässig sind nur am Cutoff bekannte Werte: letzter Referenztokenpreis,
+Preisänderungen über 1/3/7/14/30 Tage, Volatilität, Range, Tradeanzahl,
+as-of Notional, Aktivitäts- und Imbalance-Maße, Staleness-/Missingness-Flags,
+Vertragsalter, Kalenderregime, Kategorie, Exchange-Version und
+Quellenindikatoren. Terminales Gamma-Volumen, terminale Liquidität,
+Gewinnerfelder und post-cutoff Metadaten bleiben verboten.
+
+Kandidaten sind:
+
+- rohe und Platt-/isotonisch kalibrierte Marktbaselines,
+- ein past-only Markt–Basisraten-Blend,
+- regularisierte Markt-Logit-Offsetmodelle,
+- gradientengeboostete Residualmodelle,
+- ein separat bewerteter stabiler Text-Embedding-Kandidat und
+- ein Ensemble nur bei mindestens 0,001 OOF-Brier-Gewinn gegenüber dem
+  besten Einzelresidual.
+
+Die gesperrte Pipeline wird auf allen labelverfügbaren Zeilen der ersten
+80 % neu angepasst und genau einmal auf den letzten 20 % ausgewertet.
+
+### Inferenz, Power und Bericht
+
+Der Primärendpunkt ist eventgewichteter Brier Score. Sekundär werden Log
+Loss, Kalibrationsintercept/-steigung, Reliability, Sharpness,
+vertraggewichtete Effekte, andere Horizonte, Kategorien, Liquidität,
+Quelle und NegRisk berichtet. Zeitliche Abhängigkeit wird mit einem
+Wochenblock-Bootstrap behandelt; sekundäre Hypothesen werden mit Holm
+korrigiert.
+
+Power- und Typ-I-Fehler-Simulationen verwenden ausschließlich innere
+Out-of-fold-Residuals und werden vor dem äußeren Test ausgeführt. Falls die
+letzten 20 % weniger als 30 beobachtete Wochen oder weniger als 90 %
+simulierte Power bei der Mindestwirkung liefern, wird das Resultat als
+unterpowert gekennzeichnet; der Split bleibt trotzdem unverändert.
+
+## Archiviertes Protokoll 1.3
+
+Das folgende Protokoll regelt ausschließlich den bereits abgeschlossenen
+Vorgängerlauf `study-reproduction-20260910` und darf nicht zur Interpretation
+des neuen 80/20-Laufs verwendet werden.
+
 Version: 1.3
 Protokoll eingefroren: 10. September 2026, vor dem Ergebnislauf
 

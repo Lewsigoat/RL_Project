@@ -117,18 +117,27 @@ class PolymarketClient:
             if self.config.monthly_stratified_sampling
             else [(end_date_min, end_date_max)]
         )
-        per_stratum = math.ceil(self.config.max_markets / len(strata))
+        maximum = self.config.max_markets
+        per_stratum = math.ceil(maximum / len(strata)) if maximum is not None else None
         total_rows = 0
         timeout = httpx.Timeout(self.config.request_timeout_seconds)
         async with httpx.AsyncClient(timeout=timeout, follow_redirects=True) as client:
             for stratum_start, stratum_end in strata:
                 stratum_rows = 0
                 after_cursor: str | None = None
-                while stratum_rows < per_stratum and total_rows < self.config.max_markets:
+                while per_stratum is None or stratum_rows < per_stratum:
+                    if maximum is not None and total_rows >= maximum:
+                        break
+                    remaining_stratum = (
+                        self.config.page_size if per_stratum is None else per_stratum - stratum_rows
+                    )
+                    remaining_total = (
+                        self.config.page_size if maximum is None else maximum - total_rows
+                    )
                     limit = min(
                         self.config.page_size,
-                        per_stratum - stratum_rows,
-                        self.config.max_markets - total_rows,
+                        remaining_stratum,
+                        remaining_total,
                     )
                     params: dict[str, Any] = {
                         "closed": "true",
