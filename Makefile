@@ -28,6 +28,9 @@ evaluate:
 report:
 	$(STUDY) report --config $(CONFIG)
 
+simulate-returns:
+	$(STUDY) simulate-returns --config $(CONFIG)
+
 run:
 	$(STUDY) run --config $(CONFIG)
 

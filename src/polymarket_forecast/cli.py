@@ -18,7 +18,9 @@ from polymarket_forecast.pipeline import (
     run_study,
     train_study,
 )
-from polymarket_forecast.reporting import generate_plots, generate_report
+from polymarket_forecast.reporting import generate_plots, generate_report, generate_return_plots
+from polymarket_forecast.strategy import load_strategy_config
+from polymarket_forecast.trading import generate_return_report, simulate_study_returns
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -66,6 +68,18 @@ def _parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--data-run-id")
     run_parser.add_argument("--study-run-id")
     run_parser.add_argument("--destination", default="reports/results")
+
+    simulate_parser = command(
+        "simulate-returns",
+        "Lock an edge/Kelly book on OOF and simulate holdout excess returns",
+    )
+    simulate_parser.add_argument("--study-run-id")
+    simulate_parser.add_argument(
+        "--strategy-config",
+        default="configs/strategy.yaml",
+        help="Path to the trading-simulation YAML",
+    )
+    simulate_parser.add_argument("--destination", default="reports/results")
     return parser
 
 
@@ -130,6 +144,30 @@ def main(argv: list[str] | None = None) -> int:
             {
                 "evaluation": result,
                 "exported": exported,
+                "plots": plots,
+                "report": report,
+            }
+        )
+    elif args.command == "simulate-returns":
+        strategy = load_strategy_config(args.strategy_config)
+        simulation = simulate_study_returns(
+            config,
+            strategy,
+            study_run_id=args.study_run_id,
+            destination=args.destination,
+        )
+        plots = generate_return_plots(
+            config,
+            study_run_id=simulation.study_run_id,
+            export_directory=Path(args.destination) / "trading",
+        )
+        summary_path = Path(args.destination) / "trading" / "summary.json"
+        report = generate_return_report(
+            json.loads(summary_path.read_text(encoding="utf-8")),
+        )
+        _print_result(
+            {
+                "simulation": simulation,
                 "plots": plots,
                 "report": report,
             }

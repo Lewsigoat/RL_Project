@@ -23,7 +23,11 @@ keine großen Rohdaten oder Walletinformationen.
 - `manifest.json`: Run-, Konfigurations- und Exportprovenienz.
 - `reproducibility.json`: exakter Vergleich des Primär- und unabhängigen
   Reproduktionslaufs.
+- `trading/`: post-hoc Excess-Return-Simulation nach Spread und Gebühr.
+  Nicht Teil des präregistrierten Brier-Tests.
 
 Die fachliche Interpretation steht in
 [`../final_report_de.md`](../final_report_de.md). Der Primärtest ist nicht
-signifikant: globaler Intersection-Union-p-Wert `0.0530`.
+signifikant: globaler Intersection-Union-p-Wert `0.0530`. Die
+Handels-Simulation steht in
+[`../excess_return_simulation.md`](../excess_return_simulation.md).

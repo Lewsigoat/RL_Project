@@ -5,10 +5,11 @@ from __future__ import annotations
 import io
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import matplotlib
 import numpy as np
+import pandas as pd
 from matplotlib.figure import Figure
 
 from polymarket_forecast.config import ProjectConfig
@@ -694,3 +695,112 @@ Große Rohdaten und Modellartefakte werden reproduzierbar unter `data/` und
 """
     Path(readme_path).write_text(readme, encoding="utf-8")
     return report_destination
+
+
+def generate_return_plots(
+    config: ProjectConfig,
+    *,
+    study_run_id: str | None = None,
+    export_directory: str | Path = "reports/results/trading",
+) -> list[Path]:
+    """Plot the locked strategy equity curve and cost-sensitivity surface."""
+    storage = ResearchStorage(config.paths.reports_uri)
+    run_id = study_run_id or _latest_run(storage)
+    destination = Path(export_directory)
+    paths: list[Path] = []
+    prefix = f"{run_id}/trading"
+
+    equity = storage.read_parquet(f"{prefix}/holdout_equity.parquet")
+    if not equity.empty:
+        curve = equity.copy()
+        curve["timestamp"] = pd.to_datetime(curve["timestamp"], utc=True)
+        figure, axis = plt.subplots(figsize=(9.2, 4.6))
+        axis.plot(curve["timestamp"], curve["equity"], color="#1f4e79", linewidth=1.6)
+        axis.set_title("Compounding paper equity after spread and fees")
+        axis.set_xlabel("Resolution time (UTC)")
+        axis.set_ylabel("Equity")
+        axis.grid(alpha=0.25)
+        figure.text(
+            0.01,
+            -0.02,
+            "Reserved-capital book · fills at mid + half-spread · taker fee on cash spent",
+            fontsize=8,
+        )
+        paths.append(
+            _save_figure(figure, storage, f"{prefix}/equity_curve.png", destination)
+        )
+
+    trades = storage.read_parquet(f"{prefix}/holdout_unit_trades.parquet")
+    if not trades.empty:
+        figure, axis = plt.subplots(figsize=(7.2, 4.4))
+        axis.hist(trades["excess_pnl"], bins=24, color="#4a7c59", alpha=0.85)
+        axis.axvline(0, color="black", linewidth=1)
+        axis.set_title("Unit-stake excess PnL versus the market favorite")
+        axis.set_xlabel("Excess PnL per trade")
+        axis.set_ylabel("Trades")
+        axis.grid(axis="y", alpha=0.25)
+        paths.append(
+            _save_figure(figure, storage, f"{prefix}/excess_pnl_histogram.png", destination)
+        )
+
+    costs = storage.read_parquet(f"{prefix}/cost_sensitivity.parquet")
+    if not costs.empty:
+        figure, axis = plt.subplots(figsize=(8.4, 4.6))
+        for fee, group in costs.groupby("taker_fee_rate"):
+            axis.plot(
+                group["half_spread"],
+                group["return_on_deployed"],
+                marker="o",
+                label=f"fee {float(cast(Any, fee)):.1%}",
+            )
+        axis.axhline(0, color="black", linewidth=1)
+        axis.set_title("Holdout return on deployed capital by cost assumption")
+        axis.set_xlabel("Half-spread")
+        axis.set_ylabel("Return on deployed capital")
+        axis.legend(title="Taker fee")
+        axis.grid(alpha=0.25)
+        paths.append(
+            _save_figure(figure, storage, f"{prefix}/cost_sensitivity.png", destination)
+        )
+
+    fee_risk_path = f"{prefix}/fee_risk_adjusted.parquet"
+    if storage.exists(fee_risk_path):
+        fee_risk = storage.read_parquet(fee_risk_path)
+    else:
+        fee_risk = pd.DataFrame()
+    if not fee_risk.empty:
+        figure, axis = plt.subplots(figsize=(8.6, 4.8))
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["unit_weekly_sharpe"],
+            marker="o",
+            label="Unit-book Sharpe",
+        )
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["compound_weekly_sharpe"],
+            marker="s",
+            label="Compounding Sharpe",
+        )
+        axis.plot(
+            fee_risk["taker_fee_rate"],
+            fee_risk["unit_information_ratio"],
+            marker="^",
+            label="Information ratio vs favorite",
+        )
+        axis.axhline(0, color="black", linewidth=1)
+        axis.set_title("Annualized risk-adjusted returns versus taker fee")
+        axis.set_xlabel("Taker fee on cash spent")
+        axis.set_ylabel("Annualized ratio")
+        axis.legend()
+        axis.grid(alpha=0.25)
+        figure.text(
+            0.01,
+            -0.02,
+            "Locked 1-cent half-spread · weekly returns · cash as risk-free rate",
+            fontsize=8,
+        )
+        paths.append(
+            _save_figure(figure, storage, f"{prefix}/fee_risk_adjusted.png", destination)
+        )
+    return paths

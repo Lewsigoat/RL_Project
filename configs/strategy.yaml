@@ -1,0 +1,29 @@
+# Post-hoc economic diagnostic. Not a confirmatory replacement for the Brier test.
+# Hyperparameters are locked on development OOF only, then applied once to holdout.
+
+name: edge_threshold_fractional_kelly
+starting_bankroll: 10000.0
+unit_stake: 1.0
+half_spread: 0.01
+taker_fee_rate: 0.02
+price_clip: 0.01
+min_tradable_price: 0.05
+max_tradable_price: 0.95
+assumed_horizon_days: 7
+probability_column: model_probability
+selection_minimum_trades: 10
+
+grid:
+  min_edge: [0.03, 0.05, 0.08, 0.10]
+  kelly_fraction: [0.25, 0.50]
+  max_stake_fraction: [0.02, 0.05]
+
+cost_sensitivity:
+  half_spreads: [0.00, 0.01, 0.02, 0.03]
+  taker_fee_rates: [0.00, 0.005, 0.01, 0.015, 0.02, 0.03, 0.05]
+
+inference:
+  bootstrap_repetitions: 9999
+  block_length_weeks: 4
+  alpha: 0.05
+  seed: 20260910
