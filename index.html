@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon County</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <canvas id="game-canvas" tabindex="0" aria-label="Neon County game view"></canvas>
+
+    <div id="vignette" class="vignette"></div>
+    <div id="damage-flash" class="damage-flash"></div>
+
+    <div id="title-screen" class="screen title-screen">
+      <div class="title-bg"></div>
+      <div class="title-card">
+        <p class="eyebrow">Harbor Grid • Open District</p>
+        <h1>NEON COUNTY</h1>
+        <p class="tagline">Night Circuit vertical slice — run the drop, shake the Watch, get paid.</p>
+        <div class="title-actions">
+          <button id="btn-start" class="btn primary" type="button">Start Night Circuit</button>
+          <button id="btn-continue" class="btn ghost" type="button">Continue</button>
+        </div>
+        <p class="hint">Click the streets to look around. Esc pauses. All content is original.</p>
+      </div>
+    </div>
+
+    <div id="onboarding" class="screen dim hidden">
+      <div class="panel wide">
+        <p class="eyebrow">Briefing</p>
+        <h2 id="onboard-title">How you move</h2>
+        <p id="onboard-body" class="body"></p>
+        <div class="title-actions">
+          <button id="btn-onboard-next" class="btn primary" type="button">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="hud" class="hud hidden">
+      <div class="hud-left">
+        <div class="meter">
+          <span class="label">Vitals</span>
+          <div class="bar"><i id="health-fill"></i></div>
+        </div>
+        <div class="wanted">
+          <span class="label">Watch Level</span>
+          <div id="wanted-pips" class="pips" aria-label="Wanted level"></div>
+        </div>
+        <div class="money" id="money-readout">NC$ 0</div>
+      </div>
+
+      <div class="hud-center">
+        <div id="objective" class="objective">Reach Midnight Market</div>
+        <div id="prompt" class="prompt"></div>
+      </div>
+
+      <div class="hud-right">
+        <canvas id="minimap" width="196" height="196" aria-label="District radar"></canvas>
+        <div id="speed-readout" class="speed hidden">0 <small>km/h</small></div>
+        <div id="clock-readout" class="clock">Dusk</div>
+      </div>
+
+      <div id="crosshair" class="crosshair"></div>
+      <div id="look-hint" class="look-hint hidden">Click to look • Esc pauses</div>
+    </div>
+
+    <div id="pause-screen" class="screen dim hidden">
+      <div class="panel">
+        <p class="eyebrow">Paused</p>
+        <h2>Harbor Grid</h2>
+        <ul class="controls">
+          <li><kbd>W A S D</kbd> Move / drive</li>
+          <li><kbd>Shift</kbd> Sprint</li>
+          <li><kbd>Space</kbd> Jump / handbrake</li>
+          <li><kbd>E</kbd> Enter, exit, interact</li>
+          <li><kbd>Mouse</kbd> Camera / aim</li>
+          <li><kbd>Left click</kbd> Fire</li>
+          <li><kbd>Esc</kbd> Pause</li>
+          <li>If look-lock is blocked, hold <kbd>Right mouse</kbd> or use <kbd>Q</kbd>/<kbd>C</kbd> and <kbd>R</kbd>/<kbd>F</kbd></li>
+        </ul>
+        <label class="slider-row">Look sensitivity
+          <input id="sens-slider" type="range" min="0.2" max="2.2" step="0.05" />
+        </label>
+        <label class="slider-row">Volume
+          <input id="vol-slider" type="range" min="0" max="1" step="0.05" />
+        </label>
+        <div class="title-actions">
+          <button id="btn-resume" class="btn primary" type="button">Resume</button>
+          <button id="btn-restart" class="btn ghost" type="button">Restart Circuit</button>
+          <button id="btn-title" class="btn ghost" type="button">Title</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="fail-screen" class="screen dim hidden">
+      <div class="panel">
+        <p class="eyebrow">Circuit broken</p>
+        <h2 id="fail-title">Downed</h2>
+        <p id="fail-body" class="body">Harbor Watch closed the net.</p>
+        <div class="title-actions">
+          <button id="btn-fail-restart" class="btn primary" type="button">Retry Night Circuit</button>
+          <button id="btn-fail-title" class="btn ghost" type="button">Title</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="complete-screen" class="screen dim hidden">
+      <div class="panel">
+        <p class="eyebrow">Drop secured</p>
+        <h2>Night Circuit complete</h2>
+        <p id="complete-body" class="body">The Watch lost the trail. Harbor Grid stays quiet — for now.</p>
+        <div class="title-actions">
+          <button id="btn-roam" class="btn primary" type="button">Keep roaming</button>
+          <button id="btn-complete-restart" class="btn ghost" type="button">Run it again</button>
+          <button id="btn-complete-title" class="btn ghost" type="button">Title</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
