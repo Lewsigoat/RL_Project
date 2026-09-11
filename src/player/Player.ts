@@ -8,9 +8,9 @@ import { createHumanoid } from "../world/prefabs";
 export class Player {
   readonly group = new THREE.Group();
   readonly mesh: THREE.Group;
-  x = 4;
+  x = 0;
   y = 0;
-  z = -18;
+  z = -24;
   vx = 0;
   vz = 0;
   vy = 0;
@@ -28,9 +28,9 @@ export class Player {
   }
 
   reset(): void {
-    this.x = 4;
+    this.x = 0;
     this.y = 0;
-    this.z = -18;
+    this.z = -24;
     this.vx = 0;
     this.vz = 0;
     this.vy = 0;

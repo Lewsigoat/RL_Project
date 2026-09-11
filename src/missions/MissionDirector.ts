@@ -25,7 +25,7 @@ export interface MissionInput {
   wantedLevel: number;
 }
 
-const REACH = 9.5;
+const REACH = 18;
 
 export class MissionDirector {
   stage: MissionStage = "go_market";

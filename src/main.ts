@@ -8,6 +8,13 @@ if (!(canvas instanceof HTMLCanvasElement)) {
 const game = new Game(canvas);
 game.start();
 
+declare global {
+  interface Window {
+    __neonCounty?: Game;
+  }
+}
+window.__neonCounty = game;
+
 window.addEventListener("error", (event) => {
   console.error("[Neon County]", event.error ?? event.message);
 });

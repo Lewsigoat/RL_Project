@@ -26,7 +26,7 @@ export interface CityData {
   markers: THREE.Group;
 }
 
-const BUILD_COLORS = [0x1b2833, 0x24303a, 0x2a2434, 0x1d2a2c, 0x32242a, 0x253040];
+const BUILD_COLORS = [0x3b4b58, 0x45535e, 0x4a3d50, 0x3d4c4e, 0x543c44, 0x3f4c5c];
 const ACCENTS = [0x5ef2e3, 0xff4d9a, 0xffc857, 0x7cffb2, 0x7aa8ff, 0xff7ad1];
 
 export function buildCity(scene: THREE.Scene): CityData {
@@ -40,7 +40,7 @@ export function buildCity(scene: THREE.Scene): CityData {
 
   const ground = new THREE.Mesh(
     new THREE.PlaneGeometry(CITY_HALF * 2 + 20, CITY_HALF * 2 + 20),
-    new THREE.MeshStandardMaterial({ color: 0x141a16, roughness: 0.95 })
+    new THREE.MeshStandardMaterial({ color: 0x2a332c, roughness: 0.92 })
   );
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
@@ -72,7 +72,7 @@ export function buildCity(scene: THREE.Scene): CityData {
   scene.add(group);
 
   const parked: ParkSpot[] = [
-    { id: "ember-coupe", x: 8, z: -14, heading: 0.2 },
+    { id: "ember-coupe", x: 3.2, z: -20.5, heading: 0.1 },
     { id: "volt-runner", x: -54, z: -62, heading: Math.PI * 0.5 },
     { id: "slate-hauler", x: 68, z: -48, heading: Math.PI },
     { id: "pearl-cruiser", x: 48, z: 50, heading: -0.4 },
@@ -96,8 +96,8 @@ export function buildCity(scene: THREE.Scene): CityData {
 }
 
 function addRoads(group: THREE.Group, sidewalks: { x: number; z: number }[]): void {
-  const asphalt = new THREE.MeshStandardMaterial({ color: 0x1a1f25, roughness: 0.42, metalness: 0.08 });
-  const walk = new THREE.MeshStandardMaterial({ color: 0x2b3036, roughness: 0.85 });
+  const asphalt = new THREE.MeshStandardMaterial({ color: 0x3a414a, roughness: 0.48, metalness: 0.08 });
+  const walk = new THREE.MeshStandardMaterial({ color: 0x4a515a, roughness: 0.85 });
   const paint = new THREE.MeshStandardMaterial({ color: 0xf4e3a1, roughness: 0.6, emissive: 0x2a2410, emissiveIntensity: 0.2 });
   const white = new THREE.MeshStandardMaterial({ color: 0xe8eef4, roughness: 0.5 });
 
@@ -183,20 +183,20 @@ function addPlaza(
 
   const shaft = new THREE.Mesh(
     new THREE.BoxGeometry(4.2, 28, 4.2),
-    new THREE.MeshStandardMaterial({ color: 0x1a222b, roughness: 0.5, metalness: 0.25 })
+    new THREE.MeshStandardMaterial({ color: 0x4a5a6a, roughness: 0.5, metalness: 0.25, emissive: 0x15202a, emissiveIntensity: 0.2 })
   );
-  shaft.position.set(0, 14, 0);
+  shaft.position.set(0, 14, 13);
   shaft.castShadow = true;
   group.add(shaft);
-  collision.addBox(0, 0, 2.3, 2.3, 0, 28);
+  collision.addBox(0, 13, 2.3, 2.3, 0, 28);
 
   const cap = new THREE.Mesh(new THREE.BoxGeometry(6.2, 2.2, 6.2), neonMat(0xff4d9a, neonMats));
-  cap.position.set(0, 29, 0);
+  cap.position.set(0, 29, 13);
   group.add(cap);
 
   addSign(group, neonMats, 0, 8.2, 8.6, "VOLT SPIRE", 0x5ef2e3);
-  addBuilding(group, collision, neonMats, windowMats, 18, 18, 7, 9, 14, 0x24313c, 0x7aa8ff);
-  addBuilding(group, collision, neonMats, windowMats, -18, 16, 6, 7, 11, 0x2a2434, 0xff4d9a);
+  addBuilding(group, collision, neonMats, windowMats, 28, 22, 8, 10, 16, 0x3f5160, 0x7aa8ff);
+  addBuilding(group, collision, neonMats, windowMats, -28, 20, 7, 8, 13, 0x4a3d50, 0xff4d9a);
 }
 
 function addMarket(
@@ -414,21 +414,23 @@ function addBuilding(
   color: number,
   accent: number
 ): void {
-  const facade = new THREE.MeshStandardMaterial({ color, roughness: 0.72, metalness: 0.08 });
+  const tex = makeFacadeTexture(color, accent, Math.floor(x * 13 + z * 7 + h));
+  const facade = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    map: tex,
+    roughness: 0.68,
+    metalness: 0.08,
+    emissive: accent,
+    emissiveMap: tex,
+    emissiveIntensity: 0.22
+  });
+  windowMats.push(facade);
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), facade);
   mesh.position.set(x, h / 2, z);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
   group.add(mesh);
   collision.addBox(x, z, w / 2, d / 2, 0, h);
-
-  const win = windowMat(accent, windowMats);
-  const inset = new THREE.Mesh(new THREE.BoxGeometry(w * 0.82, h * 0.72, 0.08), win);
-  inset.position.set(x, h * 0.52, z + d / 2 + 0.05);
-  group.add(inset);
-  const inset2 = inset.clone();
-  inset2.position.z = z - d / 2 - 0.05;
-  group.add(inset2);
 
   if (h > 10) {
     const band = new THREE.Mesh(new THREE.BoxGeometry(w + 0.2, 0.35, d + 0.2), neonMat(accent, neonMats));
@@ -544,16 +546,29 @@ function neonMat(color: number, bag: THREE.MeshStandardMaterial[]): THREE.MeshSt
   return mat;
 }
 
-function windowMat(color: number, bag: THREE.MeshStandardMaterial[]): THREE.MeshStandardMaterial {
-  const mat = new THREE.MeshStandardMaterial({
-    color: 0x102028,
-    emissive: color,
-    emissiveIntensity: 0.35,
-    roughness: 0.25,
-    metalness: 0.2
-  });
-  bag.push(mat);
-  return mat;
+function makeFacadeTexture(base: number, accent: number, seed: number): THREE.CanvasTexture {
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = `#${base.toString(16).padStart(6, "0")}`;
+  ctx.fillRect(0, 0, 256, 512);
+  ctx.fillStyle = "rgba(0,0,0,0.18)";
+  for (let y = 0; y < 512; y += 36) ctx.fillRect(0, y, 256, 2);
+  const accentHex = `#${accent.toString(16).padStart(6, "0")}`;
+  for (let row = 0; row < 12; row += 1) {
+    for (let col = 0; col < 5; col += 1) {
+      const lit = (seed + row * 9 + col * 5) % 4 !== 0;
+      ctx.fillStyle = lit ? accentHex : "#0c1218";
+      ctx.globalAlpha = lit ? 0.85 : 0.7;
+      ctx.fillRect(18 + col * 48, 18 + row * 40, 28, 22);
+    }
+  }
+  ctx.globalAlpha = 1;
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
 }
 
 function makeClouds(): THREE.Mesh {

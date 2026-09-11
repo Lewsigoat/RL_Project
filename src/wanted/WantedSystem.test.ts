@@ -15,8 +15,8 @@ describe("WantedSystem", () => {
   it("decays after the player stays unseen and leaves last known", () => {
     const wanted = new WantedSystem();
     wanted.setAtLeast(3, 0, 0);
-    wanted.update(12, false, 80, 80);
-    wanted.update(8, false, 80, 80);
+    wanted.update(8, false, 80, 80, 50, 16);
+    wanted.update(6, false, 90, 90, 50, 16);
     expect(wanted.heat).toBeLessThan(3);
   });
 

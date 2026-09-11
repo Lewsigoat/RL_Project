@@ -43,12 +43,17 @@ export class Game {
   phase: GamePhase = "title";
   private sun!: THREE.DirectionalLight;
   private hemi!: THREE.HemisphereLight;
+  private fill!: THREE.AmbientLight;
   private fog!: THREE.Fog;
   private marker!: THREE.Group;
   private occupied: Vehicle | null = null;
   private nearby: Vehicle | null = null;
   private elapsed = 0;
   private canvas: HTMLCanvasElement;
+  private nav: { x: number; z: number; sprint: boolean } | null = null;
+  private navRoute: { x: number; z: number }[] = [];
+  private stuck = 0;
+  private reversing = 0;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -94,13 +99,76 @@ export class Game {
     this.tick();
   }
 
+  snapshot(): {
+    phase: GamePhase;
+    health: number;
+    wanted: number;
+    money: number;
+    x: number;
+    z: number;
+    inVehicle: boolean;
+    vehicleId: string | null;
+    mission: string;
+    objective: string;
+    kmh: number;
+    clock: string;
+    navigating: boolean;
+  } {
+    return {
+      phase: this.phase,
+      health: this.player.health,
+      wanted: this.wanted.level,
+      money: this.save.money,
+      x: this.player.x,
+      z: this.player.z,
+      inVehicle: this.player.inVehicle,
+      vehicleId: this.occupied?.id ?? null,
+      mission: this.mission.stage,
+      objective: this.mission.objectiveText(),
+      kmh: this.occupied?.kmh() ?? 0,
+      clock: this.dayNight.label(),
+      navigating: Boolean(this.nav)
+    };
+  }
+
+  lookToward(x: number, z: number): void {
+    this.follow.yaw = Math.atan2(x - this.player.x, z - this.player.z);
+  }
+
+  queueFire(): void {
+    this.input.queueFire();
+  }
+
+  setNav(x: number, z: number, sprint = true): void {
+    const straight = Math.hypot(this.player.x - x, this.player.z - z) < 18;
+    this.navRoute = straight ? [] : roadRoute(this.player.x, this.player.z, x, z);
+    const first = this.navRoute.shift() ?? { x, z };
+    this.nav = { ...first, sprint };
+    this.stuck = 0;
+    this.reversing = 0;
+  }
+
+  clearNav(): void {
+    this.nav = null;
+    this.navRoute = [];
+    this.input.keys.delete("KeyW");
+    this.input.keys.delete("KeyS");
+    this.input.keys.delete("ShiftLeft");
+  }
+
+  interactNow(): void {
+    this.tryInteract();
+  }
+
   private buildScene(): void {
-    this.fog = new THREE.Fog(0x071018, 36, 120);
+    this.fog = new THREE.Fog(0x152238, 48, 160);
     this.scene.fog = this.fog;
-    this.scene.background = new THREE.Color(0x071018);
-    this.hemi = new THREE.HemisphereLight(0x9eb6d4, 0x1a1c18, 0.55);
+    this.scene.background = new THREE.Color(0x24364c);
+    this.hemi = new THREE.HemisphereLight(0xc5d8f0, 0x2a3030, 0.95);
     this.scene.add(this.hemi);
-    this.sun = new THREE.DirectionalLight(0xffe6c4, 1);
+    this.fill = new THREE.AmbientLight(0x6a7c90, 0.5);
+    this.scene.add(this.fill);
+    this.sun = new THREE.DirectionalLight(0xffe6c4, 1.6);
     this.sun.position.set(40, 50, 18);
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(1024, 1024);
@@ -183,7 +251,6 @@ export class Game {
     this.phase = "playing";
     this.screens.apply(this.phase);
     this.hud.setVisible(true);
-    this.requestLock();
   }
 
   private resume(): void {
@@ -197,7 +264,6 @@ export class Game {
     this.phase = "playing";
     this.screens.apply(this.phase);
     this.hud.setVisible(true);
-    this.requestLock();
   }
 
   private toTitle(): void {
@@ -239,6 +305,7 @@ export class Game {
     this.player.reset();
     this.wanted.reset();
     this.occupied = null;
+    this.clearNav();
     this.follow.yaw = 0.2;
     this.follow.pitch = 0.35;
     for (const v of this.vehicles) {
@@ -260,7 +327,7 @@ export class Game {
     this.handlePhaseInput();
     if (this.phase === "playing") this.updatePlay(dt);
     else this.updateIdleCamera(dt);
-    this.dayNight.apply(this.sun, this.hemi, this.scene, this.fog, this.city.neonMats, this.city.windowMats);
+    this.dayNight.apply(this.sun, this.hemi, this.fill, this.scene, this.fog, this.city.neonMats, this.city.windowMats);
     this.renderer.toneMappingExposure = toneExposure(this.dayNight.nightFactor);
     this.city.clouds.position.x = Math.sin(this.elapsed * 0.03) * 16;
     this.city.clouds.position.z = Math.cos(this.elapsed * 0.02) * 10;
@@ -296,12 +363,13 @@ export class Game {
     this.follow.pitch = Math.min(1.15, Math.max(0.08, this.follow.pitch + keyLook.y * 1.1 * dt * this.save.mouseSensitivity));
     this.dayNight.update(dt);
     this.combat.update(dt);
+    this.tickNav(dt);
 
     if (this.input.consumeInteract()) this.tryInteract();
 
     const allCars = [...this.vehicles, ...this.police.cars];
     if (this.occupied) {
-      this.occupied.updateDriven(dt, this.input, this.city.collision, allCars);
+      this.occupied.updateDriven(dt, this.input, this.city.collision, allCars, this.follow.yaw);
       this.player.setPosition(this.occupied.x, this.occupied.z, this.occupied.heading);
       this.player.inVehicle = true;
     } else {
@@ -372,7 +440,7 @@ export class Game {
     if (police.seen) this.wanted.markSeen(this.player.x, this.player.z);
     for (const shot of police.shots) {
       if (this.city.collision.losClear(shot.x, shot.z, this.player.x, this.player.z)) {
-        this.player.damage(8 + this.wanted.level);
+        this.player.damage(4 + this.wanted.level * 0.6);
         this.hud.pulseDamage(this.elapsed);
       }
     }
@@ -387,7 +455,12 @@ export class Game {
         }
       }
     }
-    this.wanted.update(dt, police.seen, this.player.x, this.player.z);
+    const nearestCop = Math.min(
+      ...this.police.feet.filter((f) => f.group.visible && !f.down).map((f) => Math.hypot(f.x - this.player.x, f.z - this.player.z)),
+      ...this.police.cars.filter((c) => c.group.visible).map((c) => Math.hypot(c.x - this.player.x, c.z - this.player.z)),
+      999
+    );
+    this.wanted.update(dt, police.seen, this.player.x, this.player.z, nearestCop, threatSpeed);
     this.save.bestWanted = Math.max(this.save.bestWanted, this.wanted.level);
 
     const mission = this.mission.update(
@@ -448,6 +521,40 @@ export class Game {
     });
   }
 
+  private tickNav(dt: number): void {
+    if (!this.nav) return;
+    const dist = Math.hypot(this.player.x - this.nav.x, this.player.z - this.nav.z);
+    const last = this.navRoute.length === 0;
+    const arrive = last ? (this.occupied ? 14 : 3.4) : 8;
+    if (dist < arrive) {
+      const next = this.navRoute.shift();
+      if (!next) {
+        this.clearNav();
+        return;
+      }
+      this.nav = { ...next, sprint: this.nav.sprint };
+      this.stuck = 0;
+      return;
+    }
+    this.lookToward(this.nav.x, this.nav.z);
+    if (this.reversing > 0) {
+      this.reversing -= dt;
+      this.input.keys.add("KeyS");
+      this.input.keys.delete("KeyW");
+      return;
+    }
+    this.input.keys.delete("KeyS");
+    this.input.keys.add("KeyW");
+    if (this.nav.sprint && !this.occupied) this.input.keys.add("ShiftLeft");
+    const speed = this.occupied ? Math.abs(this.occupied.speed) : Math.hypot(this.player.vx, this.player.vz);
+    if (speed < 1.2) this.stuck += dt;
+    else this.stuck = 0;
+    if (this.stuck > 0.7) {
+      this.reversing = 0.55;
+      this.stuck = 0;
+    }
+  }
+
   private promptText(arresting: boolean): string {
     if (arresting) return "Harbor Watch is cuffing you";
     if (this.occupied) return "E — Exit vehicle";
@@ -481,7 +588,7 @@ export class Game {
 
   private findNearbyVehicle(): Vehicle | null {
     let best: Vehicle | null = null;
-    let bestD = 3.5;
+    let bestD = 4.3;
     for (const car of this.vehicles) {
       if (!car.group.visible || car.kind === "watch") continue;
       const d = Math.hypot(car.x - this.player.x, car.z - this.player.z);
@@ -534,4 +641,29 @@ export class Game {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
   };
+}
+
+function nearestRoad(value: number): number {
+  const roads = [-80, -40, 0, 40, 80];
+  return roads.reduce((best, road) => (Math.abs(road - value) < Math.abs(best - value) ? road : best));
+}
+
+function roadRoute(ax: number, az: number, bx: number, bz: number): { x: number; z: number }[] {
+  const rx0 = nearestRoad(ax);
+  const rz0 = nearestRoad(az);
+  const rx1 = nearestRoad(bx);
+  const rz1 = nearestRoad(bz);
+  const raw = [
+    { x: rx0, z: az },
+    { x: rx0, z: rz0 },
+    { x: rx1, z: rz0 },
+    { x: rx1, z: rz1 },
+    { x: bx, z: bz }
+  ];
+  const pts: { x: number; z: number }[] = [];
+  for (const p of raw) {
+    const prev = pts[pts.length - 1];
+    if (!prev || Math.hypot(prev.x - p.x, prev.z - p.z) > 3) pts.push(p);
+  }
+  return pts;
 }

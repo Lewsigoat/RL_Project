@@ -85,8 +85,8 @@ body {
 h1 {
   margin: 0;
   font-size: clamp(42px, 8vw, 72px);
-  letter-spacing: 0.08em;
-  line-height: 0.9;
+  letter-spacing: 0.04em;
+  line-height: 0.92;
   text-shadow: 0 0 18px rgba(94, 242, 227, 0.45), 0 0 40px rgba(255, 77, 154, 0.25);
 }
 

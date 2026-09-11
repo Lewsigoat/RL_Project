@@ -48,6 +48,10 @@ export class Input {
     return v;
   }
 
+  queueFire(): void {
+    this.fireQueued = true;
+  }
+
   consumePause(): boolean {
     const v = this.pauseQueued;
     this.pauseQueued = false;

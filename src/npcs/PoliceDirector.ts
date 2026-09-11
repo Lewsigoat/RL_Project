@@ -69,8 +69,8 @@ export class PoliceDirector {
     collision: CollisionWorld;
     vehicles: Vehicle[];
   }): { seen: boolean; arresting: boolean; shots: { x: number; z: number }[] } {
-    const needFoot = opts.wanted >= 1 ? Math.min(4, opts.wanted + 1) : 0;
-    const needCar = opts.wanted >= 2 ? Math.min(3, opts.wanted - 1) : 0;
+    const needFoot = opts.wanted >= 1 ? Math.min(2, opts.wanted) : 0;
+    const needCar = opts.wanted >= 2 ? Math.min(2, Math.ceil(opts.wanted / 2)) : 0;
     this.ensureCount(needFoot, needCar, opts.playerX, opts.playerZ);
 
     const target = opts.lastKnown ?? { x: opts.playerX, z: opts.playerZ };
@@ -81,7 +81,7 @@ export class PoliceDirector {
     for (const foot of this.feet) {
       if (foot.down || !foot.group.visible) continue;
       const dist = Math.hypot(foot.x - opts.playerX, foot.z - opts.playerZ);
-      const los = dist < 42 && opts.collision.losClear(foot.x, foot.z, opts.playerX, opts.playerZ);
+      const los = dist < 24 && opts.collision.losClear(foot.x, foot.z, opts.playerX, opts.playerZ);
       if (los) seen = true;
       const aim = los ? { x: opts.playerX, z: opts.playerZ } : target;
       const desired = yawToward(foot.x, foot.z, aim.x, aim.z);
@@ -99,13 +99,14 @@ export class PoliceDirector {
       foot.group.position.set(foot.x, 0, foot.z);
       foot.group.rotation.y = foot.yaw;
       foot.shootCd -= opts.dt;
-      if (los && dist < 16 && foot.shootCd <= 0) {
-        foot.shootCd = 0.85;
-        shots.push({ x: foot.x, z: foot.z });
+      if (los && dist < 15 && foot.shootCd <= 0) {
+        foot.shootCd = 1.2;
+        const speeding = !opts.onFoot && opts.playerSpeed > 9;
+        if (!speeding || Math.random() > 0.45) shots.push({ x: foot.x, z: foot.z });
       }
-      if (opts.onFoot && dist < 1.85 && opts.playerSpeed < 3.4) {
+      if (opts.onFoot && dist < 1.7 && opts.playerSpeed < 2.8) {
         foot.arrest += opts.dt;
-        if (foot.arrest > 1.35) arresting = true;
+        if (foot.arrest > 2.1) arresting = true;
       } else {
         foot.arrest = Math.max(0, foot.arrest - opts.dt);
       }
@@ -114,7 +115,7 @@ export class PoliceDirector {
     for (const car of this.cars) {
       if (!car.group.visible) continue;
       const dist = Math.hypot(car.x - opts.playerX, car.z - opts.playerZ);
-      const los = dist < 55 && opts.collision.losClear(car.x, car.z, opts.playerX, opts.playerZ);
+      const los = dist < 32 && opts.collision.losClear(car.x, car.z, opts.playerX, opts.playerZ);
       if (los) seen = true;
       const aim = los ? { x: opts.playerX, z: opts.playerZ } : target;
       car.updateChase(opts.dt, aim.x, aim.z, opts.collision, opts.vehicles);

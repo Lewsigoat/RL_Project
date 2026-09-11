@@ -68,7 +68,7 @@ export class Vehicle {
     this.loopIndex = index % loop.length;
   }
 
-  updateDriven(dt: number, input: Input, collision: CollisionWorld, others: Vehicle[]): void {
+  updateDriven(dt: number, input: Input, collision: CollisionWorld, others: Vehicle[], camYaw: number): void {
     const axis = input.axis();
     const throttle = axis.y;
     const steer = -axis.x;
@@ -79,9 +79,12 @@ export class Vehicle {
     else this.speed -= Math.sign(this.speed) * 3.2 * dt;
     if (brake) this.speed -= Math.sign(this.speed) * 28 * dt;
     this.speed = clamp(this.speed, -10, max);
+    if (Math.abs(throttle) > 0.05) {
+      this.heading += angleDelta(this.heading, camYaw) * Math.min(1, dt * 2.8);
+    }
     const steerScale = 2.15 * (1 - Math.min(0.72, Math.abs(this.speed) / max));
     this.heading += steer * steerScale * Math.sign(this.speed || 1) * dt * (brake ? 1.55 : 1);
-    this.advance(dt, collision, others, 0.22);
+    this.advance(dt, collision, others, 0.08);
   }
 
   updateTraffic(dt: number, collision: CollisionWorld, others: Vehicle[], playerX: number, playerZ: number, playerR: number): void {
@@ -121,7 +124,7 @@ export class Vehicle {
     const moved = collision.moveCircle(this.x, this.z, this.radius, dx, dz);
     this.x = moved.x;
     this.z = moved.z;
-    if (moved.hit) this.speed *= -bounce;
+    if (moved.hit) this.speed *= bounce > 0.1 ? -bounce : 0.35;
     for (const other of others) {
       if (other === this) continue;
       const sep = separateCircles(this.x, this.z, this.radius, other.x, other.z, other.radius);

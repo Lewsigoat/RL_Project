@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { clamp, damp } from "../core/math";
+import { clamp } from "../core/math";
 import type { Player } from "../player/Player";
 import type { Vehicle } from "../vehicles/Vehicle";
 
@@ -18,9 +18,7 @@ export class GameCamera {
     const targetX = driving ? vehicle!.x : player.x;
     const targetZ = driving ? vehicle!.z : player.z;
     const targetY = driving ? 1.15 : 1.45;
-    const dist = driving ? 10.5 : 6.6;
-    const lookYaw = driving ? damp(this.yaw, vehicle!.heading, 1.6, dt) : this.yaw;
-    if (driving) this.yaw = lookYaw;
+    const dist = driving ? 11.2 : 7.4;
     const ox = Math.sin(this.yaw) * Math.cos(this.pitch) * dist;
     const oz = Math.cos(this.yaw) * Math.cos(this.pitch) * dist;
     const oy = Math.sin(this.pitch) * dist + (driving ? 1.6 : 1.2);

@@ -59,24 +59,27 @@ export class WantedSystem {
     this.unseen = 0;
   }
 
-  update(dt: number, seen: boolean, x: number, z: number): void {
+  update(dt: number, seen: boolean, x: number, z: number, nearestCop = 999, speed = 0): void {
     if (this.heat <= 0) {
       this.heat = 0;
       this.unseen = 0;
       if (!seen) this.lastKnown = null;
       return;
     }
-    if (seen) {
+    const outrunning = speed > 13 && nearestCop > 20;
+    if (seen && !outrunning) {
       this.markSeen(x, z);
       return;
     }
     this.unseen += dt;
     if (this.lastKnown) this.lastKnown.age += dt;
-    if (this.unseen < 11) return;
     const far =
-      !this.lastKnown || Math.hypot(x - this.lastKnown.x, z - this.lastKnown.z) > 28;
-    if (!far && this.unseen < 18) return;
-    this.heat = clamp(this.heat - dt * 0.22, 0, this.maxLevel);
+      !this.lastKnown || Math.hypot(x - this.lastKnown.x, z - this.lastKnown.z) > 26;
+    const outrun = (nearestCop > 34 && this.unseen > 6) || outrunning;
+    const hid = this.unseen > 9 && far;
+    const longHid = this.unseen > 14;
+    if (!outrun && !hid && !longHid) return;
+    this.heat = clamp(this.heat - dt * (outrunning ? 0.4 : 0.3), 0, this.maxLevel);
     if (this.heat < 0.05) this.reset();
   }
 }

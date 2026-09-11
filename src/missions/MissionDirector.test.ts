@@ -28,7 +28,7 @@ describe("Night Circuit mission", () => {
     expect(boarded.stage).toBe("go_depot");
 
     const leaving = mission.update(
-      { playerX: 24, playerZ: 0, inVehicle: true, vehicleId: MISSION_VEHICLE_ID, wantedLevel: 0 },
+      { playerX: 0, playerZ: 28, inVehicle: true, vehicleId: MISSION_VEHICLE_ID, wantedLevel: 0 },
       landmarks
     );
     expect(leaving.raiseWanted).toBe(2);
