@@ -142,7 +142,7 @@ export function Progress() {
         <h2>Backup and your own notes</h2>
         <p>
           Export keeps enabled chapters, card schedules, and any imported term pack. You can also drop in a JSON
-          pack later if you want to replace the built-in wording with your course notes.
+          pack later if you want to add extra terms on top of the EC2 workbook bank.
         </p>
         <div className={styles.row}>
           <button type="button" className="button primary" onClick={downloadBackup}>

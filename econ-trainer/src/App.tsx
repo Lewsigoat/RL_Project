@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout.tsx'
 import { Glossary } from './pages/Glossary.tsx'
 import { Home } from './pages/Home.tsx'
@@ -10,7 +10,7 @@ import { AppStateProvider } from './state/AppStateContext.tsx'
 export default function App() {
   return (
     <AppStateProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
@@ -21,7 +21,7 @@ export default function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AppStateProvider>
   )
 }

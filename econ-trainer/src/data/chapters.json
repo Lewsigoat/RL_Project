@@ -2,91 +2,253 @@
   {
     "id": "ch1",
     "number": 1,
-    "title": "Thinking Like an Economist",
-    "summary": "Scarcity, trade-offs, opportunity cost, incentives, and the basic tools of economic reasoning."
+    "title": "The Market System \u2014 The Economic Problem",
+    "summary": "Scarcity exists because wants are unlimited but resources are finite. This means choices have to be made. Every choice has an opportunity cost. A PPC / PPF shows the maximum possible combinations of two goods an economy can produce. Points on the curve are efficient, points inside show unemployment of resources, and points outside are unattainable. An outward shift shows positive economic growth. An inward shift shows negative economic growth."
   },
   {
     "id": "ch2",
     "number": 2,
-    "title": "Gains from Trade",
-    "summary": "Absolute and comparative advantage, specialization, and why voluntary trade can make both sides better off."
+    "title": "The Market System \u2014 Economic Assumptions",
+    "summary": "Economists assume that consumers try to maximise benefit and firms try to maximise profit, but in real life they do not always do this. Consumers may copy others, follow habits, or make poor decisions. Firms may care about customers, workers, reputation, sales, or charity rather than only profit."
   },
   {
     "id": "ch3",
     "number": 3,
-    "title": "Markets, Demand, and Supply",
-    "summary": "How buyers and sellers interact, what shifts curves, and how prices ration scarce goods."
+    "title": "Demand Curve",
+    "summary": "Quantity consumers are willing and able to buy at different prices."
   },
   {
     "id": "ch4",
     "number": 4,
-    "title": "Elasticity",
-    "summary": "How strongly quantity responds to price, income, and the prices of related goods."
+    "title": "Factors that Shift Demand",
+    "summary": "Income, substitutes, complements, advertising, and tastes."
   },
   {
     "id": "ch5",
     "number": 5,
-    "title": "Welfare and Consumer Choice",
-    "summary": "Utility, budget constraints, consumer and producer surplus, and the gains from a market trade."
+    "title": "Supply Curve",
+    "summary": "Quantity producers are willing and able to sell at different prices."
   },
   {
     "id": "ch6",
     "number": 6,
-    "title": "Production and Costs",
-    "summary": "How firms turn inputs into output and why cost curves have their familiar shapes."
+    "title": "Factors that Shift Supply",
+    "summary": "Costs, taxes, subsidies, technology, and weather."
   },
   {
     "id": "ch7",
     "number": 7,
-    "title": "Market Structures",
-    "summary": "Perfect competition, monopoly, oligopoly, and monopolistic competition."
+    "title": "Market Equilibrium",
+    "summary": "Market equilibrium is where demand equals supply. The equilibrium price and quantity are determined by market forces. If price is above equilibrium, there is excess supply. If price is below equilibrium, there is excess demand. Market forces remove shortages and surpluses by changing price."
   },
   {
     "id": "ch8",
     "number": 8,
-    "title": "Factor Markets",
-    "summary": "Labor, capital, and land markets, and how factor prices are determined."
+    "title": "Price Elasticity of Demand (PED)",
+    "summary": "PED measures how much demand responds to a price change. It also determines total revenue."
   },
   {
     "id": "ch9",
     "number": 9,
-    "title": "Market Failure and Government",
-    "summary": "Externalities, public goods, information problems, and common price controls."
+    "title": "Price Elasticity of Supply (PES)",
+    "summary": "PES measures how responsive supply is to price changes."
   },
   {
     "id": "ch10",
     "number": 10,
-    "title": "Measuring the Macroeconomy",
-    "summary": "GDP, inflation, unemployment, and the business cycle."
+    "title": "Income Elasticity of Demand (YED)",
+    "summary": "YED shows how demand changes when income changes."
   },
   {
     "id": "ch11",
     "number": 11,
-    "title": "Economic Growth",
-    "summary": "Productivity, capital, technology, and the long-run rise in living standards."
+    "title": "Mixed Economy & Market Failure",
+    "summary": "A mixed economy has both a private sector and a public sector. The private sector is made up of businesses owned by individuals or shareholders. The public sector is owned or funded by the government. Governments intervene when markets do not allocate resources efficiently. This is called market failure."
   },
   {
     "id": "ch12",
     "number": 12,
-    "title": "Money, Banking, and Inflation",
-    "summary": "What money is, how banks create deposits, and why the price level moves."
+    "title": "Privatisation",
+    "summary": "Privatisation means transferring ownership of a business from the public sector to the private sector. Governments may privatise to raise money, improve efficiency, or reduce the size of the public sector. The effects are mixed: some groups may benefit and others may lose out."
   },
   {
     "id": "ch13",
     "number": 13,
-    "title": "Aggregate Demand and Supply",
-    "summary": "Short-run fluctuations, shocks, and the gap between actual and potential output."
+    "title": "Externalities",
+    "summary": "Externalities are costs or benefits that affect third parties who are not directly involved in the activity. External costs are negative spillover effects. External benefits are positive spillover effects. Because of this, markets may overproduce some goods and underproduce others."
   },
   {
     "id": "ch14",
     "number": 14,
-    "title": "Fiscal and Monetary Policy",
-    "summary": "How governments and central banks try to stabilize the economy."
+    "title": "Factors of Production & Sectors of the Economy",
+    "summary": "All production needs the four factors of production: land, labour, capital, enterprise. Economies are divided into the primary, secondary, and tertiary sectors. As countries develop, employment and output usually move away from primary and towards tertiary."
   },
   {
     "id": "ch15",
     "number": 15,
-    "title": "Open-Economy Macroeconomics",
-    "summary": "Trade balances, exchange rates, and the basic tools of international finance."
+    "title": "Productivity & Division of Labour",
+    "summary": "Productivity measures how efficiently resources are used. Labour productivity is usually output per worker. Division of labour means splitting a production process into smaller tasks so workers specialise. This can raise output, but it can also make work boring."
+  },
+  {
+    "id": "ch16",
+    "number": 16,
+    "title": "Business Costs, Revenue and Profit",
+    "summary": "Businesses need to calculate revenue, costs, and profit. Revenue is the money coming in. Costs are the money going out. Profit is what is left after costs are taken away from revenue."
+  },
+  {
+    "id": "ch17",
+    "number": 17,
+    "title": "Economies and Diseconomies of Scale",
+    "summary": "When a firm grows, it may become more efficient and reduce average costs. These are economies of scale. But if it grows too much, problems may appear and average costs may rise. These are diseconomies of scale."
+  },
+  {
+    "id": "ch18",
+    "number": 18,
+    "title": "Competitive Markets",
+    "summary": "A competitive market has many firms selling similar products. No single firm can control the price, so they must accept the market price."
+  },
+  {
+    "id": "ch19",
+    "number": 19,
+    "title": "Large and Small Firms",
+    "summary": "Firms can be large or small, and each has advantages and disadvantages depending on the market and goals."
+  },
+  {
+    "id": "ch20",
+    "number": 20,
+    "title": "Monopoly",
+    "summary": "A monopoly is a market where one firm dominates and has significant control over price."
+  },
+  {
+    "id": "ch21",
+    "number": 21,
+    "title": "Oligopoly",
+    "summary": "An oligopoly is a market dominated by a few large firms that are interdependent."
+  },
+  {
+    "id": "ch22",
+    "number": 22,
+    "title": "The Labour Market \u2014 Demand and Supply",
+    "summary": "Hiring, labour supply, and the equilibrium wage."
+  },
+  {
+    "id": "ch23",
+    "number": 23,
+    "title": "The Labour Market \u2014 Trade Unions",
+    "summary": "Collective bargaining, wages, and employment."
+  },
+  {
+    "id": "ch24",
+    "number": 24,
+    "title": "Government Intervention",
+    "summary": "Governments intervene in markets to correct market failure, reduce negative effects, and improve outcomes for society."
+  },
+  {
+    "id": "ch25",
+    "number": 25,
+    "title": "Economic Growth",
+    "summary": "Economic growth is an increase in the output of goods and services in an economy over time."
+  },
+  {
+    "id": "ch26",
+    "number": 26,
+    "title": "Inflation",
+    "summary": "Inflation is a sustained increase in the general price level over time."
+  },
+  {
+    "id": "ch27",
+    "number": 27,
+    "title": "Unemployment",
+    "summary": "Unemployment occurs when people who are willing and able to work cannot find jobs."
+  },
+  {
+    "id": "ch28",
+    "number": 28,
+    "title": "Balance of Payments (Current Account)",
+    "summary": "The current account records a country\u2019s trade in goods and services and income flows."
+  },
+  {
+    "id": "ch29",
+    "number": 29,
+    "title": "Protection of the Environment",
+    "summary": "Economic activity can damage the environment, creating negative externalities. Governments intervene to reduce these effects."
+  },
+  {
+    "id": "ch30",
+    "number": 30,
+    "title": "Redistribution of Income",
+    "summary": "Governments redistribute income to reduce inequality and poverty."
+  },
+  {
+    "id": "ch31",
+    "number": 31,
+    "title": "Fiscal Policy",
+    "summary": "Fiscal policy uses government spending and taxation to influence economic activity."
+  },
+  {
+    "id": "ch32",
+    "number": 32,
+    "title": "Monetary Policy",
+    "summary": "Monetary policy controls interest rates to influence inflation and economic growth."
+  },
+  {
+    "id": "ch33",
+    "number": 33,
+    "title": "Supply-Side Policies",
+    "summary": "Supply-side policies aim to increase productivity and long-run economic growth."
+  },
+  {
+    "id": "ch34",
+    "number": 34,
+    "title": "Relationships Between Objectives and Policies",
+    "summary": "Macroeconomic objectives can support each other, but they can also conflict. Governments often face trade-offs when trying to reduce unemployment, control inflation, achieve economic growth, protect the environment, and improve the current account."
+  },
+  {
+    "id": "ch35",
+    "number": 35,
+    "title": "Globalisation",
+    "summary": "Globalisation is the increasing integration of economies through trade, investment, migration, communication, and technology. It affects countries, firms, workers, consumers, governments, and the environment."
+  },
+  {
+    "id": "ch36",
+    "number": 36,
+    "title": "Multinational Companies and Foreign Direct Investment",
+    "summary": "Multinational companies operate across countries and often bring foreign direct investment. They can increase jobs, output, and skills, but may also create problems such as profit outflows and pressure on local firms."
+  },
+  {
+    "id": "ch37",
+    "number": 37,
+    "title": "International Trade",
+    "summary": "International trade allows countries to specialise, sell abroad, and buy goods and services from other countries. It can improve efficiency and living standards, but also create risks for domestic industries."
+  },
+  {
+    "id": "ch38",
+    "number": 38,
+    "title": "Protectionism",
+    "summary": "Protectionism is the use of trade barriers to reduce imports and protect domestic industries. It may help local producers, but often raises prices and reduces efficiency."
+  },
+  {
+    "id": "ch39",
+    "number": 39,
+    "title": "Trading Blocs",
+    "summary": "Trading blocs are groups of countries that reduce trade barriers between members. They can increase trade and growth for members, but may disadvantage non-members."
+  },
+  {
+    "id": "ch40",
+    "number": 40,
+    "title": "The World Trade Organization and World Trade Patterns",
+    "summary": "The WTO encourages free and fair trade and helps resolve trade disputes. Trade patterns differ between developed and developing countries."
+  },
+  {
+    "id": "ch41",
+    "number": 41,
+    "title": "Exchange Rates and Their Determination",
+    "summary": "An exchange rate is the price of one currency in terms of another. Exchange rates are determined by demand for and supply of currencies."
+  },
+  {
+    "id": "ch42",
+    "number": 42,
+    "title": "Impact of Changing Exchange Rates",
+    "summary": "When exchange rates change, the prices of exports and imports change. This affects trade, inflation, growth, and the current account."
   }
 ]

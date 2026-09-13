@@ -18,8 +18,8 @@ export function Home() {
           <p className={styles.kicker}>Today</p>
           <h1>Enable a chapter, then learn its definitions.</h1>
           <p className={styles.lead}>
-            Locked chapters stay out of study, quizzes, and the glossary. Turn them on one by one when you
-            are ready.
+            42 Edexcel IGCSE (EC2) chapters, in your workbook wording. Locked chapters stay out of study,
+            quizzes, and the glossary. Turn them on one by one when you are ready.
           </p>
         </div>
         <div className={styles.stats}>
