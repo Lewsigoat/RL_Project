@@ -59,7 +59,7 @@ npm install
 npm run dev
 ```
 
-Then open the printed local URL (usually `http://localhost:5173`). Routes use a hash (`/#/study`, `/#/quiz`, …) so the packaged desktop app can load from `file://`.
+Then open **http://localhost:5188**. Port `5173` is not this app — another Vite project (for example Neon Country) may already be bound there. Econ Trainer is pinned to **5188** and will exit instead of silently hopping if that port is taken. Routes use a hash (`/#/study`, `/#/quiz`, …) so the packaged desktop app can load from `file://`.
 
 ```bash
 npm test      # unit tests
@@ -77,7 +77,7 @@ npm install
 npm run electron:dev
 ```
 
-This starts the Vite dev server and opens **Econ Trainer** against it. Reload and React Fast Refresh work the same as `npm run dev`.
+This starts the Vite dev server on **5188** and opens **Econ Trainer** against it (not 5173). Reload and React Fast Refresh work the same as `npm run dev`.
 
 ### Build installers
 

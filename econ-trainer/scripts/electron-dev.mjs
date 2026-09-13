@@ -8,10 +8,11 @@ const require = createRequire(import.meta.url)
 const electronBin = require('electron')
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const viteBin = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js')
-const port = Number(process.env.VITE_DEV_PORT || 5173)
+const port = Number(process.env.VITE_DEV_PORT || 5188)
 const devUrl = process.env.VITE_DEV_SERVER_URL || `http://127.0.0.1:${port}`
+console.log(`Econ Trainer is on http://localhost:${port} (not 5173)`)
 
-const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port)], {
+const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
   cwd: root,
   stdio: 'inherit',
 })

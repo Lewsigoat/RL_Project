@@ -2,7 +2,7 @@ import { chromium } from 'playwright'
 import { mkdir } from 'node:fs/promises'
 
 const ARTIFACTS = '/opt/cursor/artifacts'
-const BASE = 'http://127.0.0.1:5173'
+const BASE = 'http://127.0.0.1:5188'
 
 async function main() {
   await mkdir(ARTIFACTS, { recursive: true })

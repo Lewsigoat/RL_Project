@@ -1,13 +1,26 @@
 const { app, BrowserWindow, Menu, shell } = require('electron')
 const path = require('node:path')
 
-const DEV_URL = process.env.VITE_DEV_SERVER_URL || 'http://127.0.0.1:5173'
+const DEFAULT_DEV_PORT = 5188
+const DEV_URL = process.env.VITE_DEV_SERVER_URL || `http://127.0.0.1:${DEFAULT_DEV_PORT}`
 const isDev = process.env.ELECTRON_DEV === '1' && !app.isPackaged
 
 function isAllowedUrl(url) {
   if (url.startsWith('file:')) return true
   if (!isDev) return false
-  return url.startsWith('http://127.0.0.1:5173') || url.startsWith('http://localhost:5173')
+  try {
+    const incoming = new URL(url)
+    const allowed = new URL(DEV_URL)
+    const hosts = new Set(['127.0.0.1', 'localhost', allowed.hostname])
+    const port = allowed.port || String(DEFAULT_DEV_PORT)
+    return (
+      (incoming.protocol === 'http:' || incoming.protocol === 'https:') &&
+      hosts.has(incoming.hostname) &&
+      incoming.port === port
+    )
+  } catch {
+    return false
+  }
 }
 
 function createWindow() {
