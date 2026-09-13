@@ -1,0 +1,2299 @@
+[
+  {
+    "id": "inward-shift-of-the-ppf",
+    "chapterId": "ch1",
+    "term": "Inward shift of the PPF",
+    "definition": "An inward shift shows a fall in productive capacity.",
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc"
+    ]
+  },
+  {
+    "id": "opportunity-cost",
+    "chapterId": "ch1",
+    "term": "Opportunity cost",
+    "definition": "The next best alternative forgone when a decision is made.",
+    "example": "The opportunity cost of producing an additional 100 units of capital goods is 200 units of consumer goods.",
+    "related": [
+      "scarcity",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "outward-shift-of-the-ppf",
+    "chapterId": "ch1",
+    "term": "Outward shift of the PPF",
+    "definition": "An outward shift shows positive economic growth / a rise in productive capacity.",
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc"
+    ]
+  },
+  {
+    "id": "point-inside-the-ppc",
+    "chapterId": "ch1",
+    "term": "Point inside the PPC",
+    "definition": "A point inside the PPC means resources are unemployed or underused.",
+    "aliases": [
+      "point inside PPC"
+    ],
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-outside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "point-on-the-ppc",
+    "chapterId": "ch1",
+    "term": "Point on the PPC",
+    "definition": "A point on the PPC means resources are fully employed.",
+    "aliases": [
+      "point on PPC"
+    ],
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "point-outside-the-ppc",
+    "chapterId": "ch1",
+    "term": "Point outside the PPC",
+    "definition": "A point outside the PPC is unobtainable with current resources.",
+    "aliases": [
+      "point outside PPC"
+    ],
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "ppf-ppc",
+    "chapterId": "ch1",
+    "term": "PPF / PPC",
+    "definition": "A curve showing the maximum combinations of two goods an economy can produce with its current resources and technology.",
+    "aliases": [
+      "PPC",
+      "PPF",
+      "production possibility curve",
+      "production possibility frontier"
+    ],
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "scarcity",
+    "chapterId": "ch1",
+    "term": "Scarcity",
+    "definition": "The basic economic problem where limited resources cannot satisfy unlimited wants.",
+    "example": "This moves the economy from PPF1 to PPF2 as more of both goods can now be produced.",
+    "related": [
+      "opportunity-cost",
+      "ppf-ppc",
+      "point-on-the-ppc",
+      "point-inside-the-ppc",
+      "point-outside-the-ppc",
+      "outward-shift-of-the-ppf"
+    ]
+  },
+  {
+    "id": "benefit-utility",
+    "chapterId": "ch2",
+    "term": "Benefit / utility",
+    "definition": "The satisfaction or usefulness a consumer gets from a good or service.",
+    "aliases": [
+      "benefit",
+      "utility"
+    ],
+    "related": [
+      "producer",
+      "profit-maximisation"
+    ]
+  },
+  {
+    "id": "producer",
+    "chapterId": "ch2",
+    "term": "Producer",
+    "definition": "A firm or individual that makes goods or provides services.",
+    "related": [
+      "profit-maximisation",
+      "benefit-utility"
+    ]
+  },
+  {
+    "id": "profit-maximisation",
+    "chapterId": "ch2",
+    "term": "Profit maximisation",
+    "definition": "When a firm aims to make as much profit as possible, where MC = MR.",
+    "related": [
+      "producer",
+      "benefit-utility"
+    ]
+  },
+  {
+    "id": "demand",
+    "chapterId": "ch3",
+    "term": "Demand",
+    "definition": "The quantity of a good that consumers are willing and able to buy at various prices during a time period.",
+    "example": "If cocoa bean prices fell from $3000 to $2000 per tonne, quantity demanded might rise from 1000 to 1500 tonnes.",
+    "related": [
+      "movement-along-the-demand-curve",
+      "demand-curve",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "price-inelastic-demand",
+      "price-elastic-demand",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "demand-curve",
+    "chapterId": "ch3",
+    "term": "Demand curve",
+    "definition": "The demand curve shows the relationship between price and quantity demanded. An increase in demand shifts the curve right.",
+    "related": [
+      "demand",
+      "movement-along-the-demand-curve",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "price-inelastic-demand",
+      "price-elastic-demand",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "movement-along-the-demand-curve",
+    "chapterId": "ch3",
+    "term": "Movement along the demand curve",
+    "definition": "A change in price causes a movement along the demand curve, not a shift.",
+    "example": "If cocoa bean prices fell from $3000 to $2000 per tonne, quantity demanded might rise from 1000 to 1500 tonnes.",
+    "related": [
+      "demand",
+      "demand-curve",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "price-inelastic-demand",
+      "price-elastic-demand",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "advertising",
+    "chapterId": "ch4",
+    "term": "Advertising",
+    "definition": "Advertising raises awareness so more consumers know about a product and demand increases.",
+    "example": "Pepsi advertising during the Cricket World Cup raises brand awareness and shifts demand right.",
+    "related": [
+      "substitute-good",
+      "complementary-good",
+      "income"
+    ]
+  },
+  {
+    "id": "complementary-good",
+    "chapterId": "ch4",
+    "term": "Complementary good",
+    "definition": "A good that is used together with another, so if the price of one rises, demand for the other falls.",
+    "related": [
+      "substitute-good",
+      "advertising",
+      "income"
+    ]
+  },
+  {
+    "id": "income",
+    "chapterId": "ch4",
+    "term": "Income",
+    "definition": "When income rises, purchasing power increases, consumers can afford more, and demand for normal goods rises.",
+    "related": [
+      "substitute-good",
+      "complementary-good",
+      "advertising"
+    ]
+  },
+  {
+    "id": "substitute-good",
+    "chapterId": "ch4",
+    "term": "Substitute good",
+    "definition": "A good that can be used in place of another, so if the price of one rises, demand for the other increases.",
+    "related": [
+      "complementary-good",
+      "advertising",
+      "income"
+    ]
+  },
+  {
+    "id": "movement-along-the-supply-curve",
+    "chapterId": "ch5",
+    "term": "Movement along the supply curve",
+    "definition": "A change in price causes a movement along the supply curve, not a shift.",
+    "example": "If wheat prices rose from $200 to $250 per tonne, farmers would supply more wheat.",
+    "related": [
+      "supply",
+      "excess-supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "price-inelastic-supply",
+      "technology-supply",
+      "supply-side-policies"
+    ]
+  },
+  {
+    "id": "supply",
+    "chapterId": "ch5",
+    "term": "Supply",
+    "definition": "The quantity of a good that producers are willing and able to sell at different prices.",
+    "example": "If wheat prices rose from $200 to $250 per tonne, farmers would supply more wheat.",
+    "related": [
+      "movement-along-the-supply-curve",
+      "excess-supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "price-inelastic-supply",
+      "technology-supply",
+      "supply-side-policies"
+    ]
+  },
+  {
+    "id": "indirect-tax",
+    "chapterId": "ch6",
+    "term": "Indirect tax",
+    "definition": "A tax levied on goods and services, which increases production costs and reduces supply.",
+    "related": [
+      "subsidy",
+      "production-costs",
+      "technology-supply",
+      "tax",
+      "carbon-tax",
+      "progressive-tax"
+    ]
+  },
+  {
+    "id": "production-costs",
+    "chapterId": "ch6",
+    "term": "Production costs",
+    "definition": "If costs rise, profit per unit falls, producers are less willing to sell, quantity supplied falls at each price, and supply falls.",
+    "related": [
+      "indirect-tax",
+      "subsidy",
+      "technology-supply"
+    ]
+  },
+  {
+    "id": "subsidy",
+    "chapterId": "ch6",
+    "term": "Subsidy",
+    "definition": "A payment from the government to producers that reduces costs and increases supply.",
+    "related": [
+      "indirect-tax",
+      "production-costs",
+      "technology-supply"
+    ]
+  },
+  {
+    "id": "technology-supply",
+    "chapterId": "ch6",
+    "term": "Technology (supply)",
+    "definition": "If technology improves, output per worker rises, costs fall, more can be produced at each price, and supply rises.",
+    "aliases": [
+      "technology"
+    ],
+    "related": [
+      "indirect-tax",
+      "subsidy",
+      "production-costs",
+      "supply",
+      "excess-supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "price-inelastic-supply"
+    ]
+  },
+  {
+    "id": "equilibrium-price",
+    "chapterId": "ch7",
+    "term": "Equilibrium price",
+    "definition": "The price where quantity demanded equals quantity supplied, with no tendency to change.",
+    "related": [
+      "excess-demand",
+      "excess-supply",
+      "shortage",
+      "surplus-ch7"
+    ]
+  },
+  {
+    "id": "excess-demand",
+    "chapterId": "ch7",
+    "term": "Excess demand",
+    "definition": "When quantity demanded exceeds quantity supplied at the current price, causing a shortage.",
+    "related": [
+      "equilibrium-price",
+      "excess-supply",
+      "shortage",
+      "surplus-ch7",
+      "demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "movement-along-the-demand-curve"
+    ]
+  },
+  {
+    "id": "excess-supply",
+    "chapterId": "ch7",
+    "term": "Excess supply",
+    "definition": "When quantity supplied exceeds quantity demanded at the current price, causing a surplus.",
+    "related": [
+      "equilibrium-price",
+      "excess-demand",
+      "shortage",
+      "surplus-ch7",
+      "supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "price-inelastic-supply"
+    ]
+  },
+  {
+    "id": "shortage",
+    "chapterId": "ch7",
+    "term": "Shortage",
+    "definition": "A shortage is excess demand: consumers cannot buy all they want at the current price.",
+    "aliases": [
+      "excess demand"
+    ],
+    "related": [
+      "equilibrium-price",
+      "excess-demand",
+      "excess-supply",
+      "surplus-ch7"
+    ]
+  },
+  {
+    "id": "surplus-ch7",
+    "chapterId": "ch7",
+    "term": "Surplus",
+    "definition": "A surplus is excess supply: unsold stock builds up at the current price.",
+    "aliases": [
+      "excess supply"
+    ],
+    "related": [
+      "equilibrium-price",
+      "excess-demand",
+      "excess-supply",
+      "shortage"
+    ]
+  },
+  {
+    "id": "ped",
+    "chapterId": "ch8",
+    "term": "PED",
+    "definition": "A measure of how much quantity demanded responds to a change in price, calculated as percentage change in quantity demanded divided by percentage change in price.",
+    "aliases": [
+      "price elasticity of demand"
+    ],
+    "example": "People driving to work every day keep buying petrol, so PED for petrol is inelastic.",
+    "related": [
+      "price-inelastic-demand",
+      "price-elastic-demand"
+    ]
+  },
+  {
+    "id": "price-elastic-demand",
+    "chapterId": "ch8",
+    "term": "Price elastic demand",
+    "definition": "Demand is price elastic when PED is greater than 1, so a price rise cuts quantity demanded significantly and total revenue falls.",
+    "aliases": [
+      "elastic demand"
+    ],
+    "related": [
+      "ped",
+      "price-inelastic-demand",
+      "demand",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "movement-along-the-demand-curve",
+      "demand-curve"
+    ]
+  },
+  {
+    "id": "price-inelastic-demand",
+    "chapterId": "ch8",
+    "term": "Price inelastic demand",
+    "definition": "Price inelastic demand means PED is less than 1, so quantity changes proportionally less than price.",
+    "example": "Petrol is essential for many commuters, so demand changes little when price rises.",
+    "aliases": [
+      "inelastic demand"
+    ],
+    "related": [
+      "ped",
+      "price-elastic-demand",
+      "demand",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "movement-along-the-demand-curve",
+      "demand-curve"
+    ]
+  },
+  {
+    "id": "pes",
+    "chapterId": "ch9",
+    "term": "PES",
+    "definition": "A measure of how responsive quantity supplied is to a change in price.",
+    "aliases": [
+      "price elasticity of supply"
+    ],
+    "related": [
+      "price-inelastic-supply"
+    ]
+  },
+  {
+    "id": "price-inelastic-supply",
+    "chapterId": "ch9",
+    "term": "Price inelastic supply",
+    "definition": "Price inelastic supply means PES is less than 1. Fresh fish spoils quickly and cannot be stored for long, so supply cannot rise quickly.",
+    "aliases": [
+      "inelastic supply"
+    ],
+    "related": [
+      "pes",
+      "supply",
+      "excess-supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "technology-supply",
+      "movement-along-the-supply-curve",
+      "supply-side-policies"
+    ]
+  },
+  {
+    "id": "inferior-good",
+    "chapterId": "ch10",
+    "term": "Inferior good",
+    "definition": "A good with negative YED: when income rises, consumers switch to better alternatives and demand for the inferior good falls.",
+    "related": [
+      "yed",
+      "normal-good"
+    ]
+  },
+  {
+    "id": "normal-good",
+    "chapterId": "ch10",
+    "term": "Normal good",
+    "definition": "A good with positive YED: when income rises, demand rises.",
+    "example": "YED = 15% / 20% = 0.75. This is a normal good because YED is positive, and it is a necessity because YED is less than 1.",
+    "related": [
+      "yed",
+      "inferior-good"
+    ]
+  },
+  {
+    "id": "yed",
+    "chapterId": "ch10",
+    "term": "YED",
+    "definition": "A measure of how demand changes in response to a change in income.",
+    "aliases": [
+      "income elasticity of demand"
+    ],
+    "related": [
+      "normal-good",
+      "inferior-good"
+    ]
+  },
+  {
+    "id": "free-rider",
+    "chapterId": "ch11",
+    "term": "Free rider",
+    "definition": "Someone who benefits from a good without paying for it.",
+    "related": [
+      "mixed-economy",
+      "market-failure",
+      "public-good",
+      "private-sector",
+      "public-sector"
+    ]
+  },
+  {
+    "id": "market-failure",
+    "chapterId": "ch11",
+    "term": "Market failure",
+    "definition": "When the free market fails to allocate resources efficiently.",
+    "related": [
+      "mixed-economy",
+      "public-good",
+      "free-rider",
+      "private-sector",
+      "public-sector"
+    ]
+  },
+  {
+    "id": "mixed-economy",
+    "chapterId": "ch11",
+    "term": "Mixed economy",
+    "definition": "An economic system with both private sector and public sector involvement.",
+    "related": [
+      "market-failure",
+      "public-good",
+      "free-rider",
+      "private-sector",
+      "public-sector"
+    ]
+  },
+  {
+    "id": "private-sector",
+    "chapterId": "ch11",
+    "term": "Private sector",
+    "definition": "Owned by individuals / businesses.",
+    "related": [
+      "mixed-economy",
+      "market-failure",
+      "public-good",
+      "free-rider",
+      "public-sector"
+    ]
+  },
+  {
+    "id": "public-good",
+    "chapterId": "ch11",
+    "term": "Public good",
+    "definition": "A good that is non-excludable and non-rival, such as street lighting or defence.",
+    "related": [
+      "mixed-economy",
+      "market-failure",
+      "free-rider",
+      "private-sector",
+      "public-sector"
+    ]
+  },
+  {
+    "id": "public-sector",
+    "chapterId": "ch11",
+    "term": "Public sector",
+    "definition": "Owned or funded by government.",
+    "related": [
+      "mixed-economy",
+      "market-failure",
+      "public-good",
+      "free-rider",
+      "private-sector"
+    ]
+  },
+  {
+    "id": "competition",
+    "chapterId": "ch12",
+    "term": "Competition",
+    "definition": "Rivalry between firms trying to win customers.",
+    "related": [
+      "privatisation",
+      "monopoly"
+    ]
+  },
+  {
+    "id": "monopoly",
+    "chapterId": "ch12",
+    "term": "Monopoly",
+    "definition": "A market with a single dominant seller.",
+    "example": "The merged Vodafone-Idea company would have 40% market share and 400 million customers.",
+    "related": [
+      "privatisation",
+      "competition"
+    ]
+  },
+  {
+    "id": "privatisation",
+    "chapterId": "ch12",
+    "term": "Privatisation",
+    "definition": "The transfer of ownership of a business from the public sector to the private sector.",
+    "example": "Austrian Railways may face new competitors after privatisation.",
+    "related": [
+      "competition",
+      "monopoly"
+    ]
+  },
+  {
+    "id": "external-benefit",
+    "chapterId": "ch13",
+    "term": "External benefit",
+    "definition": "A benefit received by a third party not involved in the economic activity, such as from education.",
+    "related": [
+      "external-cost",
+      "social-cost",
+      "social-benefit",
+      "third-party"
+    ]
+  },
+  {
+    "id": "external-cost",
+    "chapterId": "ch13",
+    "term": "External cost",
+    "definition": "A cost imposed on a third party not involved in the economic activity, such as pollution.",
+    "related": [
+      "external-benefit",
+      "social-cost",
+      "social-benefit",
+      "third-party"
+    ]
+  },
+  {
+    "id": "social-benefit",
+    "chapterId": "ch13",
+    "term": "Social benefit",
+    "definition": "Private benefit plus external benefit.",
+    "related": [
+      "external-cost",
+      "external-benefit",
+      "social-cost",
+      "third-party"
+    ]
+  },
+  {
+    "id": "social-cost",
+    "chapterId": "ch13",
+    "term": "Social cost",
+    "definition": "Private cost plus external cost.",
+    "related": [
+      "external-cost",
+      "external-benefit",
+      "social-benefit",
+      "third-party"
+    ]
+  },
+  {
+    "id": "third-party",
+    "chapterId": "ch13",
+    "term": "Third party",
+    "definition": "Someone affected by a decision but not directly buying or selling the good.",
+    "related": [
+      "external-cost",
+      "external-benefit",
+      "social-cost",
+      "social-benefit"
+    ]
+  },
+  {
+    "id": "capital",
+    "chapterId": "ch14",
+    "term": "Capital",
+    "definition": "Man-made aids to production such as machinery, tools, and buildings.",
+    "related": [
+      "labour",
+      "enterprise",
+      "primary-sector",
+      "secondary-sector",
+      "tertiary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "enterprise",
+    "chapterId": "ch14",
+    "term": "Enterprise",
+    "definition": "The factor that organises the other factors and takes risks in business decisions.",
+    "related": [
+      "labour",
+      "capital",
+      "primary-sector",
+      "secondary-sector",
+      "tertiary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "labour",
+    "chapterId": "ch14",
+    "term": "Labour",
+    "definition": "Human effort used in production, both physical and mental.",
+    "related": [
+      "capital",
+      "enterprise",
+      "primary-sector",
+      "secondary-sector",
+      "tertiary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "primary",
+    "chapterId": "ch14",
+    "term": "Primary",
+    "definition": "Raw materials (growing and collecting raw cotton).",
+    "related": [
+      "labour",
+      "capital",
+      "enterprise",
+      "primary-sector",
+      "secondary-sector",
+      "tertiary-sector"
+    ]
+  },
+  {
+    "id": "primary-sector",
+    "chapterId": "ch14",
+    "term": "Primary sector",
+    "definition": "Extraction and collection of raw materials, such as farming, fishing, and mining.",
+    "related": [
+      "labour",
+      "capital",
+      "enterprise",
+      "secondary-sector",
+      "tertiary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "secondary",
+    "chapterId": "ch14",
+    "term": "Secondary",
+    "definition": "Manufacturing (turning cotton into a shirt).",
+    "related": [
+      "labour",
+      "capital",
+      "enterprise",
+      "primary-sector",
+      "secondary-sector",
+      "tertiary-sector"
+    ]
+  },
+  {
+    "id": "secondary-sector",
+    "chapterId": "ch14",
+    "term": "Secondary sector",
+    "definition": "Manufacturing and construction, turning raw materials into finished goods.",
+    "related": [
+      "labour",
+      "capital",
+      "enterprise",
+      "primary-sector",
+      "tertiary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "tertiary-sector",
+    "chapterId": "ch14",
+    "term": "Tertiary sector",
+    "definition": "Provision of services such as retail, banking, education, and healthcare.",
+    "related": [
+      "labour",
+      "capital",
+      "enterprise",
+      "primary-sector",
+      "secondary-sector",
+      "primary"
+    ]
+  },
+  {
+    "id": "division-of-labour",
+    "chapterId": "ch15",
+    "term": "Division of labour",
+    "definition": "Breaking down production into separate tasks so workers can specialise.",
+    "related": [
+      "productivity",
+      "labour-productivity",
+      "specialisation"
+    ]
+  },
+  {
+    "id": "labour-productivity",
+    "chapterId": "ch15",
+    "term": "Labour productivity",
+    "definition": "Output per worker, usually measured as total output divided by number of workers.",
+    "related": [
+      "productivity",
+      "division-of-labour",
+      "specialisation"
+    ]
+  },
+  {
+    "id": "productivity",
+    "chapterId": "ch15",
+    "term": "Productivity",
+    "definition": "The efficiency with which inputs are converted into outputs.",
+    "related": [
+      "labour-productivity",
+      "division-of-labour",
+      "specialisation"
+    ]
+  },
+  {
+    "id": "specialisation",
+    "chapterId": "ch15",
+    "term": "Specialisation",
+    "definition": "When workers or countries concentrate on producing what they are best at.",
+    "related": [
+      "productivity",
+      "labour-productivity",
+      "division-of-labour"
+    ]
+  },
+  {
+    "id": "average-cost",
+    "chapterId": "ch16",
+    "term": "Average cost",
+    "definition": "Total cost divided by output.",
+    "related": [
+      "total-revenue",
+      "total-cost",
+      "profit",
+      "fixed-cost",
+      "variable-cost"
+    ]
+  },
+  {
+    "id": "fixed-cost",
+    "chapterId": "ch16",
+    "term": "Fixed cost",
+    "definition": "A cost that does not change with output, such as rent or salaries.",
+    "related": [
+      "total-revenue",
+      "total-cost",
+      "profit",
+      "variable-cost",
+      "average-cost"
+    ]
+  },
+  {
+    "id": "profit",
+    "chapterId": "ch16",
+    "term": "Profit",
+    "definition": "The difference between total revenue and total cost.",
+    "related": [
+      "total-revenue",
+      "total-cost",
+      "fixed-cost",
+      "variable-cost",
+      "average-cost"
+    ]
+  },
+  {
+    "id": "total-cost",
+    "chapterId": "ch16",
+    "term": "Total cost",
+    "definition": "The sum of all costs incurred in production, including fixed and variable costs.",
+    "related": [
+      "total-revenue",
+      "profit",
+      "fixed-cost",
+      "variable-cost",
+      "average-cost"
+    ]
+  },
+  {
+    "id": "total-revenue",
+    "chapterId": "ch16",
+    "term": "Total revenue",
+    "definition": "The total amount of money a firm receives from selling goods, calculated as price times quantity.",
+    "related": [
+      "total-cost",
+      "profit",
+      "fixed-cost",
+      "variable-cost",
+      "average-cost"
+    ]
+  },
+  {
+    "id": "variable-cost",
+    "chapterId": "ch16",
+    "term": "Variable cost",
+    "definition": "A cost that changes when output changes, such as raw materials.",
+    "related": [
+      "total-revenue",
+      "total-cost",
+      "profit",
+      "fixed-cost",
+      "average-cost"
+    ]
+  },
+  {
+    "id": "diseconomies-of-scale",
+    "chapterId": "ch17",
+    "term": "Diseconomies of scale",
+    "definition": "When average costs rise as a firm grows too large.",
+    "related": [
+      "economies-of-scale",
+      "internal-economies-of-scale",
+      "external-economies-of-scale",
+      "lrac-curve"
+    ]
+  },
+  {
+    "id": "economies-of-scale",
+    "chapterId": "ch17",
+    "term": "Economies of scale",
+    "definition": "When average costs fall as a firm increases its output.",
+    "related": [
+      "diseconomies-of-scale",
+      "internal-economies-of-scale",
+      "external-economies-of-scale",
+      "lrac-curve"
+    ]
+  },
+  {
+    "id": "external-economies-of-scale",
+    "chapterId": "ch17",
+    "term": "External economies of scale",
+    "definition": "Cost savings that come from the growth of the whole industry.",
+    "related": [
+      "economies-of-scale",
+      "diseconomies-of-scale",
+      "internal-economies-of-scale",
+      "lrac-curve"
+    ]
+  },
+  {
+    "id": "internal-economies-of-scale",
+    "chapterId": "ch17",
+    "term": "Internal economies of scale",
+    "definition": "Cost savings that come from the growth of the firm itself.",
+    "related": [
+      "economies-of-scale",
+      "diseconomies-of-scale",
+      "external-economies-of-scale",
+      "lrac-curve"
+    ]
+  },
+  {
+    "id": "lrac-curve",
+    "chapterId": "ch17",
+    "term": "LRAC curve",
+    "definition": "A curve showing how average costs change as output increases in the long-run.",
+    "related": [
+      "economies-of-scale",
+      "diseconomies-of-scale",
+      "internal-economies-of-scale",
+      "external-economies-of-scale"
+    ]
+  },
+  {
+    "id": "barriers-to-entry",
+    "chapterId": "ch18",
+    "term": "Barriers to entry",
+    "definition": "Obstacles that make it difficult for new firms to enter a market.",
+    "related": [
+      "competitive-market",
+      "price-taker",
+      "competition-ch18"
+    ]
+  },
+  {
+    "id": "competition-ch18",
+    "chapterId": "ch18",
+    "term": "Competition",
+    "definition": "Rivalry between firms trying to attract customers and increase market share.",
+    "related": [
+      "competitive-market",
+      "price-taker",
+      "barriers-to-entry"
+    ]
+  },
+  {
+    "id": "competitive-market",
+    "chapterId": "ch18",
+    "term": "Competitive market",
+    "definition": "A market with many buyers and sellers where no single firm can influence price.",
+    "related": [
+      "price-taker",
+      "barriers-to-entry",
+      "competition-ch18"
+    ]
+  },
+  {
+    "id": "price-taker",
+    "chapterId": "ch18",
+    "term": "Price taker",
+    "definition": "A firm that must accept the market price because it has no power to set its own price.",
+    "related": [
+      "competitive-market",
+      "barriers-to-entry",
+      "competition-ch18"
+    ]
+  },
+  {
+    "id": "growth",
+    "chapterId": "ch19",
+    "term": "Growth",
+    "definition": "An increase in the size, output, or market share of a firm.",
+    "related": [
+      "large-firm",
+      "small-firm",
+      "market-share"
+    ]
+  },
+  {
+    "id": "large-firm",
+    "chapterId": "ch19",
+    "term": "Large firm",
+    "definition": "A business with high output, many employees, and significant market presence.",
+    "related": [
+      "small-firm",
+      "growth",
+      "market-share"
+    ]
+  },
+  {
+    "id": "market-share",
+    "chapterId": "ch19",
+    "term": "Market share",
+    "definition": "The percentage of total market sales held by one firm.",
+    "related": [
+      "large-firm",
+      "small-firm",
+      "growth"
+    ]
+  },
+  {
+    "id": "small-firm",
+    "chapterId": "ch19",
+    "term": "Small firm",
+    "definition": "A business with low output, few employees, and often local market focus.",
+    "related": [
+      "large-firm",
+      "growth",
+      "market-share"
+    ]
+  },
+  {
+    "id": "barrier-to-entry",
+    "chapterId": "ch20",
+    "term": "Barrier to entry",
+    "definition": "An obstacle that prevents new firms from entering a market.",
+    "related": [
+      "monopoly-ch20",
+      "price-maker",
+      "patent"
+    ]
+  },
+  {
+    "id": "monopoly-ch20",
+    "chapterId": "ch20",
+    "term": "Monopoly",
+    "definition": "A market structure with a single dominant seller.",
+    "related": [
+      "barrier-to-entry",
+      "price-maker",
+      "patent"
+    ]
+  },
+  {
+    "id": "patent",
+    "chapterId": "ch20",
+    "term": "Patent",
+    "definition": "Legal protection that gives a firm exclusive rights to produce a new invention.",
+    "related": [
+      "monopoly-ch20",
+      "barrier-to-entry",
+      "price-maker"
+    ]
+  },
+  {
+    "id": "price-maker",
+    "chapterId": "ch20",
+    "term": "Price maker",
+    "definition": "A firm with enough market power to set its own price.",
+    "related": [
+      "monopoly-ch20",
+      "barrier-to-entry",
+      "patent"
+    ]
+  },
+  {
+    "id": "barrier-to-entry-ch21",
+    "chapterId": "ch21",
+    "term": "Barrier to entry",
+    "definition": "Obstacles that prevent new competitors from entering the market.",
+    "related": [
+      "oligopoly",
+      "interdependence",
+      "collusion"
+    ]
+  },
+  {
+    "id": "collusion",
+    "chapterId": "ch21",
+    "term": "Collusion",
+    "definition": "When firms cooperate, formally or informally, to fix prices or limit output.",
+    "related": [
+      "oligopoly",
+      "interdependence",
+      "barrier-to-entry-ch21"
+    ]
+  },
+  {
+    "id": "interdependence",
+    "chapterId": "ch21",
+    "term": "Interdependence",
+    "definition": "When firms consider rivals' reactions before making decisions.",
+    "related": [
+      "oligopoly",
+      "collusion",
+      "barrier-to-entry-ch21"
+    ]
+  },
+  {
+    "id": "oligopoly",
+    "chapterId": "ch21",
+    "term": "Oligopoly",
+    "definition": "A market dominated by a few large firms that are interdependent.",
+    "related": [
+      "interdependence",
+      "collusion",
+      "barrier-to-entry-ch21"
+    ]
+  },
+  {
+    "id": "demand-for-labour",
+    "chapterId": "ch22",
+    "term": "Demand for labour",
+    "definition": "The number of workers firms are willing to hire at different wage levels.",
+    "related": [
+      "supply-of-labour",
+      "equilibrium-wage",
+      "demand",
+      "excess-demand",
+      "demand-for-a-currency",
+      "movement-along-the-demand-curve",
+      "demand-curve",
+      "price-inelastic-demand"
+    ]
+  },
+  {
+    "id": "equilibrium-wage",
+    "chapterId": "ch22",
+    "term": "Equilibrium wage",
+    "definition": "The wage rate where demand for labour equals supply of labour.",
+    "related": [
+      "demand-for-labour",
+      "supply-of-labour",
+      "minimum-wage"
+    ]
+  },
+  {
+    "id": "supply-of-labour",
+    "chapterId": "ch22",
+    "term": "Supply of labour",
+    "definition": "The number of workers willing to work at different wage levels.",
+    "related": [
+      "demand-for-labour",
+      "equilibrium-wage",
+      "supply",
+      "excess-supply",
+      "supply-of-a-currency",
+      "price-inelastic-supply",
+      "technology-supply",
+      "movement-along-the-supply-curve"
+    ]
+  },
+  {
+    "id": "collective-bargaining",
+    "chapterId": "ch23",
+    "term": "Collective bargaining",
+    "definition": "Trade unions use collective bargaining power to negotiate higher wages; employers must agree or face strikes.",
+    "example": "In the US textile industry, a large union can negotiate better terms for workers.",
+    "related": [
+      "trade-union"
+    ]
+  },
+  {
+    "id": "trade-union",
+    "chapterId": "ch23",
+    "term": "Trade union",
+    "definition": "An organisation that represents workers to improve wages and working conditions.",
+    "related": [
+      "collective-bargaining",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade",
+      "free-trade",
+      "free-trade-area",
+      "trade-creation",
+      "trade-diversion"
+    ]
+  },
+  {
+    "id": "government-intervention",
+    "chapterId": "ch24",
+    "term": "Government intervention",
+    "definition": "Action taken by the government to influence market outcomes.",
+    "related": [
+      "tax",
+      "subsidy-ch24",
+      "minimum-wage",
+      "regulation"
+    ]
+  },
+  {
+    "id": "minimum-wage",
+    "chapterId": "ch24",
+    "term": "Minimum wage",
+    "definition": "The lowest legal wage rate that employers can pay workers.",
+    "related": [
+      "tax",
+      "subsidy-ch24",
+      "regulation",
+      "government-intervention",
+      "equilibrium-wage"
+    ]
+  },
+  {
+    "id": "regulation",
+    "chapterId": "ch24",
+    "term": "Regulation",
+    "definition": "Government rules that control how firms and individuals behave.",
+    "related": [
+      "tax",
+      "subsidy-ch24",
+      "minimum-wage",
+      "government-intervention"
+    ]
+  },
+  {
+    "id": "subsidy-ch24",
+    "chapterId": "ch24",
+    "term": "Subsidy",
+    "definition": "A government payment that reduces the cost of production or consumption.",
+    "related": [
+      "tax",
+      "minimum-wage",
+      "regulation",
+      "government-intervention"
+    ]
+  },
+  {
+    "id": "tax",
+    "chapterId": "ch24",
+    "term": "Tax",
+    "definition": "A compulsory payment to government that raises revenue or discourages an activity.",
+    "related": [
+      "subsidy-ch24",
+      "minimum-wage",
+      "regulation",
+      "government-intervention",
+      "indirect-tax",
+      "carbon-tax",
+      "progressive-tax"
+    ]
+  },
+  {
+    "id": "boom",
+    "chapterId": "ch25",
+    "term": "Boom",
+    "definition": "A period of rapid economic growth with rising output and employment.",
+    "related": [
+      "gdp",
+      "economic-growth",
+      "recession"
+    ]
+  },
+  {
+    "id": "economic-growth",
+    "chapterId": "ch25",
+    "term": "Economic growth",
+    "definition": "An increase in real GDP over time.",
+    "related": [
+      "gdp",
+      "recession",
+      "boom"
+    ]
+  },
+  {
+    "id": "gdp",
+    "chapterId": "ch25",
+    "term": "GDP",
+    "definition": "The total value of goods and services produced in an economy over a time period.",
+    "aliases": [
+      "gross domestic product"
+    ],
+    "related": [
+      "economic-growth",
+      "recession",
+      "boom"
+    ]
+  },
+  {
+    "id": "recession",
+    "chapterId": "ch25",
+    "term": "Recession",
+    "definition": "A period when real GDP falls for two consecutive quarters.",
+    "related": [
+      "gdp",
+      "economic-growth",
+      "boom"
+    ]
+  },
+  {
+    "id": "cpi",
+    "chapterId": "ch26",
+    "term": "CPI",
+    "definition": "Consumer Price Index, a measure of inflation based on a basket of goods and services.",
+    "aliases": [
+      "consumer price index"
+    ],
+    "related": [
+      "inflation",
+      "deflation",
+      "interest-rates"
+    ]
+  },
+  {
+    "id": "deflation",
+    "chapterId": "ch26",
+    "term": "Deflation",
+    "definition": "A sustained decrease in the general price level over time.",
+    "related": [
+      "inflation",
+      "cpi",
+      "interest-rates"
+    ]
+  },
+  {
+    "id": "inflation",
+    "chapterId": "ch26",
+    "term": "Inflation",
+    "definition": "A sustained increase in the general price level over time.",
+    "example": "Argentine consumers found their wages could not keep up with rising prices in December 2017.",
+    "related": [
+      "deflation",
+      "cpi",
+      "interest-rates",
+      "inflation-ch34"
+    ]
+  },
+  {
+    "id": "interest-rates",
+    "chapterId": "ch26",
+    "term": "Interest rates",
+    "definition": "The cost of borrowing money or the return on saving.",
+    "related": [
+      "inflation",
+      "deflation",
+      "cpi"
+    ]
+  },
+  {
+    "id": "cyclical-unemployment",
+    "chapterId": "ch27",
+    "term": "Cyclical unemployment",
+    "definition": "Unemployment caused by a downturn in the economic cycle.",
+    "related": [
+      "unemployment",
+      "structural-unemployment",
+      "frictional-unemployment",
+      "unemployment-ch34"
+    ]
+  },
+  {
+    "id": "frictional-unemployment",
+    "chapterId": "ch27",
+    "term": "Frictional unemployment",
+    "definition": "Short-term unemployment when workers are between jobs.",
+    "related": [
+      "unemployment",
+      "structural-unemployment",
+      "cyclical-unemployment",
+      "unemployment-ch34"
+    ]
+  },
+  {
+    "id": "structural-unemployment",
+    "chapterId": "ch27",
+    "term": "Structural unemployment",
+    "definition": "Unemployment caused by a mismatch between workers' skills and available jobs.",
+    "related": [
+      "unemployment",
+      "cyclical-unemployment",
+      "frictional-unemployment",
+      "unemployment-ch34"
+    ]
+  },
+  {
+    "id": "unemployment",
+    "chapterId": "ch27",
+    "term": "Unemployment",
+    "definition": "People of working age who are willing and able to work but cannot find a job.",
+    "example": "In South Africa, youth unemployment is especially severe, limiting future opportunities.",
+    "related": [
+      "structural-unemployment",
+      "cyclical-unemployment",
+      "frictional-unemployment",
+      "unemployment-ch34"
+    ]
+  },
+  {
+    "id": "current-account",
+    "chapterId": "ch28",
+    "term": "Current account",
+    "definition": "A record of a country's trade in goods and services and income flows.",
+    "example": "Indonesia's deficit reached 3% of GDP, putting pressure on the rupiah.",
+    "related": [
+      "deficit",
+      "surplus",
+      "exports",
+      "imports-ch28"
+    ]
+  },
+  {
+    "id": "deficit",
+    "chapterId": "ch28",
+    "term": "Deficit",
+    "definition": "When imports exceed exports, leading to a net outflow of money.",
+    "related": [
+      "current-account",
+      "surplus",
+      "exports",
+      "imports-ch28"
+    ]
+  },
+  {
+    "id": "exports",
+    "chapterId": "ch28",
+    "term": "Exports",
+    "definition": "Goods and services sold to other countries.",
+    "related": [
+      "current-account",
+      "deficit",
+      "surplus",
+      "imports-ch28"
+    ]
+  },
+  {
+    "id": "imports-ch28",
+    "chapterId": "ch28",
+    "term": "Imports",
+    "definition": "Goods and services bought from other countries. When imports exceed exports there is a current account deficit.",
+    "related": [
+      "current-account",
+      "deficit",
+      "surplus",
+      "exports"
+    ]
+  },
+  {
+    "id": "surplus",
+    "chapterId": "ch28",
+    "term": "Surplus",
+    "definition": "When exports exceed imports, leading to a net inflow of money.",
+    "related": [
+      "current-account",
+      "deficit",
+      "exports",
+      "imports-ch28"
+    ]
+  },
+  {
+    "id": "carbon-tax",
+    "chapterId": "ch29",
+    "term": "Carbon tax",
+    "definition": "A tax that raises the cost of polluting so firms seek cleaner alternatives and pollution falls.",
+    "related": [
+      "negative-externality",
+      "regulation-ch29",
+      "indirect-tax",
+      "tax",
+      "progressive-tax"
+    ]
+  },
+  {
+    "id": "negative-externality",
+    "chapterId": "ch29",
+    "term": "Negative externality",
+    "definition": "A cost to third parties not involved in the activity.",
+    "related": [
+      "carbon-tax",
+      "regulation-ch29"
+    ]
+  },
+  {
+    "id": "regulation-ch29",
+    "chapterId": "ch29",
+    "term": "Regulation",
+    "definition": "Government sets limits; firms must comply or face fines, so harmful activity decreases.",
+    "related": [
+      "negative-externality",
+      "carbon-tax"
+    ]
+  },
+  {
+    "id": "benefits",
+    "chapterId": "ch30",
+    "term": "Benefits",
+    "definition": "Low-income households receive support, purchasing power rises, and poverty falls.",
+    "related": [
+      "progressive-tax",
+      "income-inequality"
+    ]
+  },
+  {
+    "id": "income-inequality",
+    "chapterId": "ch30",
+    "term": "Income inequality",
+    "definition": "An uneven distribution of income across households, which governments try to reduce by redistributing income.",
+    "related": [
+      "progressive-tax",
+      "benefits"
+    ]
+  },
+  {
+    "id": "progressive-tax",
+    "chapterId": "ch30",
+    "term": "Progressive tax",
+    "definition": "Higher earners pay a larger share, government revenue rises, income is redistributed, and inequality falls.",
+    "related": [
+      "benefits",
+      "income-inequality",
+      "indirect-tax",
+      "tax",
+      "carbon-tax"
+    ]
+  },
+  {
+    "id": "budget-deficit",
+    "chapterId": "ch31",
+    "term": "Budget deficit",
+    "definition": "When government spending is greater than tax revenue.",
+    "related": [
+      "fiscal-policy",
+      "budget-surplus",
+      "disposable-income",
+      "savings-ratio"
+    ]
+  },
+  {
+    "id": "budget-surplus",
+    "chapterId": "ch31",
+    "term": "Budget surplus",
+    "definition": "When tax revenue is greater than government spending.",
+    "related": [
+      "fiscal-policy",
+      "budget-deficit",
+      "disposable-income",
+      "savings-ratio"
+    ]
+  },
+  {
+    "id": "disposable-income",
+    "chapterId": "ch31",
+    "term": "Disposable income",
+    "definition": "Income households keep after taxes, which rises when taxes fall and can raise consumption.",
+    "related": [
+      "fiscal-policy",
+      "budget-deficit",
+      "budget-surplus",
+      "savings-ratio"
+    ]
+  },
+  {
+    "id": "fiscal-policy",
+    "chapterId": "ch31",
+    "term": "Fiscal policy",
+    "definition": "Fiscal policy uses government spending and taxation to influence economic activity.",
+    "example": "The Slovenian government spent \u20ac3.05bn on healthcare in 2019, including extra funding to cut waiting times.",
+    "related": [
+      "budget-deficit",
+      "budget-surplus",
+      "disposable-income",
+      "savings-ratio"
+    ]
+  },
+  {
+    "id": "savings-ratio",
+    "chapterId": "ch31",
+    "term": "Savings ratio",
+    "definition": "The proportion of household disposable income that is saved rather than spent. It is usually expressed as saving as a percentage of disposable income.",
+    "example": "Between January 2015 and July 2017, the UK savings ratio followed a downward overall trend, so households were saving a smaller share of their income by the end of the period.",
+    "aliases": [
+      "saving ratio"
+    ],
+    "related": [
+      "fiscal-policy",
+      "budget-deficit",
+      "budget-surplus",
+      "disposable-income"
+    ]
+  },
+  {
+    "id": "aggregate-demand",
+    "chapterId": "ch32",
+    "term": "Aggregate demand",
+    "definition": "Total demand in the economy. Lower interest rates can raise borrowing and spending, so aggregate demand rises.",
+    "aliases": [
+      "AD"
+    ],
+    "related": [
+      "monetary-policy",
+      "central-bank",
+      "interest-rates-ch32",
+      "demand",
+      "excess-demand",
+      "demand-for-labour",
+      "demand-for-a-currency",
+      "movement-along-the-demand-curve"
+    ]
+  },
+  {
+    "id": "central-bank",
+    "chapterId": "ch32",
+    "term": "Central bank",
+    "definition": "The institution that sets interest rates to control inflation.",
+    "related": [
+      "monetary-policy",
+      "interest-rates-ch32",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "interest-rates-ch32",
+    "chapterId": "ch32",
+    "term": "Interest rates",
+    "definition": "The cost of borrowing money or the return on saving.",
+    "example": "If interest rates rise, borrowing becomes more expensive, mortgages and loans cost more, consumption falls, and inflation falls.",
+    "related": [
+      "monetary-policy",
+      "central-bank",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "monetary-policy",
+    "chapterId": "ch32",
+    "term": "Monetary policy",
+    "definition": "Monetary policy controls interest rates to influence inflation and economic growth.",
+    "example": "China's central bank brought interest rates down to 4.35% when growth was slowing.",
+    "related": [
+      "central-bank",
+      "interest-rates-ch32",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "deregulation",
+    "chapterId": "ch33",
+    "term": "Deregulation",
+    "definition": "Fewer rules to follow, so firms save time and money and efficiency rises.",
+    "related": [
+      "supply-side-policies",
+      "education-and-training"
+    ]
+  },
+  {
+    "id": "education-and-training",
+    "chapterId": "ch33",
+    "term": "Education and training",
+    "definition": "Workers gain skills, productivity per worker rises, firms produce more, and output increases.",
+    "related": [
+      "supply-side-policies",
+      "deregulation"
+    ]
+  },
+  {
+    "id": "supply-side-policies",
+    "chapterId": "ch33",
+    "term": "Supply-side policies",
+    "definition": "Policies that aim to increase productivity and long-run economic growth.",
+    "example": "Ecuador claimed a 5.8% unemployment rate in October 2017 was the result of supply-side policies.",
+    "related": [
+      "deregulation",
+      "education-and-training",
+      "supply",
+      "excess-supply",
+      "supply-of-labour",
+      "supply-of-a-currency",
+      "price-inelastic-supply",
+      "technology-supply"
+    ]
+  },
+  {
+    "id": "current-account-ch34",
+    "chapterId": "ch34",
+    "term": "Current account",
+    "definition": "The part of the balance of payments that records trade in goods and services, plus net income and current transfers.",
+    "related": [
+      "inflation-ch34",
+      "unemployment-ch34",
+      "economic-growth-ch34",
+      "trade-off"
+    ]
+  },
+  {
+    "id": "economic-growth-ch34",
+    "chapterId": "ch34",
+    "term": "Economic growth",
+    "definition": "An increase in real GDP over time.",
+    "related": [
+      "inflation-ch34",
+      "unemployment-ch34",
+      "current-account-ch34",
+      "trade-off"
+    ]
+  },
+  {
+    "id": "inflation-ch34",
+    "chapterId": "ch34",
+    "term": "Inflation",
+    "definition": "A sustained rise in the general price level.",
+    "related": [
+      "unemployment-ch34",
+      "economic-growth-ch34",
+      "current-account-ch34",
+      "trade-off",
+      "inflation"
+    ]
+  },
+  {
+    "id": "trade-off",
+    "chapterId": "ch34",
+    "term": "Trade-off",
+    "definition": "When achieving one objective makes it harder to achieve another.",
+    "related": [
+      "inflation-ch34",
+      "unemployment-ch34",
+      "economic-growth-ch34",
+      "current-account-ch34",
+      "trade-union",
+      "trade-liberalisation",
+      "international-trade",
+      "free-trade"
+    ]
+  },
+  {
+    "id": "unemployment-ch34",
+    "chapterId": "ch34",
+    "term": "Unemployment",
+    "definition": "People of working age who are willing and able to work but cannot find a job.",
+    "related": [
+      "inflation-ch34",
+      "economic-growth-ch34",
+      "current-account-ch34",
+      "trade-off",
+      "unemployment",
+      "structural-unemployment",
+      "cyclical-unemployment",
+      "frictional-unemployment"
+    ]
+  },
+  {
+    "id": "foreign-direct-investment",
+    "chapterId": "ch35",
+    "term": "Foreign direct investment",
+    "definition": "Investment by a firm in production or business operations in another country.",
+    "related": [
+      "globalisation",
+      "trade-liberalisation",
+      "multinational-company"
+    ]
+  },
+  {
+    "id": "globalisation",
+    "chapterId": "ch35",
+    "term": "Globalisation",
+    "definition": "The increasing interconnection and integration of economies around the world.",
+    "example": "More production and transport may increase pollution.",
+    "related": [
+      "trade-liberalisation",
+      "multinational-company",
+      "foreign-direct-investment"
+    ]
+  },
+  {
+    "id": "multinational-company",
+    "chapterId": "ch35",
+    "term": "Multinational company",
+    "definition": "A business that operates in more than one country.",
+    "aliases": [
+      "MNC",
+      "multinational"
+    ],
+    "related": [
+      "globalisation",
+      "trade-liberalisation",
+      "foreign-direct-investment"
+    ]
+  },
+  {
+    "id": "trade-liberalisation",
+    "chapterId": "ch35",
+    "term": "Trade liberalisation",
+    "definition": "The reduction or removal of trade barriers such as tariffs and quotas.",
+    "related": [
+      "globalisation",
+      "multinational-company",
+      "foreign-direct-investment",
+      "trade-union",
+      "trade-off",
+      "international-trade",
+      "free-trade",
+      "free-trade-area"
+    ]
+  },
+  {
+    "id": "foreign-direct-investment-ch36",
+    "chapterId": "ch36",
+    "term": "Foreign direct investment",
+    "definition": "Investment in productive business activity in another country.",
+    "related": [
+      "multinational-company-ch36",
+      "host-country",
+      "profit-repatriation",
+      "job-creation-from-fdi"
+    ]
+  },
+  {
+    "id": "host-country",
+    "chapterId": "ch36",
+    "term": "Host country",
+    "definition": "The country receiving the investment.",
+    "related": [
+      "multinational-company-ch36",
+      "foreign-direct-investment-ch36",
+      "profit-repatriation",
+      "job-creation-from-fdi"
+    ]
+  },
+  {
+    "id": "job-creation-from-fdi",
+    "chapterId": "ch36",
+    "term": "Job creation from FDI",
+    "definition": "An MNC enters a country, a factory is built, jobs are created, household incomes rise, and consumer spending rises.",
+    "related": [
+      "multinational-company-ch36",
+      "foreign-direct-investment-ch36",
+      "host-country",
+      "profit-repatriation"
+    ]
+  },
+  {
+    "id": "multinational-company-ch36",
+    "chapterId": "ch36",
+    "term": "Multinational company",
+    "definition": "A company with production or operations in more than one country.",
+    "aliases": [
+      "MNC",
+      "multinational"
+    ],
+    "related": [
+      "foreign-direct-investment-ch36",
+      "host-country",
+      "profit-repatriation",
+      "job-creation-from-fdi"
+    ]
+  },
+  {
+    "id": "profit-repatriation",
+    "chapterId": "ch36",
+    "term": "Profit repatriation",
+    "definition": "Profits sent back to the company\u2019s home country.",
+    "related": [
+      "multinational-company-ch36",
+      "foreign-direct-investment-ch36",
+      "host-country",
+      "job-creation-from-fdi"
+    ]
+  },
+  {
+    "id": "comparative-advantage",
+    "chapterId": "ch37",
+    "term": "Comparative advantage",
+    "definition": "When a country can produce a good at a lower opportunity cost than another country.",
+    "related": [
+      "international-trade",
+      "free-trade",
+      "exports-ch37",
+      "imports"
+    ]
+  },
+  {
+    "id": "exports-ch37",
+    "chapterId": "ch37",
+    "term": "Exports",
+    "definition": "Goods and services sold to other countries.",
+    "related": [
+      "international-trade",
+      "free-trade",
+      "comparative-advantage",
+      "imports"
+    ]
+  },
+  {
+    "id": "free-trade",
+    "chapterId": "ch37",
+    "term": "Free trade",
+    "definition": "Trade without tariffs, quotas, or other restrictions.",
+    "example": "The TPP would have reduced tariffs across Pacific economies, making goods cheaper.",
+    "related": [
+      "international-trade",
+      "comparative-advantage",
+      "exports-ch37",
+      "imports",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "free-trade-area"
+    ]
+  },
+  {
+    "id": "imports",
+    "chapterId": "ch37",
+    "term": "Imports",
+    "definition": "Goods and services bought from other countries.",
+    "related": [
+      "international-trade",
+      "free-trade",
+      "comparative-advantage",
+      "exports-ch37"
+    ]
+  },
+  {
+    "id": "international-trade",
+    "chapterId": "ch37",
+    "term": "International trade",
+    "definition": "The exchange of goods and services between countries.",
+    "related": [
+      "free-trade",
+      "comparative-advantage",
+      "exports-ch37",
+      "imports",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "free-trade-area"
+    ]
+  },
+  {
+    "id": "dumping",
+    "chapterId": "ch38",
+    "term": "Dumping",
+    "definition": "Selling goods in a foreign market below cost or below the home-market price.",
+    "related": [
+      "protectionism",
+      "tariff",
+      "quota",
+      "infant-industry"
+    ]
+  },
+  {
+    "id": "infant-industry",
+    "chapterId": "ch38",
+    "term": "Infant industry",
+    "definition": "A new domestic industry that may need temporary protection to grow.",
+    "related": [
+      "protectionism",
+      "tariff",
+      "quota",
+      "dumping"
+    ]
+  },
+  {
+    "id": "protectionism",
+    "chapterId": "ch38",
+    "term": "Protectionism",
+    "definition": "Government action to restrict international trade to protect domestic industries.",
+    "example": "Steel tariffs can save jobs in domestic steel mills.",
+    "related": [
+      "tariff",
+      "quota",
+      "dumping",
+      "infant-industry"
+    ]
+  },
+  {
+    "id": "quota",
+    "chapterId": "ch38",
+    "term": "Quota",
+    "definition": "A legal limit on the quantity of imports allowed.",
+    "related": [
+      "protectionism",
+      "tariff",
+      "dumping",
+      "infant-industry"
+    ]
+  },
+  {
+    "id": "tariff",
+    "chapterId": "ch38",
+    "term": "Tariff",
+    "definition": "A tax on imported goods that raises their price.",
+    "related": [
+      "protectionism",
+      "quota",
+      "dumping",
+      "infant-industry"
+    ]
+  },
+  {
+    "id": "customs-union",
+    "chapterId": "ch39",
+    "term": "Customs union",
+    "definition": "A trading bloc with free trade between members and a common external tariff.",
+    "related": [
+      "trading-bloc",
+      "free-trade-area",
+      "trade-creation",
+      "trade-diversion"
+    ]
+  },
+  {
+    "id": "free-trade-area",
+    "chapterId": "ch39",
+    "term": "Free trade area",
+    "definition": "A group of countries with no tariffs between members.",
+    "related": [
+      "trading-bloc",
+      "customs-union",
+      "trade-creation",
+      "trade-diversion",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade"
+    ]
+  },
+  {
+    "id": "trade-creation",
+    "chapterId": "ch39",
+    "term": "Trade creation",
+    "definition": "When lower trade barriers allow countries to buy from lower-cost producers inside the bloc.",
+    "related": [
+      "trading-bloc",
+      "free-trade-area",
+      "customs-union",
+      "trade-diversion",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade"
+    ]
+  },
+  {
+    "id": "trade-diversion",
+    "chapterId": "ch39",
+    "term": "Trade diversion",
+    "definition": "When trade shifts from a more efficient outside producer to a less efficient member country.",
+    "related": [
+      "trading-bloc",
+      "free-trade-area",
+      "customs-union",
+      "trade-creation",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade"
+    ]
+  },
+  {
+    "id": "trading-bloc",
+    "chapterId": "ch39",
+    "term": "Trading bloc",
+    "definition": "A group of countries that agree to reduce or remove trade barriers between themselves.",
+    "related": [
+      "free-trade-area",
+      "customs-union",
+      "trade-creation",
+      "trade-diversion"
+    ]
+  },
+  {
+    "id": "manufactured-good",
+    "chapterId": "ch40",
+    "term": "Manufactured good",
+    "definition": "A product that has been processed or made in factories.",
+    "related": [
+      "world-trade-organization",
+      "trade-dispute",
+      "primary-product"
+    ]
+  },
+  {
+    "id": "primary-product",
+    "chapterId": "ch40",
+    "term": "Primary product",
+    "definition": "A raw material or natural product, such as coffee, oil, or copper.",
+    "related": [
+      "world-trade-organization",
+      "trade-dispute",
+      "manufactured-good"
+    ]
+  },
+  {
+    "id": "trade-dispute",
+    "chapterId": "ch40",
+    "term": "Trade dispute",
+    "definition": "A disagreement between countries over trade rules or restrictions.",
+    "related": [
+      "world-trade-organization",
+      "primary-product",
+      "manufactured-good",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade",
+      "free-trade"
+    ]
+  },
+  {
+    "id": "world-trade-organization",
+    "chapterId": "ch40",
+    "term": "World Trade Organization",
+    "definition": "An international organisation that promotes freer trade and resolves trade disputes.",
+    "aliases": [
+      "WTO"
+    ],
+    "related": [
+      "trade-dispute",
+      "primary-product",
+      "manufactured-good",
+      "trade-union",
+      "trade-liberalisation",
+      "trade-off",
+      "international-trade",
+      "free-trade"
+    ]
+  },
+  {
+    "id": "appreciation",
+    "chapterId": "ch41",
+    "term": "Appreciation",
+    "definition": "An increase in the value of a currency.",
+    "related": [
+      "exchange-rate",
+      "depreciation",
+      "demand-for-a-currency",
+      "supply-of-a-currency"
+    ]
+  },
+  {
+    "id": "demand-for-a-currency",
+    "chapterId": "ch41",
+    "term": "Demand for a currency",
+    "definition": "The desire to buy a currency, usually to buy that country\u2019s exports or invest there.",
+    "related": [
+      "exchange-rate",
+      "appreciation",
+      "depreciation",
+      "supply-of-a-currency",
+      "demand",
+      "excess-demand",
+      "demand-for-labour",
+      "movement-along-the-demand-curve"
+    ]
+  },
+  {
+    "id": "depreciation",
+    "chapterId": "ch41",
+    "term": "Depreciation",
+    "definition": "A decrease in the value of a currency. Depreciation means a fall in the value of the currency.",
+    "example": "A weaker euro made German cars and machinery cheaper for foreign buyers and helped Germany's current account surplus.",
+    "related": [
+      "exchange-rate",
+      "appreciation",
+      "demand-for-a-currency",
+      "supply-of-a-currency"
+    ]
+  },
+  {
+    "id": "exchange-rate",
+    "chapterId": "ch41",
+    "term": "Exchange rate",
+    "definition": "The price of one currency in terms of another currency.",
+    "related": [
+      "appreciation",
+      "depreciation",
+      "demand-for-a-currency",
+      "supply-of-a-currency"
+    ]
+  },
+  {
+    "id": "supply-of-a-currency",
+    "chapterId": "ch41",
+    "term": "Supply of a currency",
+    "definition": "The amount of a currency being sold, usually to buy imports or invest abroad.",
+    "related": [
+      "exchange-rate",
+      "appreciation",
+      "depreciation",
+      "demand-for-a-currency",
+      "supply",
+      "excess-supply",
+      "supply-of-labour",
+      "price-inelastic-supply"
+    ]
+  },
+  {
+    "id": "appreciation-ch42",
+    "chapterId": "ch42",
+    "term": "Appreciation",
+    "definition": "An increase in the value of a currency.",
+    "related": [
+      "revaluation",
+      "depreciation-ch42",
+      "devaluation"
+    ]
+  },
+  {
+    "id": "depreciation-ch42",
+    "chapterId": "ch42",
+    "term": "Depreciation",
+    "definition": "A decrease in the value of a currency.",
+    "related": [
+      "appreciation-ch42",
+      "revaluation",
+      "devaluation"
+    ]
+  },
+  {
+    "id": "devaluation",
+    "chapterId": "ch42",
+    "term": "Devaluation",
+    "definition": "An official decrease in the value of a currency in a fixed exchange rate system.",
+    "related": [
+      "appreciation-ch42",
+      "revaluation",
+      "depreciation-ch42"
+    ]
+  },
+  {
+    "id": "revaluation",
+    "chapterId": "ch42",
+    "term": "Revaluation",
+    "definition": "An official increase in the value of a currency in a fixed exchange rate system.",
+    "related": [
+      "appreciation-ch42",
+      "depreciation-ch42",
+      "devaluation"
+    ]
+  }
+]

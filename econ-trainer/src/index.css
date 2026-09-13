@@ -1,0 +1,92 @@
+:root {
+  color-scheme: light;
+  --paper: #f3ead8;
+  --paper-2: #e7d8bc;
+  --card: #fffaf1;
+  --ink: #1b2430;
+  --ink-soft: #3d4a59;
+  --muted: #6b7380;
+  --line: #d5c4a6;
+  --accent: #c45c26;
+  --accent-2: #1f6b5a;
+  --again: #9b2c2c;
+  --hard: #b45309;
+  --good: #1f6b5a;
+  --easy: #1d4ed8;
+  --shadow: 0 12px 32px rgba(48, 32, 12, 0.08);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--sans);
+  line-height: 1.5;
+  font-weight: 450;
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(196, 92, 38, 0.08), transparent 28%),
+    var(--paper);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 650;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
