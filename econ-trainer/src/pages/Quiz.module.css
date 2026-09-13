@@ -74,8 +74,7 @@
 }
 
 .form,
-.row,
-.feedback {
+.row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
@@ -84,6 +83,12 @@
 
 .form {
   display: grid;
+}
+
+.feedback {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: start;
 }
 
 .feedback p {

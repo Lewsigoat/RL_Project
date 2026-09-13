@@ -29,7 +29,7 @@ export function Home() {
           </div>
           <div>
             <strong>{due.review}</strong>
-            <span>reviews</span>
+            <span>reviews due</span>
           </div>
           <div>
             <strong>{due.nextNew}</strong>
