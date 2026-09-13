@@ -41,6 +41,9 @@
     "productName": "Econ Trainer",
     "copyright": "Copyright © 2026",
     "asar": true,
+    "electronLanguages": [
+      "en"
+    ],
     "directories": {
       "output": "release",
       "buildResources": "build"

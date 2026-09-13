@@ -51,6 +51,46 @@ The built-in bank is **Edexcel IGCSE Economics (EC2)** — 42 chapters and 177 t
 
 The same app runs in a browser during development and as a double-clickable desktop app on macOS and Windows. Both modes work offline after the files are on your machine. Progress is stored in `localStorage` (the Electron window has its own store, separate from Safari/Chrome).
 
+## How to open it
+
+`http://localhost:5188` is **not** a public website. It only works after you start Econ Trainer **on the same computer** you are using.
+
+### On your Mac (browser)
+
+In Terminal, from the repo:
+
+```bash
+cd econ-trainer
+npm install
+npm run dev
+```
+
+Wait until the terminal prints `Local: http://localhost:5188/`. Then open:
+
+**http://localhost:5188**
+
+Leave that Terminal window open. Closing it stops the site.
+
+### On your Mac (desktop window, no URL)
+
+```bash
+cd econ-trainer
+npm install
+npm run electron:dev
+```
+
+A window titled **Econ Trainer** opens. You do not type a URL.
+
+### If you do not want Node / npm
+
+Download the Mac app (`Econ-Trainer-mac.dmg` on Apple Silicon, or `Econ-Trainer-mac-intel.zip` on Intel). Open the disk image, drag **Econ Trainer** into Applications, then launch it. See [Install on a Mac](#install-on-a-mac).
+
+### Why “http://localhost:5188 does not load”
+
+1. You opened the URL without running `npm run dev` (or `npm run electron:dev`) on **this Mac**. Nothing is listening until you start it.
+2. A Cloud Agent’s `localhost` is a remote Linux VM, not your laptop. Port 5188 on the agent does not appear on your Mac unless you run the commands above **here**, or you use Cursor’s Ports / Preview panel while that agent’s Vite server is running.
+3. **http://localhost:5173 is Neon Country** (or another Vite app). Econ Trainer is pinned to **5188** and will exit instead of hopping if that port is taken.
+
 ## Install on a Mac
 
 1. Download **Econ-Trainer-mac.dmg** (or **Econ-Trainer-mac.zip**).
@@ -59,17 +99,11 @@ The same app runs in a browser during development and as a double-clickable desk
 
 If Gatekeeper blocks the first launch (this build is unsigned): right-click **Econ Trainer** → **Open** → **Open**. Or System Settings → Privacy & Security → Open Anyway.
 
-Apple Silicon (M1–M4) should use the default **Econ-Trainer-mac** file (arm64). Intel Macs can use **Econ-Trainer-mac-intel.zip**.
+The downloadable **Econ-Trainer-mac.dmg** is an Apple Silicon (arm64) build. Intel Macs can rebuild with `npm run dist:mac` (that command also produces an x64 zip).
 
-## Run in a browser
+## Other commands
 
-```bash
-cd econ-trainer
-npm install
-npm run dev
-```
-
-Then open **http://localhost:5188**. Port `5173` is not this app — another Vite project (for example Neon Country) may already be bound there. Econ Trainer is pinned to **5188** and will exit instead of silently hopping if that port is taken. Routes use a hash (`/#/study`, `/#/quiz`, …) so the packaged desktop app can load from `file://`.
+Routes use a hash (`/#/study`, `/#/quiz`, …) so the packaged desktop app can load from `file://`.
 
 ```bash
 npm test      # unit tests
@@ -79,15 +113,7 @@ npm run preview
 
 ## Desktop app (Mac and Windows)
 
-### Develop in an Electron window
-
-```bash
-cd econ-trainer
-npm install
-npm run electron:dev
-```
-
-This starts the Vite dev server on **5188** and opens **Econ Trainer** against it (not 5173). Reload and React Fast Refresh work the same as `npm run dev`.
+`npm run electron:dev` starts Vite on **5188** and opens the desktop window against it (not 5173). Reload and React Fast Refresh work the same as `npm run dev`.
 
 ### Build installers
 
