@@ -51,6 +51,16 @@ The built-in bank is **Edexcel IGCSE Economics (EC2)** — 42 chapters and 177 t
 
 The same app runs in a browser during development and as a double-clickable desktop app on macOS and Windows. Both modes work offline after the files are on your machine. Progress is stored in `localStorage` (the Electron window has its own store, separate from Safari/Chrome).
 
+## Install on a Mac
+
+1. Download **Econ-Trainer-mac.dmg** (or **Econ-Trainer-mac.zip**).
+2. Open the disk image and drag **Econ Trainer** into **Applications**. If you have the zip, unzip it and drag **Econ Trainer.app** into **Applications**.
+3. Open the app from Applications. It works offline.
+
+If Gatekeeper blocks the first launch (this build is unsigned): right-click **Econ Trainer** → **Open** → **Open**. Or System Settings → Privacy & Security → Open Anyway.
+
+Apple Silicon (M1–M4) should use the default **Econ-Trainer-mac** file (arm64). Intel Macs can use **Econ-Trainer-mac-intel.zip**.
+
 ## Run in a browser
 
 ```bash
@@ -92,16 +102,12 @@ Installers land in `econ-trainer/release/` and are **not** committed to git.
 
 **macOS**
 
-1. Run `npm run dist:mac` on a Mac (electron-builder cannot produce a reliable `.dmg` from Linux).
-2. Open `release/Econ Trainer-<version>-mac.dmg` and drag **Econ Trainer** into Applications.
-3. Double-click the app. It works offline.
+See [Install on a Mac](#install-on-a-mac) if you just want the downloadable app. To rebuild installers:
 
-Unsigned local builds are expected. macOS Gatekeeper may block the first open:
+1. Run `npm run dist:mac` (unsigned `.dmg` + `.zip` for arm64 and Intel).
+2. Open the `.dmg` and drag **Econ Trainer** into Applications.
 
-- Right-click the app → **Open** → **Open**, or
-- System Settings → Privacy & Security → Open Anyway
-
-A signed, notarized Mac app needs an Apple Developer certificate. You do not need that just to run a build you made yourself.
+Unsigned local builds are expected. A signed, notarized Mac app needs an Apple Developer certificate.
 
 **Windows**
 
@@ -115,7 +121,7 @@ Windows SmartScreen may warn on an unsigned installer; choose **More info** → 
 
 - Node.js 20+ and npm
 - `npm install` inside `econ-trainer/`
-- Mac `.dmg`: build on macOS
+- Mac `.dmg` / `.zip`: `npm run dist:mac` (unsigned arm64 + Intel; Gatekeeper: right-click → Open)
 - Windows `.exe`: build on Windows, or use electron-builder’s Windows target from another OS
 
 ## How to study

@@ -58,13 +58,47 @@
       "category": "public.app-category.education",
       "icon": "build/icon.png",
       "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "notarize": false,
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}",
       "target": [
-        "dmg",
-        "zip"
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
       ]
     },
     "dmg": {
-      "artifactName": "${productName}-${version}-mac.${ext}"
+      "sign": false,
+      "backgroundColor": "#f3ead8",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "artifactName": "${productName}-${version}-mac-${arch}.${ext}"
     },
     "win": {
       "icon": "build/icon.png",
