@@ -12,7 +12,7 @@ const port = Number(process.env.VITE_DEV_PORT || 5188)
 const devUrl = process.env.VITE_DEV_SERVER_URL || `http://127.0.0.1:${port}`
 console.log(`Econ Trainer is on http://localhost:${port} (not 5173)`)
 
-const vite = spawn(process.execPath, [viteBin, '--host', '127.0.0.1', '--port', String(port), '--strictPort'], {
+const vite = spawn(process.execPath, [viteBin, '--host', '0.0.0.0', '--port', String(port), '--strictPort'], {
   cwd: root,
   stdio: 'inherit',
 })
