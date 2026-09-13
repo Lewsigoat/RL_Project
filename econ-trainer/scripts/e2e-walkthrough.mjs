@@ -103,7 +103,7 @@ async function main() {
     const stillOn = await page.locator('ol input[type="checkbox"]').first().isChecked()
     const stillOn2 = await page.locator('ol input[type="checkbox"]').nth(1).isChecked()
     if (!stillOn || !stillOn2) failures.push('enabled chapters did not persist after reload')
-    const reviews = await page.locator('text=goal').innerText()
+    const reviews = await page.getByText(/\/\d+ goal/).innerText()
     if (!/\d+\/\d+ goal/.test(reviews)) failures.push(`goal meter missing: ${reviews}`)
     await shot('home_persisted_after_reload')
 
