@@ -2,6 +2,53 @@
 
 A local study app for economics definitions. You enable chapters one by one; locked chapters stay out of flashcards, quizzes, and the glossary.
 
+The built-in bank is **Edexcel IGCSE Economics (EC2)** — 42 chapters and 177 terms, worded from the EoY revision workbook and completed answers (not a generic intro/Mankiw list).
+
+**Chapters**
+
+1. The Market System — The Economic Problem
+2. The Market System — Economic Assumptions
+3. Demand Curve
+4. Factors that Shift Demand
+5. Supply Curve
+6. Factors that Shift Supply
+7. Market Equilibrium
+8. Price Elasticity of Demand (PED)
+9. Price Elasticity of Supply (PES)
+10. Income Elasticity of Demand (YED)
+11. Mixed Economy & Market Failure
+12. Privatisation
+13. Externalities
+14. Factors of Production & Sectors of the Economy
+15. Productivity & Division of Labour
+16. Business Costs, Revenue and Profit
+17. Economies and Diseconomies of Scale
+18. Competitive Markets
+19. Large and Small Firms
+20. Monopoly
+21. Oligopoly
+22. The Labour Market — Demand and Supply
+23. The Labour Market — Trade Unions
+24. Government Intervention
+25. Economic Growth
+26. Inflation
+27. Unemployment
+28. Balance of Payments (Current Account)
+29. Protection of the Environment
+30. Redistribution of Income
+31. Fiscal Policy
+32. Monetary Policy
+33. Supply-Side Policies
+34. Relationships Between Objectives and Policies
+35. Globalisation
+36. Multinational Companies and Foreign Direct Investment
+37. International Trade
+38. Protectionism
+39. Trading Blocs
+40. The World Trade Organization and World Trade Patterns
+41. Exchange Rates and Their Determination
+42. Impact of Changing Exchange Rates
+
 The same app runs in a browser during development and as a double-clickable desktop app on macOS and Windows. Both modes work offline after the files are on your machine. Progress is stored in `localStorage` (the Electron window has its own store, separate from Safari/Chrome).
 
 ## Run in a browser
@@ -83,7 +130,7 @@ Export a backup from the Progress page if you switch machines or browsers.
 
 ## Add your own definitions
 
-The built-in bank ships in `src/data/`. To use your course wording instead (or as well):
+The built-in bank already uses the EC2 workbook wording in `src/data/`. To add extra terms or override a definition:
 
 1. Copy `public/custom-terms.example.json`.
 2. Add chapters and terms. Custom ids replace built-in terms with the same id.
