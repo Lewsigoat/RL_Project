@@ -1,0 +1,3007 @@
+[
+  {
+    "id": "economics",
+    "chapterId": "ch1",
+    "term": "Economics",
+    "definition": "The study of how individuals, firms, and societies choose to allocate scarce resources among competing uses.",
+    "example": "A government deciding how much of its budget to spend on schools versus roads is an economic choice.",
+    "related": [
+      "scarcity",
+      "opportunity-cost",
+      "microeconomics",
+      "macroeconomics"
+    ]
+  },
+  {
+    "id": "scarcity",
+    "chapterId": "ch1",
+    "term": "Scarcity",
+    "definition": "The condition that wants exceed the resources available to satisfy them, so every choice requires a trade-off.",
+    "example": "There is only so much time in a day, so studying more economics means less time for something else.",
+    "related": [
+      "opportunity-cost",
+      "trade-off",
+      "economics"
+    ]
+  },
+  {
+    "id": "opportunity-cost",
+    "chapterId": "ch1",
+    "term": "Opportunity cost",
+    "definition": "The value of the next-best alternative given up when a choice is made.",
+    "example": "The opportunity cost of a concert ticket is the dinner, or the savings, you could have had with that same money and evening.",
+    "related": [
+      "trade-off",
+      "scarcity",
+      "sunk-cost"
+    ]
+  },
+  {
+    "id": "trade-off",
+    "chapterId": "ch1",
+    "term": "Trade-off",
+    "definition": "A situation in which having more of one thing requires having less of another.",
+    "example": "A society that produces more military goods typically produces fewer consumer goods.",
+    "related": [
+      "opportunity-cost",
+      "production-possibilities-frontier",
+      "scarcity"
+    ]
+  },
+  {
+    "id": "incentives",
+    "chapterId": "ch1",
+    "term": "Incentives",
+    "definition": "Rewards or penalties that shape people's choices. People usually respond to incentives in predictable ways.",
+    "example": "A tax on sugary drinks raises their price and typically reduces the quantity demanded.",
+    "related": [
+      "rational-choice",
+      "marginal-analysis"
+    ]
+  },
+  {
+    "id": "marginal-analysis",
+    "chapterId": "ch1",
+    "term": "Marginal analysis",
+    "definition": "Comparing the additional benefit of one more unit of an activity with its additional cost.",
+    "example": "A firm hires one more worker only if that worker's extra revenue covers the extra wage.",
+    "related": [
+      "marginal-benefit",
+      "marginal-cost",
+      "rational-choice"
+    ],
+    "aliases": [
+      "thinking at the margin"
+    ]
+  },
+  {
+    "id": "marginal-benefit",
+    "chapterId": "ch1",
+    "term": "Marginal benefit",
+    "definition": "The extra benefit obtained from consuming or producing one additional unit.",
+    "example": "The first slice of pizza is worth more to you than the fourth.",
+    "related": [
+      "marginal-cost",
+      "diminishing-marginal-utility",
+      "marginal-analysis"
+    ],
+    "aliases": [
+      "MB"
+    ]
+  },
+  {
+    "id": "marginal-cost",
+    "chapterId": "ch1",
+    "term": "Marginal cost",
+    "definition": "The extra cost of producing or doing one additional unit.",
+    "example": "The cost of staying open one more hour is the extra wages and utilities for that hour.",
+    "related": [
+      "marginal-benefit",
+      "marginal-analysis",
+      "mc"
+    ],
+    "aliases": [
+      "MC"
+    ]
+  },
+  {
+    "id": "rational-choice",
+    "chapterId": "ch1",
+    "term": "Rational choice",
+    "definition": "Choosing the option that the decision maker believes will best achieve their objectives, given constraints and information.",
+    "example": "A commuter picks the subway over a taxi when the time and money trade-off favors the subway.",
+    "related": [
+      "incentives",
+      "opportunity-cost",
+      "marginal-analysis"
+    ],
+    "aliases": [
+      "rationality"
+    ]
+  },
+  {
+    "id": "positive-statement",
+    "chapterId": "ch1",
+    "term": "Positive statement",
+    "definition": "A claim about what is, was, or will be that can be tested with evidence. It is about facts, not values.",
+    "example": "\"Raising the minimum wage will reduce teen employment\" is a positive claim, whether it turns out true or false.",
+    "related": [
+      "normative-statement"
+    ]
+  },
+  {
+    "id": "normative-statement",
+    "chapterId": "ch1",
+    "term": "Normative statement",
+    "definition": "A claim about what ought to be. It rests on values and cannot be settled by data alone.",
+    "example": "\"The minimum wage should be higher so work pays a living wage\" is a normative judgment.",
+    "related": [
+      "positive-statement"
+    ]
+  },
+  {
+    "id": "ceteris-paribus",
+    "chapterId": "ch1",
+    "term": "Ceteris paribus",
+    "definition": "Latin for \"other things equal.\" Economists hold other variables constant to isolate one relationship.",
+    "example": "The law of demand says that, ceteris paribus, a higher price reduces quantity demanded.",
+    "related": [
+      "law-of-demand",
+      "demand-curve"
+    ],
+    "aliases": [
+      "other things equal"
+    ]
+  },
+  {
+    "id": "efficiency",
+    "chapterId": "ch1",
+    "term": "Efficiency",
+    "definition": "Getting the most value from scarce resources. An outcome is efficient when no one can be made better off without making someone else worse off.",
+    "example": "If leftover bread is thrown away while people nearby want it, the allocation is inefficient.",
+    "related": [
+      "equity",
+      "total-surplus",
+      "pareto-improvement"
+    ],
+    "aliases": [
+      "allocative efficiency"
+    ]
+  },
+  {
+    "id": "equity",
+    "chapterId": "ch1",
+    "term": "Equity",
+    "definition": "Fairness in the distribution of economic benefits. Equity is a value judgment and can conflict with efficiency.",
+    "example": "A progressive income tax can increase equity while changing work and investment incentives.",
+    "related": [
+      "efficiency",
+      "normative-statement"
+    ],
+    "aliases": [
+      "fairness"
+    ]
+  },
+  {
+    "id": "microeconomics",
+    "chapterId": "ch1",
+    "term": "Microeconomics",
+    "definition": "The study of individual decision makers \u2014 households, firms, and specific markets \u2014 and the prices that coordinate them.",
+    "example": "How a coffee shop sets prices and how students choose majors are micro questions.",
+    "related": [
+      "macroeconomics",
+      "economics"
+    ],
+    "aliases": [
+      "micro"
+    ]
+  },
+  {
+    "id": "macroeconomics",
+    "chapterId": "ch1",
+    "term": "Macroeconomics",
+    "definition": "The study of the economy as a whole: total output, unemployment, inflation, growth, and policy.",
+    "example": "Why the unemployment rate rose last year is a macro question.",
+    "related": [
+      "microeconomics",
+      "gdp",
+      "inflation"
+    ],
+    "aliases": [
+      "macro"
+    ]
+  },
+  {
+    "id": "factors-of-production",
+    "chapterId": "ch1",
+    "term": "Factors of production",
+    "definition": "The inputs used to produce goods and services, usually grouped as land, labor, capital, and entrepreneurship.",
+    "example": "A bakery uses a kitchen (capital), a baker (labor), flour (land/materials), and an owner who organizes them.",
+    "related": [
+      "production-function",
+      "physical-capital",
+      "human-capital"
+    ],
+    "aliases": [
+      "inputs",
+      "resources"
+    ]
+  },
+  {
+    "id": "production-possibilities-frontier",
+    "chapterId": "ch1",
+    "term": "Production possibilities frontier",
+    "definition": "A curve showing the maximum combinations of two goods an economy can produce with given resources and technology. Points on the frontier are efficient; inside are inefficient; outside are unattainable.",
+    "example": "A country that uses all resources can have more hospitals only by having fewer other buildings.",
+    "related": [
+      "opportunity-cost",
+      "trade-off",
+      "increasing-opportunity-cost",
+      "efficiency"
+    ],
+    "aliases": [
+      "PPF",
+      "PPC",
+      "production possibilities curve"
+    ]
+  },
+  {
+    "id": "increasing-opportunity-cost",
+    "chapterId": "ch1",
+    "term": "Increasing opportunity cost",
+    "definition": "The idea that as you produce more of one good, you give up increasingly larger amounts of the other, because resources are not equally suited to every use. This bows the PPF outward.",
+    "example": "The first acres used for wheat may be perfect farmland; later acres may have been much better as orchards.",
+    "related": [
+      "production-possibilities-frontier",
+      "opportunity-cost"
+    ],
+    "aliases": [
+      "law of increasing opportunity cost"
+    ]
+  },
+  {
+    "id": "sunk-cost",
+    "chapterId": "ch1",
+    "term": "Sunk cost",
+    "definition": "A cost that has already been incurred and cannot be recovered. Rational decisions ignore sunk costs and look only at future costs and benefits.",
+    "example": "You already paid for a nonrefundable ticket. Whether you go should depend on tonight's alternatives, not the sunk price.",
+    "related": [
+      "opportunity-cost",
+      "rational-choice",
+      "marginal-analysis"
+    ]
+  },
+  {
+    "id": "pareto-improvement",
+    "chapterId": "ch1",
+    "term": "Pareto improvement",
+    "definition": "A change that makes at least one person better off without making anyone worse off.",
+    "example": "Reallocating an unused classroom to a waitlisted seminar can be a Pareto improvement.",
+    "related": [
+      "efficiency"
+    ]
+  },
+  {
+    "id": "absolute-advantage",
+    "chapterId": "ch2",
+    "term": "Absolute advantage",
+    "definition": "The ability to produce a good using fewer inputs, or to produce more output with the same inputs, than another producer.",
+    "example": "If Pat types faster and cooks faster than Sam, Pat has an absolute advantage in both tasks.",
+    "related": [
+      "comparative-advantage",
+      "specialization"
+    ]
+  },
+  {
+    "id": "comparative-advantage",
+    "chapterId": "ch2",
+    "term": "Comparative advantage",
+    "definition": "The ability to produce a good at a lower opportunity cost than another producer. Comparative advantage, not absolute advantage, is the basis for mutually beneficial trade.",
+    "example": "Even if a lawyer types faster than a secretary, the lawyer's opportunity cost of typing is higher, so the secretary has the comparative advantage in typing.",
+    "related": [
+      "absolute-advantage",
+      "opportunity-cost",
+      "gains-from-trade",
+      "specialization"
+    ]
+  },
+  {
+    "id": "specialization",
+    "chapterId": "ch2",
+    "term": "Specialization",
+    "definition": "Concentrating production on the goods or tasks for which a person or country has a comparative advantage.",
+    "example": "Portugal specializing in wine and England in cloth is the classic textbook example.",
+    "related": [
+      "comparative-advantage",
+      "gains-from-trade"
+    ]
+  },
+  {
+    "id": "gains-from-trade",
+    "chapterId": "ch2",
+    "term": "Gains from trade",
+    "definition": "The extra output or extra utility that parties obtain by specializing and exchanging, compared with producing only for themselves.",
+    "example": "Two roommates who split cooking and cleaning according to comparative advantage finish both chores faster.",
+    "related": [
+      "comparative-advantage",
+      "specialization",
+      "terms-of-trade"
+    ]
+  },
+  {
+    "id": "terms-of-trade",
+    "chapterId": "ch2",
+    "term": "Terms of trade",
+    "definition": "The rate at which one good is exchanged for another. Mutually beneficial terms of trade lie between the two parties' opportunity costs.",
+    "example": "If one country gives up 1 cloth for 2 wine and the other gives up 1 cloth for 4 wine, they can trade at 1 cloth for 3 wine and both gain.",
+    "related": [
+      "gains-from-trade",
+      "comparative-advantage"
+    ]
+  },
+  {
+    "id": "imports",
+    "chapterId": "ch2",
+    "term": "Imports",
+    "definition": "Goods and services purchased from foreign producers and consumed domestically.",
+    "example": "A U.S. household buying a phone assembled abroad is importing.",
+    "related": [
+      "exports",
+      "net-exports",
+      "autarky"
+    ]
+  },
+  {
+    "id": "exports",
+    "chapterId": "ch2",
+    "term": "Exports",
+    "definition": "Goods and services produced domestically and sold to buyers in other countries.",
+    "example": "Brazilian coffee sold in Europe is an export for Brazil.",
+    "related": [
+      "imports",
+      "net-exports"
+    ]
+  },
+  {
+    "id": "autarky",
+    "chapterId": "ch2",
+    "term": "Autarky",
+    "definition": "A situation in which a country or person does not trade with others and consumes only what it produces.",
+    "example": "A household that grows all its own food and never shops is living in autarky.",
+    "related": [
+      "gains-from-trade",
+      "imports",
+      "exports"
+    ]
+  },
+  {
+    "id": "interdependence",
+    "chapterId": "ch2",
+    "term": "Interdependence",
+    "definition": "The reliance of people and countries on one another for goods, services, and inputs that results from specialization and trade.",
+    "example": "Modern car production depends on parts and software from many countries.",
+    "related": [
+      "specialization",
+      "gains-from-trade"
+    ]
+  },
+  {
+    "id": "market",
+    "chapterId": "ch3",
+    "term": "Market",
+    "definition": "A group of buyers and sellers of a particular good or service, and the arrangements through which they trade.",
+    "example": "The market for used laptops includes campus listings, shops, and online platforms.",
+    "related": [
+      "competitive-market",
+      "equilibrium"
+    ]
+  },
+  {
+    "id": "competitive-market",
+    "chapterId": "ch3",
+    "term": "Competitive market",
+    "definition": "A market with many buyers and sellers of a nearly identical product, so that no single trader can influence the price.",
+    "example": "Wholesale wheat is closer to a competitive market than the market for a patented drug.",
+    "related": [
+      "market",
+      "price-taker",
+      "perfect-competition"
+    ],
+    "aliases": [
+      "perfectly competitive market"
+    ]
+  },
+  {
+    "id": "demand",
+    "chapterId": "ch3",
+    "term": "Demand",
+    "definition": "The relationship between the price of a good and the quantity buyers are willing and able to purchase, other things equal.",
+    "example": "At lower coffee prices, more cups are demanded each morning.",
+    "related": [
+      "quantity-demanded",
+      "law-of-demand",
+      "demand-curve"
+    ]
+  },
+  {
+    "id": "quantity-demanded",
+    "chapterId": "ch3",
+    "term": "Quantity demanded",
+    "definition": "The amount of a good buyers want to buy at a specific price. A price change moves quantity demanded along the demand curve.",
+    "example": "If the price of apples falls from $2 to $1, quantity demanded might rise from 4 to 7 pounds.",
+    "related": [
+      "demand",
+      "law-of-demand"
+    ],
+    "aliases": [
+      "Qd"
+    ]
+  },
+  {
+    "id": "law-of-demand",
+    "chapterId": "ch3",
+    "term": "Law of demand",
+    "definition": "Other things equal, when the price of a good rises, the quantity demanded falls, and when the price falls, quantity demanded rises.",
+    "example": "Concert tickets that get more expensive usually sell fewer seats.",
+    "related": [
+      "demand",
+      "quantity-demanded",
+      "ceteris-paribus"
+    ]
+  },
+  {
+    "id": "demand-curve",
+    "chapterId": "ch3",
+    "term": "Demand curve",
+    "definition": "A graph of the demand relationship, with price on the vertical axis and quantity on the horizontal axis. It usually slopes down.",
+    "example": "A city transit map of fares versus daily riders is a demand curve.",
+    "related": [
+      "demand",
+      "substitutes",
+      "complements"
+    ]
+  },
+  {
+    "id": "substitutes",
+    "chapterId": "ch3",
+    "term": "Substitutes",
+    "definition": "Goods that can take each other's place. A rise in the price of one increases demand for the other.",
+    "example": "Butter and margarine are substitutes for many cooks.",
+    "related": [
+      "complements",
+      "cross-price-elasticity",
+      "demand"
+    ]
+  },
+  {
+    "id": "complements",
+    "chapterId": "ch3",
+    "term": "Complements",
+    "definition": "Goods that are used together. A rise in the price of one decreases demand for the other.",
+    "example": "Printers and ink cartridges are complements.",
+    "related": [
+      "substitutes",
+      "cross-price-elasticity",
+      "demand"
+    ]
+  },
+  {
+    "id": "normal-good",
+    "chapterId": "ch3",
+    "term": "Normal good",
+    "definition": "A good for which demand rises when income rises.",
+    "example": "Restaurant meals are a normal good for most households.",
+    "related": [
+      "inferior-good",
+      "income-elasticity"
+    ]
+  },
+  {
+    "id": "inferior-good",
+    "chapterId": "ch3",
+    "term": "Inferior good",
+    "definition": "A good for which demand falls when income rises.",
+    "example": "Instant noodles may be inferior if people switch to fresher food as income grows.",
+    "related": [
+      "normal-good",
+      "income-elasticity"
+    ]
+  },
+  {
+    "id": "supply",
+    "chapterId": "ch3",
+    "term": "Supply",
+    "definition": "The relationship between the price of a good and the quantity sellers are willing and able to sell, other things equal.",
+    "example": "Higher wheat prices lead farmers to plant more wheat.",
+    "related": [
+      "quantity-supplied",
+      "law-of-supply",
+      "supply-curve"
+    ]
+  },
+  {
+    "id": "quantity-supplied",
+    "chapterId": "ch3",
+    "term": "Quantity supplied",
+    "definition": "The amount of a good sellers want to sell at a specific price. A price change moves quantity supplied along the supply curve.",
+    "example": "If tablet prices rise, existing factories may run extra shifts and raise quantity supplied.",
+    "related": [
+      "supply",
+      "law-of-supply"
+    ],
+    "aliases": [
+      "Qs"
+    ]
+  },
+  {
+    "id": "law-of-supply",
+    "chapterId": "ch3",
+    "term": "Law of supply",
+    "definition": "Other things equal, when the price of a good rises, the quantity supplied rises, and when the price falls, quantity supplied falls.",
+    "example": "A surge in avocado prices encourages more growers to harvest and ship avocados.",
+    "related": [
+      "supply",
+      "quantity-supplied"
+    ]
+  },
+  {
+    "id": "supply-curve",
+    "chapterId": "ch3",
+    "term": "Supply curve",
+    "definition": "A graph of the supply relationship. It usually slopes up because higher prices draw out more production.",
+    "example": "An oil-field chart of price versus barrels offered is a supply curve.",
+    "related": [
+      "supply",
+      "input-prices"
+    ]
+  },
+  {
+    "id": "input-prices",
+    "chapterId": "ch3",
+    "term": "Input prices",
+    "definition": "The prices of factors and materials used to produce a good. Higher input prices shift supply left; lower input prices shift it right.",
+    "example": "A jump in steel prices shifts the supply of cars leftward.",
+    "related": [
+      "supply",
+      "factors-of-production"
+    ],
+    "aliases": [
+      "factor prices"
+    ]
+  },
+  {
+    "id": "equilibrium",
+    "chapterId": "ch3",
+    "term": "Equilibrium",
+    "definition": "The price and quantity at which quantity demanded equals quantity supplied. There is no tendency for price to change until something shifts demand or supply.",
+    "example": "If 1,000 tickets are demanded and supplied at $40, the concert market is in equilibrium.",
+    "related": [
+      "surplus",
+      "shortage",
+      "market-clearing-price"
+    ],
+    "aliases": [
+      "market equilibrium"
+    ]
+  },
+  {
+    "id": "market-clearing-price",
+    "chapterId": "ch3",
+    "term": "Market-clearing price",
+    "definition": "The equilibrium price: the price that clears the market by equating quantity demanded and quantity supplied.",
+    "example": "Auction prices often move until the last unsold item finds a buyer.",
+    "related": [
+      "equilibrium"
+    ],
+    "aliases": [
+      "market clearing price"
+    ]
+  },
+  {
+    "id": "surplus",
+    "chapterId": "ch3",
+    "term": "Surplus",
+    "definition": "A situation in which quantity supplied exceeds quantity demanded at the current price. Price tends to fall.",
+    "example": "Unsold winter coats in March are a surplus; stores mark them down.",
+    "related": [
+      "shortage",
+      "equilibrium",
+      "price-floor"
+    ],
+    "aliases": [
+      "excess supply"
+    ]
+  },
+  {
+    "id": "shortage",
+    "chapterId": "ch3",
+    "term": "Shortage",
+    "definition": "A situation in which quantity demanded exceeds quantity supplied at the current price. Price tends to rise.",
+    "example": "Sold-out festival tickets at the printed price are a shortage.",
+    "related": [
+      "surplus",
+      "equilibrium",
+      "price-ceiling"
+    ],
+    "aliases": [
+      "excess demand"
+    ]
+  },
+  {
+    "id": "elasticity",
+    "chapterId": "ch4",
+    "term": "Elasticity",
+    "definition": "A unit-free measure of how much one variable responds to a change in another, usually as a percentage change over a percentage change.",
+    "example": "If a 10% price cut raises quantity demanded 20%, demand elasticity is 2.",
+    "related": [
+      "price-elasticity-of-demand",
+      "price-elasticity-of-supply"
+    ]
+  },
+  {
+    "id": "price-elasticity-of-demand",
+    "chapterId": "ch4",
+    "term": "Price elasticity of demand",
+    "definition": "The percentage change in quantity demanded divided by the percentage change in price. Economists often report it as a positive number (absolute value).",
+    "example": "If price rises 5% and quantity demanded falls 15%, elasticity is 3.",
+    "related": [
+      "elastic-demand",
+      "inelastic-demand",
+      "total-revenue-test"
+    ],
+    "aliases": [
+      "PED",
+      "own-price elasticity"
+    ]
+  },
+  {
+    "id": "elastic-demand",
+    "chapterId": "ch4",
+    "term": "Elastic demand",
+    "definition": "Demand is elastic when the price elasticity is greater than 1: quantity changes by a larger percentage than price.",
+    "example": "Demand for a particular brand of cereal is often elastic because many brands are close substitutes.",
+    "related": [
+      "inelastic-demand",
+      "unit-elastic",
+      "price-elasticity-of-demand"
+    ]
+  },
+  {
+    "id": "inelastic-demand",
+    "chapterId": "ch4",
+    "term": "Inelastic demand",
+    "definition": "Demand is inelastic when the price elasticity is less than 1: quantity changes by a smaller percentage than price.",
+    "example": "Demand for insulin is highly inelastic because there are few substitutes.",
+    "related": [
+      "elastic-demand",
+      "perfectly-inelastic",
+      "price-elasticity-of-demand"
+    ]
+  },
+  {
+    "id": "unit-elastic",
+    "chapterId": "ch4",
+    "term": "Unit elastic",
+    "definition": "A response in which the percentage change in quantity equals the percentage change in price, so elasticity equals 1.",
+    "example": "If a 10% price rise cuts quantity demanded by 10%, demand is unit elastic.",
+    "related": [
+      "elastic-demand",
+      "inelastic-demand"
+    ],
+    "aliases": [
+      "unit elastic demand",
+      "unitary elastic"
+    ]
+  },
+  {
+    "id": "perfectly-elastic",
+    "chapterId": "ch4",
+    "term": "Perfectly elastic",
+    "definition": "Elasticity is infinite: buyers or sellers will trade any amount at one price and nothing at a slightly worse price. The curve is horizontal.",
+    "example": "A small wheat farm in a huge market faces a nearly perfectly elastic demand at the market price.",
+    "related": [
+      "perfectly-inelastic",
+      "price-taker"
+    ]
+  },
+  {
+    "id": "perfectly-inelastic",
+    "chapterId": "ch4",
+    "term": "Perfectly inelastic",
+    "definition": "Elasticity is zero: quantity does not change when price changes. The curve is vertical.",
+    "example": "A unique painting has a perfectly inelastic supply: there is only one of it.",
+    "related": [
+      "perfectly-elastic",
+      "inelastic-demand"
+    ]
+  },
+  {
+    "id": "total-revenue-test",
+    "chapterId": "ch4",
+    "term": "Total revenue test",
+    "definition": "If price and total revenue move in opposite directions, demand is elastic. If they move together, demand is inelastic. If revenue is unchanged, demand is unit elastic.",
+    "example": "A fare hike that fills the register with more money means demand for those rides is inelastic.",
+    "related": [
+      "price-elasticity-of-demand",
+      "elastic-demand"
+    ]
+  },
+  {
+    "id": "income-elasticity",
+    "chapterId": "ch4",
+    "term": "Income elasticity of demand",
+    "definition": "The percentage change in quantity demanded divided by the percentage change in income. Positive for normal goods, negative for inferior goods.",
+    "example": "If income rises 10% and restaurant meals rise 15%, income elasticity is 1.5.",
+    "related": [
+      "normal-good",
+      "inferior-good"
+    ],
+    "aliases": [
+      "income elasticity"
+    ]
+  },
+  {
+    "id": "cross-price-elasticity",
+    "chapterId": "ch4",
+    "term": "Cross-price elasticity of demand",
+    "definition": "The percentage change in quantity demanded of one good divided by the percentage change in the price of another. Positive for substitutes, negative for complements.",
+    "example": "If tea prices rise 10% and coffee demand rises 4%, the cross-price elasticity is 0.4.",
+    "related": [
+      "substitutes",
+      "complements"
+    ],
+    "aliases": [
+      "cross price elasticity",
+      "XED"
+    ]
+  },
+  {
+    "id": "price-elasticity-of-supply",
+    "chapterId": "ch4",
+    "term": "Price elasticity of supply",
+    "definition": "The percentage change in quantity supplied divided by the percentage change in price. Supply is more elastic when firms can expand output easily.",
+    "example": "Beachfront land has inelastic supply; factory-made mugs have more elastic supply.",
+    "related": [
+      "elasticity",
+      "supply"
+    ],
+    "aliases": [
+      "PES"
+    ]
+  },
+  {
+    "id": "determinants-of-elasticity",
+    "chapterId": "ch4",
+    "term": "Determinants of demand elasticity",
+    "definition": "Demand is more elastic when there are close substitutes, the good is a luxury, the time horizon is long, or the good takes a large share of the budget.",
+    "example": "Gasoline demand is more elastic over several years than over a single week.",
+    "related": [
+      "price-elasticity-of-demand",
+      "elastic-demand"
+    ]
+  },
+  {
+    "id": "utility",
+    "chapterId": "ch5",
+    "term": "Utility",
+    "definition": "A measure of the satisfaction or well-being a person gets from consuming goods and services.",
+    "example": "A rainy-day movie may give you more utility than another hour of chores.",
+    "related": [
+      "marginal-utility",
+      "diminishing-marginal-utility"
+    ]
+  },
+  {
+    "id": "marginal-utility",
+    "chapterId": "ch5",
+    "term": "Marginal utility",
+    "definition": "The extra utility from consuming one more unit of a good.",
+    "example": "The first glass of water after a run has high marginal utility; the fifth does not.",
+    "related": [
+      "utility",
+      "diminishing-marginal-utility"
+    ],
+    "aliases": [
+      "MU"
+    ]
+  },
+  {
+    "id": "diminishing-marginal-utility",
+    "chapterId": "ch5",
+    "term": "Diminishing marginal utility",
+    "definition": "The principle that extra utility from each additional unit of a good eventually falls, holding other consumption fixed.",
+    "example": "The tenth cookie in a sitting is less satisfying than the first.",
+    "related": [
+      "marginal-utility",
+      "utility",
+      "marginal-benefit"
+    ],
+    "aliases": [
+      "DMU",
+      "law of diminishing marginal utility"
+    ]
+  },
+  {
+    "id": "budget-constraint",
+    "chapterId": "ch5",
+    "term": "Budget constraint",
+    "definition": "The limit on consumption bundles a household can afford, given income and prices. Its slope is the relative price of the two goods.",
+    "example": "With $20, $2 tacos and $4 sodas, you can buy at most 10 tacos or 5 sodas, or mixtures on the line between them.",
+    "related": [
+      "indifference-curve",
+      "opportunity-cost"
+    ],
+    "aliases": [
+      "budget line"
+    ]
+  },
+  {
+    "id": "indifference-curve",
+    "chapterId": "ch5",
+    "term": "Indifference curve",
+    "definition": "A curve showing bundles that give a consumer the same utility. Higher curves are better if more is preferred to less.",
+    "example": "You might be equally happy with 2 concerts and 8 meals or 3 concerts and 5 meals.",
+    "related": [
+      "mrs",
+      "budget-constraint",
+      "utility"
+    ]
+  },
+  {
+    "id": "mrs",
+    "chapterId": "ch5",
+    "term": "Marginal rate of substitution",
+    "definition": "The rate at which a consumer is willing to trade one good for another while staying equally happy. It is the slope of an indifference curve.",
+    "example": "If you will give up 2 coffees for 1 extra pastry and feel no worse, your MRS is 2 coffees per pastry.",
+    "related": [
+      "indifference-curve",
+      "opportunity-cost"
+    ],
+    "aliases": [
+      "MRS"
+    ]
+  },
+  {
+    "id": "willingness-to-pay",
+    "chapterId": "ch5",
+    "term": "Willingness to pay",
+    "definition": "The maximum amount a buyer will pay for a unit of a good. It measures the buyer's marginal benefit.",
+    "example": "If you would pay up to $12 for a book priced at $8, your consumer surplus on that book is $4.",
+    "related": [
+      "consumer-surplus",
+      "marginal-benefit"
+    ],
+    "aliases": [
+      "WTP"
+    ]
+  },
+  {
+    "id": "consumer-surplus",
+    "chapterId": "ch5",
+    "term": "Consumer surplus",
+    "definition": "The difference between what buyers are willing to pay and what they actually pay, summed across units purchased.",
+    "example": "A fan willing to pay $80 who buys a $50 ticket enjoys $30 of consumer surplus.",
+    "related": [
+      "producer-surplus",
+      "total-surplus",
+      "willingness-to-pay"
+    ],
+    "aliases": [
+      "CS"
+    ]
+  },
+  {
+    "id": "producer-surplus",
+    "chapterId": "ch5",
+    "term": "Producer surplus",
+    "definition": "The difference between the price sellers receive and the minimum they would have accepted (their marginal cost), summed across units sold.",
+    "example": "A musician who would play for $200 and is paid $350 earns $150 of producer surplus.",
+    "related": [
+      "consumer-surplus",
+      "total-surplus",
+      "marginal-cost"
+    ],
+    "aliases": [
+      "PS"
+    ]
+  },
+  {
+    "id": "total-surplus",
+    "chapterId": "ch5",
+    "term": "Total surplus",
+    "definition": "Consumer surplus plus producer surplus. In a well-functioning competitive market with no externalities, equilibrium maximizes total surplus.",
+    "example": "A street market that matches willing buyers and sellers raises total surplus compared with no trade.",
+    "related": [
+      "consumer-surplus",
+      "producer-surplus",
+      "efficiency",
+      "deadweight-loss"
+    ],
+    "aliases": [
+      "social surplus",
+      "total welfare"
+    ]
+  },
+  {
+    "id": "reservation-price",
+    "chapterId": "ch5",
+    "term": "Reservation price",
+    "definition": "The cutoff price at which a buyer is just willing to buy, or a seller is just willing to sell.",
+    "example": "A seller's reservation price for a used bike might be $90; below that they keep it.",
+    "related": [
+      "willingness-to-pay",
+      "producer-surplus"
+    ]
+  },
+  {
+    "id": "firm",
+    "chapterId": "ch6",
+    "term": "Firm",
+    "definition": "An organization that hires factors of production and uses them to produce and sell goods or services.",
+    "example": "A bakery, a hospital, and a software studio are all firms.",
+    "related": [
+      "production-function",
+      "economic-profit"
+    ]
+  },
+  {
+    "id": "production-function",
+    "chapterId": "ch6",
+    "term": "Production function",
+    "definition": "The relationship between the quantity of inputs a firm uses and the quantity of output it can produce.",
+    "example": "Two ovens and three bakers might produce 200 loaves a day.",
+    "related": [
+      "marginal-product",
+      "factors-of-production"
+    ]
+  },
+  {
+    "id": "marginal-product",
+    "chapterId": "ch6",
+    "term": "Marginal product",
+    "definition": "The extra output produced by one additional unit of an input, holding other inputs fixed.",
+    "example": "The fifth barista might add 12 drinks an hour to output.",
+    "related": [
+      "diminishing-marginal-returns",
+      "production-function",
+      "mrp"
+    ],
+    "aliases": [
+      "MP",
+      "marginal product of labor"
+    ]
+  },
+  {
+    "id": "diminishing-marginal-returns",
+    "chapterId": "ch6",
+    "term": "Diminishing marginal returns",
+    "definition": "In the short run, adding more of one input while holding others fixed eventually yields smaller extra output.",
+    "example": "Crowding a fifth cook into a tiny kitchen adds less output than the second cook did.",
+    "related": [
+      "marginal-product",
+      "short-run"
+    ],
+    "aliases": [
+      "diminishing returns",
+      "law of diminishing returns"
+    ]
+  },
+  {
+    "id": "explicit-cost",
+    "chapterId": "ch6",
+    "term": "Explicit cost",
+    "definition": "A cost that involves a direct money outlay.",
+    "example": "Wages, rent, and flour invoices are explicit costs.",
+    "related": [
+      "implicit-cost",
+      "accounting-profit",
+      "economic-profit"
+    ]
+  },
+  {
+    "id": "implicit-cost",
+    "chapterId": "ch6",
+    "term": "Implicit cost",
+    "definition": "The opportunity cost of using resources the firm already owns, including the owner's time and capital.",
+    "example": "The salary an owner forgoes by running their own shop is an implicit cost.",
+    "related": [
+      "explicit-cost",
+      "opportunity-cost",
+      "economic-profit"
+    ]
+  },
+  {
+    "id": "accounting-profit",
+    "chapterId": "ch6",
+    "term": "Accounting profit",
+    "definition": "Total revenue minus explicit costs. It ignores implicit costs.",
+    "example": "Revenue of $200,000 minus $160,000 of bills is $40,000 of accounting profit.",
+    "related": [
+      "economic-profit",
+      "explicit-cost"
+    ]
+  },
+  {
+    "id": "economic-profit",
+    "chapterId": "ch6",
+    "term": "Economic profit",
+    "definition": "Total revenue minus all opportunity costs, explicit and implicit. Zero economic profit means the firm is earning a normal return.",
+    "example": "If the same $40,000 accounting profit requires giving up a $50,000 job, economic profit is negative.",
+    "related": [
+      "accounting-profit",
+      "implicit-cost",
+      "normal-profit"
+    ]
+  },
+  {
+    "id": "normal-profit",
+    "chapterId": "ch6",
+    "term": "Normal profit",
+    "definition": "The minimum return needed to keep resources in their current use; equivalent to zero economic profit.",
+    "example": "A cafe that covers wages, rent, and the owner's next-best salary is earning normal profit.",
+    "related": [
+      "economic-profit",
+      "implicit-cost"
+    ]
+  },
+  {
+    "id": "fixed-cost",
+    "chapterId": "ch6",
+    "term": "Fixed cost",
+    "definition": "A cost that does not change with output in the short run.",
+    "example": "Monthly shop rent is a fixed cost whether you bake 10 loaves or 1,000.",
+    "related": [
+      "variable-cost",
+      "total-cost",
+      "average-fixed-cost"
+    ],
+    "aliases": [
+      "FC"
+    ]
+  },
+  {
+    "id": "variable-cost",
+    "chapterId": "ch6",
+    "term": "Variable cost",
+    "definition": "A cost that changes with output.",
+    "example": "Flour and hourly wages rise as a bakery produces more bread.",
+    "related": [
+      "fixed-cost",
+      "total-cost",
+      "average-variable-cost"
+    ],
+    "aliases": [
+      "VC"
+    ]
+  },
+  {
+    "id": "total-cost",
+    "chapterId": "ch6",
+    "term": "Total cost",
+    "definition": "Fixed cost plus variable cost.",
+    "example": "If rent is $2,000 and ingredients plus wages are $3,000, total cost is $5,000.",
+    "related": [
+      "fixed-cost",
+      "variable-cost",
+      "average-total-cost"
+    ],
+    "aliases": [
+      "TC"
+    ]
+  },
+  {
+    "id": "mc",
+    "chapterId": "ch6",
+    "term": "Marginal cost (firm)",
+    "definition": "The extra cost of producing one more unit of output. MC typically falls at first and then rises because of diminishing returns.",
+    "example": "The 101st sandwich might add $2.40 of ingredients and extra labor.",
+    "related": [
+      "average-total-cost",
+      "diminishing-marginal-returns",
+      "mr-equals-mc"
+    ],
+    "aliases": [
+      "marginal cost"
+    ]
+  },
+  {
+    "id": "average-total-cost",
+    "chapterId": "ch6",
+    "term": "Average total cost",
+    "definition": "Total cost divided by output. ATC is U-shaped in the usual short-run model.",
+    "example": "Producing 500 mugs at $2,000 total cost means ATC is $4.",
+    "related": [
+      "average-variable-cost",
+      "average-fixed-cost",
+      "mc"
+    ],
+    "aliases": [
+      "ATC",
+      "average cost",
+      "AC"
+    ]
+  },
+  {
+    "id": "average-variable-cost",
+    "chapterId": "ch6",
+    "term": "Average variable cost",
+    "definition": "Variable cost divided by output. A competitive firm shuts down in the short run if price falls below AVC.",
+    "example": "If variable costs are $300 for 100 units, AVC is $3.",
+    "related": [
+      "average-total-cost",
+      "shutdown-rule"
+    ],
+    "aliases": [
+      "AVC"
+    ]
+  },
+  {
+    "id": "average-fixed-cost",
+    "chapterId": "ch6",
+    "term": "Average fixed cost",
+    "definition": "Fixed cost divided by output. AFC falls as output rises because the same fixed cost is spread over more units.",
+    "example": "A $1,000 oven used for 500 pizzas contributes $2 of AFC per pizza.",
+    "related": [
+      "fixed-cost",
+      "average-total-cost"
+    ],
+    "aliases": [
+      "AFC"
+    ]
+  },
+  {
+    "id": "short-run",
+    "chapterId": "ch6",
+    "term": "Short run",
+    "definition": "A period in which at least one input is fixed.",
+    "example": "A restaurant can hire waiters this week but cannot enlarge the dining room.",
+    "related": [
+      "long-run",
+      "fixed-cost",
+      "diminishing-marginal-returns"
+    ]
+  },
+  {
+    "id": "long-run",
+    "chapterId": "ch6",
+    "term": "Long run",
+    "definition": "A period in which all inputs can be varied and firms can enter or exit.",
+    "example": "Over several years a restaurant can move, expand, or close.",
+    "related": [
+      "short-run",
+      "economies-of-scale"
+    ]
+  },
+  {
+    "id": "economies-of-scale",
+    "chapterId": "ch6",
+    "term": "Economies of scale",
+    "definition": "Long-run average cost falling as the firm's scale of production rises.",
+    "example": "A large chip plant may have a lower cost per chip than a tiny one.",
+    "related": [
+      "diseconomies-of-scale",
+      "constant-returns-to-scale",
+      "natural-monopoly"
+    ]
+  },
+  {
+    "id": "diseconomies-of-scale",
+    "chapterId": "ch6",
+    "term": "Diseconomies of scale",
+    "definition": "Long-run average cost rising as the firm becomes very large, often from coordination problems.",
+    "example": "A sprawling restaurant chain may add layers of management that raise cost per meal.",
+    "related": [
+      "economies-of-scale",
+      "long-run"
+    ]
+  },
+  {
+    "id": "constant-returns-to-scale",
+    "chapterId": "ch6",
+    "term": "Constant returns to scale",
+    "definition": "Long-run average cost that stays the same as the firm scales up or down.",
+    "example": "Duplicating a successful coffee kiosk in a similar location may leave average cost unchanged.",
+    "related": [
+      "economies-of-scale",
+      "diseconomies-of-scale"
+    ],
+    "aliases": [
+      "CRS"
+    ]
+  },
+  {
+    "id": "perfect-competition",
+    "chapterId": "ch7",
+    "term": "Perfect competition",
+    "definition": "A market structure with many firms, a standardized product, free entry, and firms that are price takers. In long-run equilibrium, economic profit is zero and price equals minimum ATC.",
+    "example": "Small organic-egg farms selling into a large wholesale market are close to this model.",
+    "related": [
+      "price-taker",
+      "mr-equals-mc",
+      "economic-profit"
+    ],
+    "aliases": [
+      "perfectly competitive market"
+    ]
+  },
+  {
+    "id": "price-taker",
+    "chapterId": "ch7",
+    "term": "Price taker",
+    "definition": "A buyer or seller who must accept the market price and cannot influence it.",
+    "example": "A single soybean farmer takes the world price as given.",
+    "related": [
+      "perfect-competition",
+      "competitive-market",
+      "price-maker"
+    ]
+  },
+  {
+    "id": "price-maker",
+    "chapterId": "ch7",
+    "term": "Price maker",
+    "definition": "A seller with market power that can choose price, facing a downward-sloping demand curve.",
+    "example": "A patented drug firm can set a high price because rivals cannot legally copy the drug.",
+    "related": [
+      "monopoly",
+      "price-taker",
+      "market-power"
+    ]
+  },
+  {
+    "id": "market-power",
+    "chapterId": "ch7",
+    "term": "Market power",
+    "definition": "The ability to set price above marginal cost without losing all customers.",
+    "example": "A town's only internet provider has market power if residents have no alternative.",
+    "related": [
+      "price-maker",
+      "monopoly",
+      "barriers-to-entry"
+    ]
+  },
+  {
+    "id": "monopoly",
+    "chapterId": "ch7",
+    "term": "Monopoly",
+    "definition": "A market with a single seller of a product that has no close substitutes, protected by barriers to entry. The monopolist produces where MR = MC and charges the price on the demand curve.",
+    "example": "A regional water utility is often a regulated monopoly.",
+    "related": [
+      "barriers-to-entry",
+      "natural-monopoly",
+      "price-discrimination",
+      "mr-equals-mc"
+    ]
+  },
+  {
+    "id": "barriers-to-entry",
+    "chapterId": "ch7",
+    "term": "Barriers to entry",
+    "definition": "Obstacles that prevent new firms from competing, such as patents, licenses, control of a key input, or large economies of scale.",
+    "example": "A patent on a drug is a legal barrier to entry.",
+    "related": [
+      "monopoly",
+      "natural-monopoly",
+      "market-power"
+    ]
+  },
+  {
+    "id": "natural-monopoly",
+    "chapterId": "ch7",
+    "term": "Natural monopoly",
+    "definition": "An industry in which one firm can supply the market at a lower average cost than two or more firms, usually because of large fixed costs and economies of scale.",
+    "example": "Electricity transmission is a classic natural monopoly.",
+    "related": [
+      "economies-of-scale",
+      "monopoly",
+      "barriers-to-entry"
+    ]
+  },
+  {
+    "id": "price-discrimination",
+    "chapterId": "ch7",
+    "term": "Price discrimination",
+    "definition": "Selling the same product to different buyers at different prices that are not justified by cost differences.",
+    "example": "Student discounts and airline fare classes are forms of price discrimination.",
+    "related": [
+      "monopoly",
+      "consumer-surplus"
+    ]
+  },
+  {
+    "id": "mr-equals-mc",
+    "chapterId": "ch7",
+    "term": "MR = MC rule",
+    "definition": "A profit-maximizing firm produces the quantity at which marginal revenue equals marginal cost, provided price covers the relevant average cost.",
+    "example": "If another haircut would add $20 of revenue and $14 of cost, the salon should offer it.",
+    "related": [
+      "marginal-revenue",
+      "mc",
+      "shutdown-rule"
+    ],
+    "aliases": [
+      "profit maximization",
+      "MR = MC"
+    ]
+  },
+  {
+    "id": "marginal-revenue",
+    "chapterId": "ch7",
+    "term": "Marginal revenue",
+    "definition": "The extra revenue from selling one more unit. For a price taker, MR equals price. For a price maker, MR is below price because selling more requires cutting price on previous units.",
+    "example": "A monopolist who cuts price from $10 to $9 to sell an extra unit may gain $9 but lose $1 on each previous unit.",
+    "related": [
+      "mr-equals-mc",
+      "monopoly"
+    ],
+    "aliases": [
+      "MR"
+    ]
+  },
+  {
+    "id": "shutdown-rule",
+    "chapterId": "ch7",
+    "term": "Shutdown rule",
+    "definition": "In the short run a firm should produce nothing if price is below average variable cost. It should still operate at a loss if price is between AVC and ATC, because some fixed costs are covered.",
+    "example": "A ski lodge may close for a week of rain if ticket revenue cannot cover staff and fuel.",
+    "related": [
+      "average-variable-cost",
+      "sunk-cost",
+      "perfect-competition"
+    ]
+  },
+  {
+    "id": "oligopoly",
+    "chapterId": "ch7",
+    "term": "Oligopoly",
+    "definition": "A market dominated by a few firms that are interdependent: each firm's best action depends on what the others do.",
+    "example": "The markets for airframes, wireless carriers, and soda are often oligopolies.",
+    "related": [
+      "game-theory",
+      "nash-equilibrium",
+      "cartel",
+      "collusion"
+    ]
+  },
+  {
+    "id": "monopolistic-competition",
+    "chapterId": "ch7",
+    "term": "Monopolistic competition",
+    "definition": "A market with many firms, free entry, and differentiated products. Firms have some price-setting power but earn zero economic profit in the long run.",
+    "example": "Neighborhood restaurants and paperback novels are monopolistically competitive.",
+    "related": [
+      "product-differentiation",
+      "perfect-competition",
+      "monopoly"
+    ]
+  },
+  {
+    "id": "product-differentiation",
+    "chapterId": "ch7",
+    "term": "Product differentiation",
+    "definition": "Making a product distinct in quality, branding, location, or features so that it is not a perfect substitute for rivals' goods.",
+    "example": "Two coffee shops a block apart differentiate with vibe, roast, and hours.",
+    "related": [
+      "monopolistic-competition"
+    ]
+  },
+  {
+    "id": "game-theory",
+    "chapterId": "ch7",
+    "term": "Game theory",
+    "definition": "The study of strategic interaction, in which each player's payoff depends on everyone else's actions.",
+    "example": "Two gas stations choosing prices are playing a pricing game.",
+    "related": [
+      "nash-equilibrium",
+      "oligopoly",
+      "collusion"
+    ]
+  },
+  {
+    "id": "nash-equilibrium",
+    "chapterId": "ch7",
+    "term": "Nash equilibrium",
+    "definition": "A strategy profile in which no player wants to change their action given what the others are doing.",
+    "example": "If both firms advertise because each would lose customers by stopping alone, that pair of choices can be a Nash equilibrium.",
+    "related": [
+      "game-theory",
+      "oligopoly"
+    ]
+  },
+  {
+    "id": "collusion",
+    "chapterId": "ch7",
+    "term": "Collusion",
+    "definition": "An agreement among firms to limit competition, for example by fixing prices or splitting markets. Collusion is often illegal.",
+    "example": "Rival airlines secretly agreeing not to cut fares is collusion.",
+    "related": [
+      "cartel",
+      "oligopoly"
+    ]
+  },
+  {
+    "id": "cartel",
+    "chapterId": "ch7",
+    "term": "Cartel",
+    "definition": "A group of firms that collude to act like a monopolist, typically by restricting output to raise price.",
+    "example": "OPEC is a well-known oil cartel, though members often have incentives to cheat.",
+    "related": [
+      "collusion",
+      "oligopoly",
+      "nash-equilibrium"
+    ]
+  },
+  {
+    "id": "derived-demand",
+    "chapterId": "ch8",
+    "term": "Derived demand",
+    "definition": "Demand for a factor of production that comes from the demand for the goods that factor helps produce.",
+    "example": "Demand for carpenters rises when demand for new houses rises.",
+    "related": [
+      "mrp",
+      "factors-of-production"
+    ]
+  },
+  {
+    "id": "mrp",
+    "chapterId": "ch8",
+    "term": "Marginal revenue product",
+    "definition": "The extra revenue from employing one more unit of a factor: marginal product times marginal revenue.",
+    "example": "If one more programmer adds software that sells for $4,000 of extra revenue, MRP is $4,000.",
+    "related": [
+      "derived-demand",
+      "marginal-product",
+      "wage"
+    ],
+    "aliases": [
+      "MRP",
+      "value of marginal product",
+      "VMP"
+    ]
+  },
+  {
+    "id": "wage",
+    "chapterId": "ch8",
+    "term": "Wage",
+    "definition": "The price of labor services, usually per hour or per year.",
+    "example": "A cafe may pay $18 an hour plus tips.",
+    "related": [
+      "labor-supply",
+      "human-capital",
+      "compensating-differential"
+    ]
+  },
+  {
+    "id": "labor-supply",
+    "chapterId": "ch8",
+    "term": "Labor supply",
+    "definition": "The relationship between the wage and the hours of work people are willing to offer. Higher wages have substitution and income effects that can pull in opposite directions.",
+    "example": "A higher wage may lead some people to work more and others to take more leisure.",
+    "related": [
+      "wage",
+      "human-capital"
+    ]
+  },
+  {
+    "id": "human-capital",
+    "chapterId": "ch8",
+    "term": "Human capital",
+    "definition": "The skills, knowledge, and health embodied in people that raise their productivity.",
+    "example": "A nursing degree is human capital that typically raises wages.",
+    "related": [
+      "physical-capital",
+      "productivity",
+      "wage"
+    ]
+  },
+  {
+    "id": "compensating-differential",
+    "chapterId": "ch8",
+    "term": "Compensating differential",
+    "definition": "An extra wage paid to attract workers to jobs that are unpleasant, risky, or inconvenient.",
+    "example": "Night-shift and offshore-rig pay often includes a compensating differential.",
+    "related": [
+      "wage",
+      "human-capital"
+    ]
+  },
+  {
+    "id": "monopsony",
+    "chapterId": "ch8",
+    "term": "Monopsony",
+    "definition": "A market with a single (or dominant) buyer. A labor monopsonist hires fewer workers and pays a lower wage than a competitive labor market.",
+    "example": "A remote mining town with one large employer can be a labor monopsony.",
+    "related": [
+      "monopoly",
+      "wage"
+    ]
+  },
+  {
+    "id": "physical-capital",
+    "chapterId": "ch8",
+    "term": "Physical capital",
+    "definition": "Produced goods used to produce other goods and services, such as machines, buildings, and tools.",
+    "example": "A CNC mill and a warehouse are physical capital.",
+    "related": [
+      "human-capital",
+      "investment",
+      "factors-of-production"
+    ],
+    "aliases": [
+      "capital"
+    ]
+  },
+  {
+    "id": "land",
+    "chapterId": "ch8",
+    "term": "Land",
+    "definition": "Natural resources used in production, including soil, minerals, water, and location.",
+    "example": "A vineyard's hillside is land in the economic sense.",
+    "related": [
+      "rent",
+      "factors-of-production"
+    ]
+  },
+  {
+    "id": "rent",
+    "chapterId": "ch8",
+    "term": "Economic rent",
+    "definition": "A payment to a factor above the minimum needed to keep it in its current use. Also, the return to land.",
+    "example": "A pop star's income far above their next-best job is mostly economic rent.",
+    "related": [
+      "land",
+      "opportunity-cost"
+    ],
+    "aliases": [
+      "rent"
+    ]
+  },
+  {
+    "id": "interest",
+    "chapterId": "ch8",
+    "term": "Interest",
+    "definition": "The return to saving and the price of borrowed funds, usually expressed as a percentage per year.",
+    "example": "A 5% interest rate means $100 saved grows to $105 in a year, before inflation.",
+    "related": [
+      "real-interest-rate",
+      "investment",
+      "physical-capital"
+    ]
+  },
+  {
+    "id": "market-failure",
+    "chapterId": "ch9",
+    "term": "Market failure",
+    "definition": "A situation in which an unregulated market fails to allocate resources efficiently.",
+    "example": "Pollution, unprovided street lighting, and lemons markets are standard market failures.",
+    "related": [
+      "externality",
+      "public-good",
+      "asymmetric-information"
+    ]
+  },
+  {
+    "id": "externality",
+    "chapterId": "ch9",
+    "term": "Externality",
+    "definition": "A cost or benefit of an activity that falls on a bystander who did not choose to incur it.",
+    "example": "Your neighbor's late-night drum practice is a negative externality for you.",
+    "related": [
+      "negative-externality",
+      "positive-externality",
+      "pigouvian-tax"
+    ]
+  },
+  {
+    "id": "negative-externality",
+    "chapterId": "ch9",
+    "term": "Negative externality",
+    "definition": "An external cost. The market quantity is too high because sellers and buyers ignore costs imposed on others.",
+    "example": "Factory smoke that harms nearby lungs is a negative externality.",
+    "related": [
+      "externality",
+      "pigouvian-tax",
+      "deadweight-loss"
+    ]
+  },
+  {
+    "id": "positive-externality",
+    "chapterId": "ch9",
+    "term": "Positive externality",
+    "definition": "An external benefit. The market quantity is too low because decision makers ignore benefits conferred on others.",
+    "example": "Flu shots protect people who never got vaccinated.",
+    "related": [
+      "externality",
+      "subsidy"
+    ]
+  },
+  {
+    "id": "pigouvian-tax",
+    "chapterId": "ch9",
+    "term": "Pigouvian tax",
+    "definition": "A tax equal to the marginal external cost, meant to make private decision makers face the social cost.",
+    "example": "A carbon tax is a Pigouvian tax on greenhouse-gas emissions.",
+    "related": [
+      "negative-externality",
+      "subsidy"
+    ],
+    "aliases": [
+      "Pigovian tax",
+      "corrective tax"
+    ]
+  },
+  {
+    "id": "subsidy",
+    "chapterId": "ch9",
+    "term": "Subsidy",
+    "definition": "A payment that lowers the cost of an activity. A subsidy equal to a marginal external benefit can correct a positive externality.",
+    "example": "Scholarships subsidize education, which may have social benefits beyond the student.",
+    "related": [
+      "positive-externality",
+      "pigouvian-tax"
+    ]
+  },
+  {
+    "id": "coase-theorem",
+    "chapterId": "ch9",
+    "term": "Coase theorem",
+    "definition": "If property rights are well defined and bargaining is costless, private parties can negotiate an efficient solution to an externality regardless of who has the legal right.",
+    "example": "A beekeeper and an orchard owner can contract over hive placement if talking is cheap.",
+    "related": [
+      "externality",
+      "market-failure"
+    ]
+  },
+  {
+    "id": "public-good",
+    "chapterId": "ch9",
+    "term": "Public good",
+    "definition": "A good that is nonrival and nonexcludable. Markets underprovide public goods because of the free-rider problem.",
+    "example": "Basic scientific knowledge and national defense are classic public goods.",
+    "related": [
+      "private-good",
+      "free-rider",
+      "common-resource",
+      "club-good"
+    ]
+  },
+  {
+    "id": "private-good",
+    "chapterId": "ch9",
+    "term": "Private good",
+    "definition": "A good that is both rival and excludable, so markets can usually allocate it well.",
+    "example": "A sandwich is a private good: if you eat it, others cannot, and the shop can charge you.",
+    "related": [
+      "public-good",
+      "rivalry",
+      "excludability"
+    ]
+  },
+  {
+    "id": "common-resource",
+    "chapterId": "ch9",
+    "term": "Common resource",
+    "definition": "A good that is rival but nonexcludable. It is prone to overuse \u2014 the tragedy of the commons.",
+    "example": "An open-access fishery is a common resource.",
+    "related": [
+      "tragedy-of-the-commons",
+      "public-good",
+      "rivalry"
+    ],
+    "aliases": [
+      "common-pool resource"
+    ]
+  },
+  {
+    "id": "club-good",
+    "chapterId": "ch9",
+    "term": "Club good",
+    "definition": "A good that is nonrival (at least until congestion) but excludable.",
+    "example": "A streaming subscription or a toll road with spare capacity is a club good.",
+    "related": [
+      "public-good",
+      "private-good",
+      "excludability"
+    ],
+    "aliases": [
+      "artificially scarce good"
+    ]
+  },
+  {
+    "id": "rivalry",
+    "chapterId": "ch9",
+    "term": "Rivalry",
+    "definition": "A good is rival if one person's use reduces the amount available for others.",
+    "example": "A parking space is rival; a radio broadcast is not.",
+    "related": [
+      "excludability",
+      "private-good",
+      "common-resource"
+    ],
+    "aliases": [
+      "rival",
+      "rivalrous"
+    ]
+  },
+  {
+    "id": "excludability",
+    "chapterId": "ch9",
+    "term": "Excludability",
+    "definition": "A good is excludable if people who do not pay can be prevented from using it.",
+    "example": "A movie theater can exclude nonpayers; a city fireworks show usually cannot.",
+    "related": [
+      "rivalry",
+      "public-good",
+      "free-rider"
+    ],
+    "aliases": [
+      "excludable"
+    ]
+  },
+  {
+    "id": "free-rider",
+    "chapterId": "ch9",
+    "term": "Free rider",
+    "definition": "Someone who enjoys a good without paying for it. Free riding undermines private provision of nonexcludable goods.",
+    "example": "A neighbor who enjoys a block's private security patrol without contributing is a free rider.",
+    "related": [
+      "public-good",
+      "excludability"
+    ],
+    "aliases": [
+      "free-rider problem"
+    ]
+  },
+  {
+    "id": "tragedy-of-the-commons",
+    "chapterId": "ch9",
+    "term": "Tragedy of the commons",
+    "definition": "The overuse of a common resource when individuals do not bear the full social cost of their use.",
+    "example": "Open pasture that is overgrazed until the grass is gone is the original tragedy of the commons.",
+    "related": [
+      "common-resource",
+      "externality"
+    ]
+  },
+  {
+    "id": "asymmetric-information",
+    "chapterId": "ch9",
+    "term": "Asymmetric information",
+    "definition": "A situation in which one party to a transaction knows more than the other.",
+    "example": "A used-car seller usually knows more about the car than the buyer.",
+    "related": [
+      "adverse-selection",
+      "moral-hazard",
+      "market-failure"
+    ]
+  },
+  {
+    "id": "adverse-selection",
+    "chapterId": "ch9",
+    "term": "Adverse selection",
+    "definition": "When hidden information before a deal means the mix of participants is worse than the average of the whole population.",
+    "example": "If only the sickest people buy health insurance, premiums rise and healthier people drop out.",
+    "related": [
+      "asymmetric-information",
+      "moral-hazard"
+    ]
+  },
+  {
+    "id": "moral-hazard",
+    "chapterId": "ch9",
+    "term": "Moral hazard",
+    "definition": "When hidden actions after a deal lead someone to take more risk or less care because another party bears the cost.",
+    "example": "Insured drivers may park less carefully than they would if they paid every scratch themselves.",
+    "related": [
+      "asymmetric-information",
+      "adverse-selection"
+    ]
+  },
+  {
+    "id": "price-ceiling",
+    "chapterId": "ch9",
+    "term": "Price ceiling",
+    "definition": "A legal maximum price. A ceiling below equilibrium is binding and creates a shortage.",
+    "example": "Rent control is a price ceiling in the housing market.",
+    "related": [
+      "price-floor",
+      "shortage",
+      "deadweight-loss"
+    ]
+  },
+  {
+    "id": "price-floor",
+    "chapterId": "ch9",
+    "term": "Price floor",
+    "definition": "A legal minimum price. A floor above equilibrium is binding and creates a surplus.",
+    "example": "A minimum wage is a price floor in the labor market.",
+    "related": [
+      "price-ceiling",
+      "surplus",
+      "deadweight-loss"
+    ]
+  },
+  {
+    "id": "deadweight-loss",
+    "chapterId": "ch9",
+    "term": "Deadweight loss",
+    "definition": "The fall in total surplus from an inefficient quantity \u2014 trades that should happen but do not, or trades that should not happen but do.",
+    "example": "A tax that stops mutually beneficial used-book sales creates deadweight loss.",
+    "related": [
+      "total-surplus",
+      "price-ceiling",
+      "price-floor"
+    ],
+    "aliases": [
+      "DWL"
+    ]
+  },
+  {
+    "id": "tax-incidence",
+    "chapterId": "ch9",
+    "term": "Tax incidence",
+    "definition": "The actual division of a tax burden between buyers and sellers, which depends on elasticities, not on who writes the check.",
+    "example": "A cigarette tax may fall mostly on buyers if demand is inelastic.",
+    "related": [
+      "price-elasticity-of-demand",
+      "price-elasticity-of-supply"
+    ]
+  },
+  {
+    "id": "quota",
+    "chapterId": "ch9",
+    "term": "Quota",
+    "definition": "A legal limit on the quantity that may be bought, sold, or imported.",
+    "example": "A city that issues only 200 taxi medallions is using a quota.",
+    "related": [
+      "deadweight-loss",
+      "tariff"
+    ],
+    "aliases": [
+      "quantity restriction"
+    ]
+  },
+  {
+    "id": "gdp",
+    "chapterId": "ch10",
+    "term": "Gross domestic product",
+    "definition": "The market value of all final goods and services produced within a country in a given period.",
+    "example": "Cars assembled in the United States count in U.S. GDP even if the firm is foreign-owned.",
+    "related": [
+      "nominal-gdp",
+      "real-gdp",
+      "gnp",
+      "value-added"
+    ],
+    "aliases": [
+      "GDP"
+    ]
+  },
+  {
+    "id": "nominal-gdp",
+    "chapterId": "ch10",
+    "term": "Nominal GDP",
+    "definition": "GDP measured in current prices, unadjusted for inflation.",
+    "example": "If prices and output both rise, nominal GDP rises for both reasons.",
+    "related": [
+      "gdp",
+      "real-gdp",
+      "gdp-deflator"
+    ]
+  },
+  {
+    "id": "real-gdp",
+    "chapterId": "ch10",
+    "term": "Real GDP",
+    "definition": "GDP measured using the prices of a base year, so that changes reflect quantities rather than inflation.",
+    "example": "Real GDP is the standard measure of an economy's production over time.",
+    "related": [
+      "nominal-gdp",
+      "gdp-deflator",
+      "economic-growth"
+    ]
+  },
+  {
+    "id": "gdp-deflator",
+    "chapterId": "ch10",
+    "term": "GDP deflator",
+    "definition": "A price index equal to nominal GDP divided by real GDP, times 100. It covers all goods in GDP, not just consumer goods.",
+    "example": "If nominal GDP is 110 and real GDP is 100, the deflator is 110.",
+    "related": [
+      "nominal-gdp",
+      "real-gdp",
+      "cpi"
+    ]
+  },
+  {
+    "id": "value-added",
+    "chapterId": "ch10",
+    "term": "Value added",
+    "definition": "The value of a firm's output minus the value of intermediate goods it buys. GDP equals the sum of value added across firms.",
+    "example": "A baker who buys $1 of flour and sells $4 of bread adds $3 of value.",
+    "related": [
+      "gdp"
+    ]
+  },
+  {
+    "id": "gnp",
+    "chapterId": "ch10",
+    "term": "Gross national product",
+    "definition": "The market value of final goods and services produced by a country's residents, including income earned abroad and excluding income earned by foreigners domestically.",
+    "example": "Wages a U.S. engineer earns on a project in Singapore count in U.S. GNP, not U.S. GDP.",
+    "related": [
+      "gdp"
+    ],
+    "aliases": [
+      "GNP"
+    ]
+  },
+  {
+    "id": "cpi",
+    "chapterId": "ch10",
+    "term": "Consumer price index",
+    "definition": "A measure of the cost of a fixed basket of goods and services bought by a typical household, relative to a base period.",
+    "example": "If the basket cost $200 in the base year and $260 now, the CPI is 130.",
+    "related": [
+      "inflation",
+      "gdp-deflator"
+    ],
+    "aliases": [
+      "CPI"
+    ]
+  },
+  {
+    "id": "inflation",
+    "chapterId": "ch10",
+    "term": "Inflation",
+    "definition": "A sustained rise in the general price level, usually measured as the percentage change in a price index.",
+    "example": "If the CPI rises from 200 to 206, the inflation rate is 3%.",
+    "related": [
+      "cpi",
+      "deflation",
+      "inflation-rate"
+    ]
+  },
+  {
+    "id": "inflation-rate",
+    "chapterId": "ch10",
+    "term": "Inflation rate",
+    "definition": "The percentage change in a price index from one period to the next.",
+    "example": "(This year's CPI \u2212 last year's CPI) / last year's CPI \u00d7 100.",
+    "related": [
+      "inflation",
+      "cpi"
+    ]
+  },
+  {
+    "id": "deflation",
+    "chapterId": "ch10",
+    "term": "Deflation",
+    "definition": "A sustained fall in the general price level.",
+    "example": "Japan experienced stretches of deflation in the 1990s and 2000s.",
+    "related": [
+      "inflation",
+      "hyperinflation"
+    ]
+  },
+  {
+    "id": "labor-force",
+    "chapterId": "ch10",
+    "term": "Labor force",
+    "definition": "The sum of employed and unemployed people who are actively seeking work. People not looking for work are outside the labor force.",
+    "example": "A full-time student who is not job hunting is not in the labor force.",
+    "related": [
+      "unemployment-rate",
+      "discouraged-worker"
+    ]
+  },
+  {
+    "id": "unemployment-rate",
+    "chapterId": "ch10",
+    "term": "Unemployment rate",
+    "definition": "The percentage of the labor force that is unemployed: unemployed / labor force \u00d7 100.",
+    "example": "If 8 million people are unemployed and the labor force is 160 million, the rate is 5%.",
+    "related": [
+      "labor-force",
+      "frictional-unemployment",
+      "structural-unemployment",
+      "cyclical-unemployment"
+    ]
+  },
+  {
+    "id": "frictional-unemployment",
+    "chapterId": "ch10",
+    "term": "Frictional unemployment",
+    "definition": "Short-term unemployment that arises from job search, matching, and normal turnover.",
+    "example": "A recent graduate interviewing for a first job is frictionally unemployed.",
+    "related": [
+      "structural-unemployment",
+      "natural-rate-of-unemployment"
+    ]
+  },
+  {
+    "id": "structural-unemployment",
+    "chapterId": "ch10",
+    "term": "Structural unemployment",
+    "definition": "Unemployment that arises from a mismatch between workers' skills or locations and the jobs available, or from labor-market institutions that keep wages above equilibrium.",
+    "example": "Coal miners in a region where mines have closed may be structurally unemployed.",
+    "related": [
+      "frictional-unemployment",
+      "natural-rate-of-unemployment"
+    ]
+  },
+  {
+    "id": "cyclical-unemployment",
+    "chapterId": "ch10",
+    "term": "Cyclical unemployment",
+    "definition": "Unemployment above the natural rate that is caused by a downturn in the business cycle.",
+    "example": "Layoffs during a recession are mostly cyclical unemployment.",
+    "related": [
+      "business-cycle",
+      "natural-rate-of-unemployment",
+      "recession"
+    ]
+  },
+  {
+    "id": "natural-rate-of-unemployment",
+    "chapterId": "ch10",
+    "term": "Natural rate of unemployment",
+    "definition": "The unemployment rate when the economy is at potential output: frictional plus structural unemployment, with cyclical unemployment at zero.",
+    "example": "Policy that shortens job search can lower the natural rate.",
+    "related": [
+      "frictional-unemployment",
+      "structural-unemployment",
+      "potential-output"
+    ],
+    "aliases": [
+      "NAIRU",
+      "natural unemployment"
+    ]
+  },
+  {
+    "id": "discouraged-worker",
+    "chapterId": "ch10",
+    "term": "Discouraged worker",
+    "definition": "Someone who wants a job but has stopped looking because they believe none are available. Discouraged workers are not counted as unemployed.",
+    "example": "A long-term job seeker who quits applying drops out of the official unemployment rate.",
+    "related": [
+      "labor-force",
+      "unemployment-rate"
+    ]
+  },
+  {
+    "id": "business-cycle",
+    "chapterId": "ch10",
+    "term": "Business cycle",
+    "definition": "The irregular short-run fluctuation of aggregate economic activity around its long-run trend, with expansions and recessions.",
+    "example": "Output, employment, and investment typically rise together in expansions and fall in recessions.",
+    "related": [
+      "recession",
+      "expansion",
+      "potential-output"
+    ]
+  },
+  {
+    "id": "recession",
+    "chapterId": "ch10",
+    "term": "Recession",
+    "definition": "A significant, widespread decline in economic activity lasting more than a few months.",
+    "example": "The 2008\u201309 downturn was a deep recession in many countries.",
+    "related": [
+      "expansion",
+      "business-cycle",
+      "cyclical-unemployment"
+    ]
+  },
+  {
+    "id": "expansion",
+    "chapterId": "ch10",
+    "term": "Expansion",
+    "definition": "A period of rising real GDP and usually falling unemployment, from a trough to a peak.",
+    "example": "The long expansion of the 2010s followed the Great Recession.",
+    "related": [
+      "recession",
+      "business-cycle"
+    ],
+    "aliases": [
+      "recovery"
+    ]
+  },
+  {
+    "id": "economic-growth",
+    "chapterId": "ch11",
+    "term": "Economic growth",
+    "definition": "A sustained increase in real GDP per person, which raises average living standards over time.",
+    "example": "Real GDP per person in many rich countries is many times higher than a century ago.",
+    "related": [
+      "productivity",
+      "real-gdp",
+      "rule-of-70"
+    ]
+  },
+  {
+    "id": "productivity",
+    "chapterId": "ch11",
+    "term": "Productivity",
+    "definition": "Output per unit of input, most often output per hour of labor.",
+    "example": "A barista who makes 20 drinks an hour is more productive than one who makes 10, other things equal.",
+    "related": [
+      "human-capital",
+      "physical-capital",
+      "technological-progress"
+    ],
+    "aliases": [
+      "labor productivity"
+    ]
+  },
+  {
+    "id": "technological-progress",
+    "chapterId": "ch11",
+    "term": "Technological progress",
+    "definition": "Advances in knowledge that let the same inputs produce more or better output.",
+    "example": "Container shipping and semiconductors raised productivity across many industries.",
+    "related": [
+      "productivity",
+      "economic-growth"
+    ],
+    "aliases": [
+      "technology"
+    ]
+  },
+  {
+    "id": "catch-up-effect",
+    "chapterId": "ch11",
+    "term": "Catch-up effect",
+    "definition": "The tendency for poorer countries to grow faster than richer ones when they can adopt existing technology and when extra capital is very productive.",
+    "example": "South Korea grew rapidly in the late 20th century as it industrialized and imported techniques.",
+    "related": [
+      "economic-growth",
+      "diminishing-returns-to-capital"
+    ],
+    "aliases": [
+      "convergence"
+    ]
+  },
+  {
+    "id": "diminishing-returns-to-capital",
+    "chapterId": "ch11",
+    "term": "Diminishing returns to capital",
+    "definition": "Holding technology and labor fixed, extra machines eventually add less and less extra output. This is why capital accumulation alone cannot sustain growth forever.",
+    "example": "Giving a second computer to an office already full of computers helps less than giving the first computer.",
+    "related": [
+      "physical-capital",
+      "technological-progress",
+      "catch-up-effect"
+    ]
+  },
+  {
+    "id": "institutions",
+    "chapterId": "ch11",
+    "term": "Institutions",
+    "definition": "The formal and informal rules that shape economic life, including property rights, courts, and political stability. Growth research treats them as a deep cause of prosperity.",
+    "example": "Secure title to land makes farmers more willing to invest in irrigation.",
+    "related": [
+      "property-rights",
+      "economic-growth"
+    ]
+  },
+  {
+    "id": "property-rights",
+    "chapterId": "ch11",
+    "term": "Property rights",
+    "definition": "The legal ability to own, use, and transfer assets, and to enforce those claims. Weak property rights discourage investment and growth.",
+    "example": "A firm will not build a factory if it expects the plant to be seized.",
+    "related": [
+      "institutions",
+      "economic-growth"
+    ]
+  },
+  {
+    "id": "saving",
+    "chapterId": "ch11",
+    "term": "Saving",
+    "definition": "Income that is not consumed. In a closed economy, saving finances investment.",
+    "example": "A household that earns $60,000 and spends $52,000 saves $8,000.",
+    "related": [
+      "investment",
+      "crowding-out"
+    ]
+  },
+  {
+    "id": "investment",
+    "chapterId": "ch11",
+    "term": "Investment",
+    "definition": "Spending on new capital goods \u2014 plant, equipment, housing, and inventories \u2014 not the purchase of financial assets.",
+    "example": "Buying a newly built apartment is investment; buying an old stock certificate is not.",
+    "related": [
+      "saving",
+      "physical-capital",
+      "crowding-out"
+    ],
+    "aliases": [
+      "gross investment"
+    ]
+  },
+  {
+    "id": "rule-of-70",
+    "chapterId": "ch11",
+    "term": "Rule of 70",
+    "definition": "A shortcut: the number of years for a growing variable to double is about 70 divided by the annual growth rate in percent.",
+    "example": "At 2% growth, living standards double in about 35 years; at 7%, in about 10 years.",
+    "related": [
+      "economic-growth"
+    ],
+    "aliases": [
+      "rule of 72"
+    ]
+  },
+  {
+    "id": "money",
+    "chapterId": "ch12",
+    "term": "Money",
+    "definition": "The widely accepted medium of exchange, and usually also a unit of account and store of value.",
+    "example": "Dollar bills and checking deposits are money in the United States; houses are not, because they are not a medium of exchange.",
+    "related": [
+      "medium-of-exchange",
+      "unit-of-account",
+      "store-of-value",
+      "liquidity"
+    ]
+  },
+  {
+    "id": "medium-of-exchange",
+    "chapterId": "ch12",
+    "term": "Medium of exchange",
+    "definition": "An item that buyers give to sellers when they purchase goods and services, eliminating the need for barter.",
+    "example": "You pay for groceries with a card that draws on a deposit, not with a haircut.",
+    "related": [
+      "money",
+      "unit-of-account",
+      "store-of-value"
+    ]
+  },
+  {
+    "id": "unit-of-account",
+    "chapterId": "ch12",
+    "term": "Unit of account",
+    "definition": "The yardstick in which prices and debts are recorded.",
+    "example": "Menus list prices in dollars, not in minutes of work.",
+    "related": [
+      "money",
+      "medium-of-exchange"
+    ]
+  },
+  {
+    "id": "store-of-value",
+    "chapterId": "ch12",
+    "term": "Store of value",
+    "definition": "An item that can transfer purchasing power from the present to the future. Inflation erodes money's usefulness as a store of value.",
+    "example": "Cash under a mattress stores value poorly during high inflation.",
+    "related": [
+      "money",
+      "inflation"
+    ]
+  },
+  {
+    "id": "liquidity",
+    "chapterId": "ch12",
+    "term": "Liquidity",
+    "definition": "The ease with which an asset can be converted into the medium of exchange without a large loss of value.",
+    "example": "Cash is perfectly liquid; a house is much less liquid.",
+    "related": [
+      "money",
+      "m1",
+      "m2"
+    ]
+  },
+  {
+    "id": "commodity-money",
+    "chapterId": "ch12",
+    "term": "Commodity money",
+    "definition": "Money that has intrinsic value as a good, such as gold coins or cigarettes in a prison camp.",
+    "example": "Gold coins could be melted for jewelry, so they had value beyond being money.",
+    "related": [
+      "fiat-money",
+      "money"
+    ]
+  },
+  {
+    "id": "fiat-money",
+    "chapterId": "ch12",
+    "term": "Fiat money",
+    "definition": "Money with no intrinsic value that is money by government decree and social acceptance.",
+    "example": "Modern paper currency and central-bank reserves are fiat money.",
+    "related": [
+      "commodity-money",
+      "money"
+    ]
+  },
+  {
+    "id": "m1",
+    "chapterId": "ch12",
+    "term": "M1",
+    "definition": "A narrow money-stock measure that includes currency in circulation and highly liquid deposits such as checking accounts.",
+    "example": "The cash in your wallet plus your checking balance are in M1.",
+    "related": [
+      "m2",
+      "money",
+      "liquidity"
+    ]
+  },
+  {
+    "id": "m2",
+    "chapterId": "ch12",
+    "term": "M2",
+    "definition": "A broader money-stock measure: M1 plus less liquid deposits such as ordinary savings accounts and small time deposits.",
+    "example": "A savings account is typically in M2 but not always treated as immediately spendable as cash.",
+    "related": [
+      "m1",
+      "money"
+    ]
+  },
+  {
+    "id": "central-bank",
+    "chapterId": "ch12",
+    "term": "Central bank",
+    "definition": "The institution that manages a country's money and monetary policy, often including bank supervision and the payments system.",
+    "example": "The Federal Reserve is the central bank of the United States.",
+    "related": [
+      "monetary-policy",
+      "open-market-operations",
+      "money-supply"
+    ],
+    "aliases": [
+      "the Fed"
+    ]
+  },
+  {
+    "id": "fractional-reserve-banking",
+    "chapterId": "ch12",
+    "term": "Fractional-reserve banking",
+    "definition": "A system in which banks hold only a fraction of deposits as reserves and lend the rest, which creates additional deposits.",
+    "example": "A bank that keeps 10% of deposits in reserve can lend the other 90%.",
+    "related": [
+      "reserve-ratio",
+      "money-multiplier"
+    ]
+  },
+  {
+    "id": "reserve-ratio",
+    "chapterId": "ch12",
+    "term": "Reserve ratio",
+    "definition": "The fraction of deposits that a bank holds as reserves.",
+    "example": "A 10% reserve ratio means $10 of reserves for every $100 of deposits.",
+    "related": [
+      "fractional-reserve-banking",
+      "money-multiplier"
+    ],
+    "aliases": [
+      "reserve requirement"
+    ]
+  },
+  {
+    "id": "money-multiplier",
+    "chapterId": "ch12",
+    "term": "Money multiplier",
+    "definition": "The maximum factor by which an injection of reserves can increase the money stock in a simple reserve-ratio model, equal to 1 / reserve ratio.",
+    "example": "With a 10% reserve ratio, the simple multiplier is 10.",
+    "related": [
+      "reserve-ratio",
+      "fractional-reserve-banking"
+    ]
+  },
+  {
+    "id": "money-supply",
+    "chapterId": "ch12",
+    "term": "Money supply",
+    "definition": "The quantity of money available in the economy, measured by aggregates such as M1 or M2.",
+    "example": "Central banks influence the money supply through policy tools.",
+    "related": [
+      "m1",
+      "m2",
+      "monetary-policy"
+    ],
+    "aliases": [
+      "money stock"
+    ]
+  },
+  {
+    "id": "quantity-theory-of-money",
+    "chapterId": "ch12",
+    "term": "Quantity theory of money",
+    "definition": "The view that, in the long run, the price level is proportional to the money supply. In the equation MV = PY, if V and Y are stable, more M means a higher P.",
+    "example": "Historical hyperinflations were accompanied by explosive growth in the money stock.",
+    "related": [
+      "velocity",
+      "inflation",
+      "classical-dichotomy"
+    ],
+    "aliases": [
+      "quantity equation"
+    ]
+  },
+  {
+    "id": "velocity",
+    "chapterId": "ch12",
+    "term": "Velocity of money",
+    "definition": "The average number of times a unit of money is spent on final goods and services in a period. In MV = PY, V = PY / M.",
+    "example": "If people hold cash longer, velocity falls.",
+    "related": [
+      "quantity-theory-of-money"
+    ],
+    "aliases": [
+      "V"
+    ]
+  },
+  {
+    "id": "fisher-effect",
+    "chapterId": "ch12",
+    "term": "Fisher effect",
+    "definition": "The one-for-one long-run relationship between expected inflation and the nominal interest rate: nominal rate \u2248 real rate + expected inflation.",
+    "example": "If expected inflation rises from 2% to 5% and the real rate is unchanged, nominal rates tend to rise by 3 points.",
+    "related": [
+      "real-interest-rate",
+      "inflation"
+    ]
+  },
+  {
+    "id": "real-interest-rate",
+    "chapterId": "ch12",
+    "term": "Real interest rate",
+    "definition": "The interest rate adjusted for inflation: nominal interest rate minus the inflation rate. It measures the real cost of borrowing and the real return to saving.",
+    "example": "A 6% loan with 4% inflation has a 2% real interest rate.",
+    "related": [
+      "interest",
+      "fisher-effect",
+      "inflation"
+    ],
+    "aliases": [
+      "real rate"
+    ]
+  },
+  {
+    "id": "hyperinflation",
+    "chapterId": "ch12",
+    "term": "Hyperinflation",
+    "definition": "Extremely rapid inflation, often defined as monthly price increases of 50% or more, usually caused by massive money creation.",
+    "example": "Germany in 1923 and Zimbabwe in the 2000s are textbook hyperinflations.",
+    "related": [
+      "inflation",
+      "quantity-theory-of-money"
+    ]
+  },
+  {
+    "id": "menu-costs",
+    "chapterId": "ch12",
+    "term": "Menu costs",
+    "definition": "The real costs of changing posted prices, one reason prices can be sticky.",
+    "example": "A restaurant reprinting menus after every price change incurs menu costs.",
+    "related": [
+      "sticky-prices",
+      "inflation"
+    ]
+  },
+  {
+    "id": "shoeleather-costs",
+    "chapterId": "ch12",
+    "term": "Shoeleather costs",
+    "definition": "The time and effort people spend to economize on money holdings when inflation is high.",
+    "example": "During high inflation, people make many small withdrawals instead of holding cash.",
+    "related": [
+      "inflation",
+      "money"
+    ],
+    "aliases": [
+      "shoe-leather costs"
+    ]
+  },
+  {
+    "id": "aggregate-demand",
+    "chapterId": "ch13",
+    "term": "Aggregate demand",
+    "definition": "The total quantity of goods and services demanded in the economy at each price level: C + I + G + NX.",
+    "example": "A stock-market boom that raises consumption shifts AD right.",
+    "related": [
+      "aggregate-supply",
+      "net-exports",
+      "multiplier"
+    ],
+    "aliases": [
+      "AD"
+    ]
+  },
+  {
+    "id": "aggregate-supply",
+    "chapterId": "ch13",
+    "term": "Aggregate supply",
+    "definition": "The total quantity of goods and services firms produce at each price level. Distinguish the sticky-price short run from the flexible-price long run.",
+    "example": "A sudden oil-price spike can shift short-run aggregate supply left.",
+    "related": [
+      "sras",
+      "lras",
+      "aggregate-demand"
+    ],
+    "aliases": [
+      "AS"
+    ]
+  },
+  {
+    "id": "sras",
+    "chapterId": "ch13",
+    "term": "Short-run aggregate supply",
+    "definition": "The upward-sloping AS relationship when some wages or prices are sticky, so a higher price level raises output temporarily.",
+    "example": "If demand jumps and wages have not yet adjusted, firms produce more.",
+    "related": [
+      "lras",
+      "sticky-wages",
+      "sticky-prices"
+    ],
+    "aliases": [
+      "SRAS"
+    ]
+  },
+  {
+    "id": "lras",
+    "chapterId": "ch13",
+    "term": "Long-run aggregate supply",
+    "definition": "A vertical AS curve at potential output, determined by labor, capital, and technology, not by the price level.",
+    "example": "Immigration that expands the labor force shifts LRAS right.",
+    "related": [
+      "potential-output",
+      "sras",
+      "classical-dichotomy"
+    ],
+    "aliases": [
+      "LRAS"
+    ]
+  },
+  {
+    "id": "potential-output",
+    "chapterId": "ch13",
+    "term": "Potential output",
+    "definition": "The level of real GDP the economy can produce when labor and capital are used at normal intensity and unemployment is at the natural rate. Also called natural or full-employment output.",
+    "example": "A hurricane that destroys factories lowers potential output until they are rebuilt.",
+    "related": [
+      "lras",
+      "output-gap",
+      "natural-rate-of-unemployment"
+    ],
+    "aliases": [
+      "natural output",
+      "full-employment output",
+      "Y*"
+    ]
+  },
+  {
+    "id": "output-gap",
+    "chapterId": "ch13",
+    "term": "Output gap",
+    "definition": "Actual real GDP minus potential output. A negative gap is a recessionary gap; a positive gap is an inflationary gap.",
+    "example": "If potential is 20 trillion and actual is 19 trillion, the output gap is \u22121 trillion.",
+    "related": [
+      "potential-output",
+      "recession",
+      "cyclical-unemployment"
+    ],
+    "aliases": [
+      "recessionary gap",
+      "inflationary gap"
+    ]
+  },
+  {
+    "id": "sticky-wages",
+    "chapterId": "ch13",
+    "term": "Sticky wages",
+    "definition": "Wages that adjust slowly, so a fall in demand can raise real wages temporarily and cause unemployment.",
+    "example": "Multi-year union contracts keep nominal wages from falling quickly in a slump.",
+    "related": [
+      "sticky-prices",
+      "sras",
+      "unemployment-rate"
+    ]
+  },
+  {
+    "id": "sticky-prices",
+    "chapterId": "ch13",
+    "term": "Sticky prices",
+    "definition": "Prices that adjust slowly because of menu costs, contracts, or customer relationships.",
+    "example": "Magazine cover prices used to stay fixed for years.",
+    "related": [
+      "menu-costs",
+      "sticky-wages",
+      "sras"
+    ]
+  },
+  {
+    "id": "demand-shock",
+    "chapterId": "ch13",
+    "term": "Demand shock",
+    "definition": "A sudden shift of aggregate demand, from changes in confidence, wealth, policy, or the rest of the world.",
+    "example": "A collapse in housing wealth can be a negative demand shock.",
+    "related": [
+      "supply-shock",
+      "aggregate-demand"
+    ]
+  },
+  {
+    "id": "supply-shock",
+    "chapterId": "ch13",
+    "term": "Supply shock",
+    "definition": "A sudden shift of aggregate supply, often from input prices or productivity.",
+    "example": "A pandemic that closes factories is a negative supply shock.",
+    "related": [
+      "demand-shock",
+      "stagflation",
+      "sras"
+    ]
+  },
+  {
+    "id": "stagflation",
+    "chapterId": "ch13",
+    "term": "Stagflation",
+    "definition": "The combination of high or rising inflation and weak output or high unemployment, typically from an adverse supply shock.",
+    "example": "The 1970s oil shocks produced stagflation in many advanced economies.",
+    "related": [
+      "supply-shock",
+      "inflation",
+      "recession"
+    ]
+  },
+  {
+    "id": "classical-dichotomy",
+    "chapterId": "ch13",
+    "term": "Classical dichotomy",
+    "definition": "The idea that, in the long run, real variables (output, real wages) are determined by real factors, while nominal variables (the price level, money) are determined by the money supply.",
+    "example": "Printing more money does not, by itself, create more factories in the long run.",
+    "related": [
+      "quantity-theory-of-money",
+      "lras"
+    ]
+  },
+  {
+    "id": "fiscal-policy",
+    "chapterId": "ch14",
+    "term": "Fiscal policy",
+    "definition": "The use of government spending and taxation to influence the economy.",
+    "example": "A temporary income-tax cut is expansionary fiscal policy.",
+    "related": [
+      "monetary-policy",
+      "multiplier",
+      "automatic-stabilizers",
+      "budget-deficit"
+    ]
+  },
+  {
+    "id": "monetary-policy",
+    "chapterId": "ch14",
+    "term": "Monetary policy",
+    "definition": "Central-bank actions that influence money, credit, and interest rates to affect inflation and output.",
+    "example": "Cutting the policy interest rate is expansionary monetary policy.",
+    "related": [
+      "fiscal-policy",
+      "open-market-operations",
+      "central-bank"
+    ]
+  },
+  {
+    "id": "multiplier",
+    "chapterId": "ch14",
+    "term": "Multiplier",
+    "definition": "The factor by which a change in autonomous spending changes equilibrium output. In the simple Keynesian model it equals 1 / (1 \u2212 MPC).",
+    "example": "If MPC is 0.8, a $1 billion rise in government spending can raise output by $5 billion before crowding out and imports.",
+    "related": [
+      "mpc",
+      "fiscal-policy",
+      "aggregate-demand"
+    ],
+    "aliases": [
+      "spending multiplier"
+    ]
+  },
+  {
+    "id": "mpc",
+    "chapterId": "ch14",
+    "term": "Marginal propensity to consume",
+    "definition": "The fraction of an extra dollar of disposable income that households spend on consumption.",
+    "example": "If you spend 75 cents of each extra dollar, your MPC is 0.75.",
+    "related": [
+      "multiplier",
+      "saving"
+    ],
+    "aliases": [
+      "MPC"
+    ]
+  },
+  {
+    "id": "automatic-stabilizers",
+    "chapterId": "ch14",
+    "term": "Automatic stabilizers",
+    "definition": "Taxes and transfers that reduce the size of fluctuations without new legislation. They raise deficits in slumps and shrink them in booms.",
+    "example": "Unemployment insurance and a progressive income tax are automatic stabilizers.",
+    "related": [
+      "fiscal-policy",
+      "budget-deficit"
+    ]
+  },
+  {
+    "id": "budget-deficit",
+    "chapterId": "ch14",
+    "term": "Budget deficit",
+    "definition": "The amount by which government spending exceeds tax revenue in a period.",
+    "example": "If spending is $4.2 trillion and revenue is $3.8 trillion, the deficit is $0.4 trillion.",
+    "related": [
+      "budget-surplus",
+      "crowding-out",
+      "fiscal-policy"
+    ]
+  },
+  {
+    "id": "budget-surplus",
+    "chapterId": "ch14",
+    "term": "Budget surplus",
+    "definition": "The amount by which tax revenue exceeds government spending in a period.",
+    "example": "A booming economy can swing the budget into surplus even without new laws.",
+    "related": [
+      "budget-deficit",
+      "automatic-stabilizers"
+    ]
+  },
+  {
+    "id": "crowding-out",
+    "chapterId": "ch14",
+    "term": "Crowding out",
+    "definition": "The reduction in private investment (or net exports) that can follow expansionary fiscal policy when interest rates or the exchange rate rise.",
+    "example": "Large government borrowing can push up interest rates and discourage firms from building plants.",
+    "related": [
+      "investment",
+      "budget-deficit",
+      "fiscal-policy"
+    ]
+  },
+  {
+    "id": "open-market-operations",
+    "chapterId": "ch14",
+    "term": "Open-market operations",
+    "definition": "Central-bank purchases or sales of securities used to change reserves and influence interest rates.",
+    "example": "The Fed buying Treasury securities injects reserves into the banking system.",
+    "related": [
+      "monetary-policy",
+      "central-bank",
+      "money-supply"
+    ],
+    "aliases": [
+      "OMO"
+    ]
+  },
+  {
+    "id": "discount-rate",
+    "chapterId": "ch14",
+    "term": "Discount rate",
+    "definition": "The interest rate a central bank charges commercial banks for borrowing reserves from the discount window.",
+    "example": "A lower discount rate makes it cheaper for banks to borrow from the Fed.",
+    "related": [
+      "monetary-policy",
+      "reserve-ratio"
+    ]
+  },
+  {
+    "id": "inflation-targeting",
+    "chapterId": "ch14",
+    "term": "Inflation targeting",
+    "definition": "A monetary-policy regime in which the central bank announces and aims at a numerical inflation objective.",
+    "example": "Many central banks target inflation near 2%.",
+    "related": [
+      "monetary-policy",
+      "central-bank",
+      "inflation"
+    ]
+  },
+  {
+    "id": "liquidity-trap",
+    "chapterId": "ch14",
+    "term": "Liquidity trap",
+    "definition": "A situation in which the policy interest rate is near zero and further conventional monetary easing has little effect because people are willing to hold extra money.",
+    "example": "After 2008, several central banks hit the zero lower bound and turned to unconventional tools.",
+    "related": [
+      "monetary-policy",
+      "interest"
+    ],
+    "aliases": [
+      "zero lower bound"
+    ]
+  },
+  {
+    "id": "phillips-curve",
+    "chapterId": "ch14",
+    "term": "Phillips curve",
+    "definition": "An observed short-run trade-off between inflation and unemployment. In the long run the curve is vertical at the natural rate if expectations adjust.",
+    "example": "Unexpectedly tight policy can raise unemployment while lowering inflation for a time.",
+    "related": [
+      "inflation",
+      "natural-rate-of-unemployment",
+      "monetary-policy"
+    ]
+  },
+  {
+    "id": "net-exports",
+    "chapterId": "ch15",
+    "term": "Net exports",
+    "definition": "Exports minus imports. Also called the trade balance in goods and services.",
+    "example": "If a country exports $300 billion and imports $400 billion, net exports are \u2212$100 billion.",
+    "related": [
+      "exports",
+      "imports",
+      "current-account"
+    ],
+    "aliases": [
+      "NX",
+      "trade balance"
+    ]
+  },
+  {
+    "id": "current-account",
+    "chapterId": "ch15",
+    "term": "Current account",
+    "definition": "The record of trade in goods and services, net income from abroad, and net unilateral transfers.",
+    "example": "A current-account deficit means the country is a net borrower from the rest of the world.",
+    "related": [
+      "capital-account",
+      "net-exports"
+    ]
+  },
+  {
+    "id": "capital-account",
+    "chapterId": "ch15",
+    "term": "Capital and financial account",
+    "definition": "The record of international purchases and sales of assets. A current-account deficit is matched by a financial-account surplus (net capital inflow).",
+    "example": "Foreigners buying domestic bonds are a capital inflow.",
+    "related": [
+      "current-account",
+      "capital-flight"
+    ],
+    "aliases": [
+      "financial account"
+    ]
+  },
+  {
+    "id": "exchange-rate",
+    "chapterId": "ch15",
+    "term": "Exchange rate",
+    "definition": "The price of one currency in terms of another.",
+    "example": "If $1 buys \u00a5150, the dollar-yen exchange rate is 150 yen per dollar.",
+    "related": [
+      "appreciation",
+      "depreciation",
+      "real-exchange-rate"
+    ],
+    "aliases": [
+      "nominal exchange rate"
+    ]
+  },
+  {
+    "id": "appreciation",
+    "chapterId": "ch15",
+    "term": "Appreciation",
+    "definition": "A rise in the value of a currency: it buys more of another currency. Appreciation makes imports cheaper and exports less competitive.",
+    "example": "If the euro goes from $1.05 to $1.15, the euro has appreciated.",
+    "related": [
+      "depreciation",
+      "exchange-rate",
+      "net-exports"
+    ]
+  },
+  {
+    "id": "depreciation",
+    "chapterId": "ch15",
+    "term": "Depreciation",
+    "definition": "A fall in the value of a currency: it buys less of another currency. Depreciation makes exports cheaper to foreigners and imports more expensive at home.",
+    "example": "If the pound falls from $1.30 to $1.20, the pound has depreciated.",
+    "related": [
+      "appreciation",
+      "exchange-rate",
+      "net-exports"
+    ]
+  },
+  {
+    "id": "real-exchange-rate",
+    "chapterId": "ch15",
+    "term": "Real exchange rate",
+    "definition": "The relative price of domestic goods in terms of foreign goods: nominal exchange rate times domestic prices over foreign prices.",
+    "example": "If U.S. prices rise faster than foreign prices and the nominal rate is unchanged, U.S. goods become more expensive abroad.",
+    "related": [
+      "exchange-rate",
+      "purchasing-power-parity"
+    ]
+  },
+  {
+    "id": "purchasing-power-parity",
+    "chapterId": "ch15",
+    "term": "Purchasing-power parity",
+    "definition": "The theory that a unit of currency should buy the same basket of goods everywhere, so the nominal exchange rate should reflect relative price levels. It is a long-run benchmark, not a short-run law.",
+    "example": "The Big Mac index is a playful PPP comparison.",
+    "related": [
+      "real-exchange-rate",
+      "exchange-rate"
+    ],
+    "aliases": [
+      "PPP"
+    ]
+  },
+  {
+    "id": "tariff",
+    "chapterId": "ch15",
+    "term": "Tariff",
+    "definition": "A tax on imported goods. It usually raises the domestic price, reduces imports, and creates deadweight loss, while generating government revenue.",
+    "example": "A $500 tariff on each imported truck makes foreign trucks more expensive.",
+    "related": [
+      "import-quota",
+      "protectionism",
+      "deadweight-loss"
+    ]
+  },
+  {
+    "id": "import-quota",
+    "chapterId": "ch15",
+    "term": "Import quota",
+    "definition": "A quantitative limit on imports of a good. Like a tariff it restricts trade, but the scarcity rents often go to license holders rather than the government.",
+    "example": "A cap of 10,000 imported motorcycles a year is an import quota.",
+    "related": [
+      "tariff",
+      "quota",
+      "protectionism"
+    ]
+  },
+  {
+    "id": "protectionism",
+    "chapterId": "ch15",
+    "term": "Protectionism",
+    "definition": "Policies that restrict imports to shield domestic producers, such as tariffs, quotas, and local-content rules.",
+    "example": "\"Buy national\" rules for government contracts are a form of protectionism.",
+    "related": [
+      "tariff",
+      "import-quota",
+      "gains-from-trade"
+    ]
+  },
+  {
+    "id": "capital-flight",
+    "chapterId": "ch15",
+    "term": "Capital flight",
+    "definition": "A sudden large-scale movement of financial assets out of a country, often after a loss of confidence. It can depreciate the currency and raise domestic interest rates.",
+    "example": "Investors rushing to sell a country's bonds after a political crisis is capital flight.",
+    "related": [
+      "capital-account",
+      "depreciation",
+      "exchange-rate"
+    ]
+  },
+  {
+    "id": "floating-exchange-rate",
+    "chapterId": "ch15",
+    "term": "Floating exchange rate",
+    "definition": "A regime in which the currency's value is determined by market supply and demand, with little or no official peg.",
+    "example": "The dollar, euro, and yen float against one another.",
+    "related": [
+      "fixed-exchange-rate",
+      "exchange-rate"
+    ],
+    "aliases": [
+      "flexible exchange rate"
+    ]
+  },
+  {
+    "id": "fixed-exchange-rate",
+    "chapterId": "ch15",
+    "term": "Fixed exchange rate",
+    "definition": "A regime in which the government or central bank pledges to keep the currency at a set value against another currency or basket, using reserves and policy to defend the peg.",
+    "example": "A small country may peg to the dollar to import monetary credibility.",
+    "related": [
+      "floating-exchange-rate",
+      "exchange-rate"
+    ],
+    "aliases": [
+      "peg",
+      "pegged exchange rate"
+    ]
+  }
+]

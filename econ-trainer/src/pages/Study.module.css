@@ -1,0 +1,157 @@
+.panel,
+.session {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  padding: 1.4rem 1.5rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.panel h1,
+.session h1 {
+  margin: 0;
+  font-family: var(--serif);
+  letter-spacing: -0.03em;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.grid label,
+.check {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.grid select {
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0.55rem 0.7rem;
+}
+
+.check {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  align-content: center;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+}
+
+.card {
+  min-height: 16rem;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  padding: 1.4rem 1.5rem;
+  text-align: left;
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  color: inherit;
+}
+
+.card strong {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.card p,
+.card em {
+  margin: 0;
+  color: var(--ink-soft);
+  font-style: normal;
+}
+
+.side {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hint {
+  color: var(--muted) !important;
+}
+
+.ratings {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.rate {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  padding: 0.7rem 0.4rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
+.rate kbd {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.again {
+  border-color: color-mix(in srgb, var(--again) 45%, var(--line));
+}
+.hard {
+  border-color: color-mix(in srgb, var(--hard) 45%, var(--line));
+}
+.good {
+  border-color: color-mix(in srgb, var(--good) 45%, var(--line));
+}
+.easy {
+  border-color: color-mix(in srgb, var(--easy) 45%, var(--line));
+}
+
+@media (max-width: 720px) {
+  .grid,
+  .ratings {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "ch1",
+    "number": 1,
+    "title": "Thinking Like an Economist",
+    "summary": "Scarcity, trade-offs, opportunity cost, incentives, and the basic tools of economic reasoning."
+  },
+  {
+    "id": "ch2",
+    "number": 2,
+    "title": "Gains from Trade",
+    "summary": "Absolute and comparative advantage, specialization, and why voluntary trade can make both sides better off."
+  },
+  {
+    "id": "ch3",
+    "number": 3,
+    "title": "Markets, Demand, and Supply",
+    "summary": "How buyers and sellers interact, what shifts curves, and how prices ration scarce goods."
+  },
+  {
+    "id": "ch4",
+    "number": 4,
+    "title": "Elasticity",
+    "summary": "How strongly quantity responds to price, income, and the prices of related goods."
+  },
+  {
+    "id": "ch5",
+    "number": 5,
+    "title": "Welfare and Consumer Choice",
+    "summary": "Utility, budget constraints, consumer and producer surplus, and the gains from a market trade."
+  },
+  {
+    "id": "ch6",
+    "number": 6,
+    "title": "Production and Costs",
+    "summary": "How firms turn inputs into output and why cost curves have their familiar shapes."
+  },
+  {
+    "id": "ch7",
+    "number": 7,
+    "title": "Market Structures",
+    "summary": "Perfect competition, monopoly, oligopoly, and monopolistic competition."
+  },
+  {
+    "id": "ch8",
+    "number": 8,
+    "title": "Factor Markets",
+    "summary": "Labor, capital, and land markets, and how factor prices are determined."
+  },
+  {
+    "id": "ch9",
+    "number": 9,
+    "title": "Market Failure and Government",
+    "summary": "Externalities, public goods, information problems, and common price controls."
+  },
+  {
+    "id": "ch10",
+    "number": 10,
+    "title": "Measuring the Macroeconomy",
+    "summary": "GDP, inflation, unemployment, and the business cycle."
+  },
+  {
+    "id": "ch11",
+    "number": 11,
+    "title": "Economic Growth",
+    "summary": "Productivity, capital, technology, and the long-run rise in living standards."
+  },
+  {
+    "id": "ch12",
+    "number": 12,
+    "title": "Money, Banking, and Inflation",
+    "summary": "What money is, how banks create deposits, and why the price level moves."
+  },
+  {
+    "id": "ch13",
+    "number": 13,
+    "title": "Aggregate Demand and Supply",
+    "summary": "Short-run fluctuations, shocks, and the gap between actual and potential output."
+  },
+  {
+    "id": "ch14",
+    "number": 14,
+    "title": "Fiscal and Monetary Policy",
+    "summary": "How governments and central banks try to stabilize the economy."
+  },
+  {
+    "id": "ch15",
+    "number": 15,
+    "title": "Open-Economy Macroeconomics",
+    "summary": "Trade balances, exchange rates, and the basic tools of international finance."
+  }
+]

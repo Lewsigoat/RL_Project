@@ -1,0 +1,26 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.track {
+  flex: 1;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+}
+
+.label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  min-width: 3.2rem;
+  text-align: right;
+}

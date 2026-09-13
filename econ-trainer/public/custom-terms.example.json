@@ -1,0 +1,21 @@
+{
+  "chapters": [
+    {
+      "id": "ch16",
+      "number": 16,
+      "title": "My course notes",
+      "summary": "Paste your own chapter here, then import this file from Progress."
+    }
+  ],
+  "terms": [
+    {
+      "id": "my-term",
+      "chapterId": "ch16",
+      "term": "My term",
+      "definition": "Write the definition in your own wording.",
+      "example": "Add a concrete example if you have one.",
+      "related": [],
+      "aliases": ["alternate name"]
+    }
+  ]
+}
