@@ -10,7 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+release
 *.local
+*.dmg
+*.exe
+*.blockmap
+*.AppImage
+*.snap
+*.deb
+*.rpm
+build/icon.html
 
 # Editor directories and files
 .vscode/*

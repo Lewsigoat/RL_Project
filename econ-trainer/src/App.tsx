@@ -10,6 +10,7 @@ import { AppStateProvider } from './state/AppStateContext.tsx'
 export default function App() {
   return (
     <AppStateProvider>
+      {/* HashRouter keeps Study/Quiz/Glossary/Progress working from file:// in Electron. */}
       <HashRouter>
         <Routes>
           <Route element={<Layout />}>
