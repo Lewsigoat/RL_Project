@@ -83,7 +83,7 @@ A window titled **Econ Trainer** opens. You do not type a URL.
 
 ### If you do not want Node / npm
 
-Download the Mac app (`Econ-Trainer-mac.dmg` on Apple Silicon, or `Econ-Trainer-mac-intel.zip` on Intel). Open the disk image, drag **Econ Trainer** into Applications, then launch it. See [Install on a Mac](#install-on-a-mac).
+Download **Econ-Trainer-mac.dmg** (Apple Silicon). Open the disk image, drag **Econ Trainer** into Applications, then launch it. See [Install on a Mac](#install-on-a-mac).
 
 ### Why “http://localhost:5188 does not load”
 
@@ -93,8 +93,8 @@ Download the Mac app (`Econ-Trainer-mac.dmg` on Apple Silicon, or `Econ-Trainer-
 
 ## Install on a Mac
 
-1. Download **Econ-Trainer-mac.dmg** (or **Econ-Trainer-mac.zip**).
-2. Open the disk image and drag **Econ Trainer** into **Applications**. If you have the zip, unzip it and drag **Econ Trainer.app** into **Applications**.
+1. Download **Econ-Trainer-mac.dmg**.
+2. Open the disk image and drag **Econ Trainer** into **Applications**.
 3. Open the app from Applications. It works offline.
 
 If Gatekeeper blocks the first launch (this build is unsigned): right-click **Econ Trainer** → **Open** → **Open**. Or System Settings → Privacy & Security → Open Anyway.
